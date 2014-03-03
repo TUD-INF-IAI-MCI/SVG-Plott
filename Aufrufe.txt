@@ -1,0 +1,11 @@
+Grafik 1:
+(wird verwendet für die Fragen 5-9, die erzeugte Beschreibung (HTML-Datei) für Frage 13)
+java -jar svgplot.jar -o grafik1.svg -t "Grafik 1" "(x^3-3x^2-10x+12)/6" "-0.25x^2+1"
+
+Grafik 2:
+(wird verwendet für Frage 10, die Legende für Frage 12)
+java -jar svgplot.jar -o grafik2.svg -t "Grafik 2" -x -4:8 -y -6:6 "(x^5-12x^4+35x^3+20x^2-156x+168)/56" "-x+3" "-(x-2)^2+3"
+
+Grafik 3:
+(wird verwendet für Frage 11)
+java -jar svgplot.jar -o grafik3.svg -t "Grafik 3" -x -6:10 -y -6:10 "1/(x-2)+2" "-0.3(x-3)^2+6"

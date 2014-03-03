@@ -1,0 +1,42 @@
+Aufruf: java -jar svgplot.jar [options] function1 [function2 [function3]]
+
+  Optionen:
+
+    --title, -t
+       Titel der Grafik
+
+    --size, -s
+       Größe der Grafik in Millimeter
+       Standard: 210,297
+
+    --xrange, -x
+       Darstellungsbereich der x-Achse
+       Standard: -8:8
+
+    --yrange, -y
+       Darstellungsbereich der y-Achse
+       Standard: -8:8
+
+    --pi, -p
+       Einteilung der x-Achse in Vielfache von pi
+       Standard: false
+
+    --xlines
+       Hilfslinien auf der x-Achse, durch Leerzeichen getrennt
+
+    --ylines
+       Hilfslinien auf der y-Achse, durch Leerzeichen getrennt
+
+    --css, -c
+       Direkte Angabe von zusätzlichen CSS-Anweisungen oder Pfad zu einer
+       CSS-Datei
+
+    --gnuplot, -g
+       Pfad zum Gnuplot-Programm
+
+    --output, -o
+       Pfad zur Ausgabedatei
+
+    --help, -h
+       Hilfe
+       Standard: false
