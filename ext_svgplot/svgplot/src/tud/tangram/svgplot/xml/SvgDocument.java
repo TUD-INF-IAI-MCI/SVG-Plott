@@ -9,7 +9,13 @@ import org.w3c.dom.Node;
 
 import tud.tangram.svgplot.SvgPlot;
 import tud.tangram.svgplot.coordinatesystem.Point;
-
+/**
+ * 
+ * @author Gregor Harlan
+ * Idea and supervising by Jens Bornschein jens.bornschein@tu-dresden.de
+ * Copyright by Technische Universität Dresden / MCI 2014
+ *
+ */
 public class SvgDocument extends Document {
 
 	final protected Node defs;
@@ -85,7 +91,7 @@ public class SvgDocument extends Document {
 	public Element createText(Point point, String line1, String... lines) {
 		Element text = createElement("text");
 		int charLimit = (int) ((textEnd - point.x) / 6.5);
-		if (lines.length == 0 && line1.length() < charLimit) {
+		if (lines.length == 0 && line1.length() <= charLimit) {
 			text.setAttribute("x", point.x() + "mm");
 			text.setAttribute("y", point.y() + "mm");
 			text.setTextContent(line1);

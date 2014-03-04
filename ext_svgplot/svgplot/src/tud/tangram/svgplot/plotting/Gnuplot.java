@@ -13,6 +13,13 @@ import java.util.StringTokenizer;
 import tud.tangram.svgplot.coordinatesystem.Point;
 import tud.tangram.svgplot.coordinatesystem.Range;
 
+/**
+ * 
+ * @author Gregor Harlan
+ * Idea and supervising by Jens Bornschein jens.bornschein@tu-dresden.de
+ * Copyright by Technische Universität Dresden / MCI 2014
+ *
+ */
 public class Gnuplot {
 
 	private String executable;

@@ -41,7 +41,13 @@ import com.beust.jcommander.IStringConverterFactory;
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
-
+/**
+ * 
+ * @author Gregor Harlan
+ * Idea and supervising by Jens Bornschein jens.bornschein@tu-dresden.de
+ * Copyright by Technische Universität Dresden / MCI 2014
+ *
+ */
 @Parameters(separators = "=", resourceBundle = "Bundle")
 public class SvgPlot {
 
@@ -80,6 +86,12 @@ public class SvgPlot {
 
 	@Parameter(names = { "--help", "-h" }, help = true, descriptionKey = "param.help")
 	private boolean help;
+	
+	//TODO: add parameter and description for integrals
+	
+	//TODO: add parameter for scatter plot file
+	
+	//TODO: add a parameter for axes naming
 
 	private SvgDocument doc;
 
@@ -136,6 +148,8 @@ public class SvgPlot {
 		if (output != null) {
 			doc.writeTo(new FileOutputStream(output));
 			String parent = output.getParent() == null ? "" : output.getParent();
+			
+			//FIXME: if the target is given as an relative path "test/test.svg" the legend and the description are created in the parent directory --> the / is deleted  
 			String legendFile = parent + output.getName().replaceFirst("(\\.[^.]*)?$", "_legend$0");
 			legend.writeTo(new FileOutputStream(legendFile));
 			String descFile = parent + output.getName().replaceFirst("(\\.[^.]*)?$", "_desc.html");
@@ -145,6 +159,12 @@ public class SvgPlot {
 		}
 	}
 
+	/**
+	 * Generates the basic css optimized for tactile output on a tiger embosser.
+	 * TODO: make this more general - maybe load this from the configuration
+	 * @param doc
+	 * @throws IOException
+	 */
 	private void createCss(SvgDocument doc) throws IOException {
 		String css = "/* default */\n";
 		css += "svg { fill: none; stroke: #000000; stroke-width: " + strokeWidth + "; }\n";
@@ -216,7 +236,12 @@ public class SvgPlot {
 		}
 	}
 
+	/**
+	 * Paint the axes to the svg file.
+	 */
 	private void createAxes() {
+		//TODO: name the axes
+		
 		Node axes = viewbox.appendChild(doc.createGroup("axes"));
 
 		Point from, to;
@@ -237,6 +262,12 @@ public class SvgPlot {
 		points += " " + to;
 		xAxisArrow.setAttribute("points", points);
 		xAxisArrow.appendChild(doc.createTitle(translate("xaxis")));
+		
+		// append x-label
+		Point pos2 = to;
+		pos2.translate(0, 13);
+		doc.appendChild(createLabel("x", pos2, "x_label", "label"));
+
 
 		from = cs.convert(0, yRange.from, 0, 10);
 		to = cs.convert(0, yRange.to, 0, -10);
@@ -253,6 +284,17 @@ public class SvgPlot {
 		points += " " + to;
 		yAxisArrow.setAttribute("points", points);
 		yAxisArrow.appendChild(doc.createTitle(translate("yaxis")));
+		
+		
+		/*
+		 *  create x title
+		 */
+		
+		Point pos3 = to;
+		pos3.translate(-15, 0);
+		doc.appendChild(createLabel("y", pos3, "y_label", "label"));
+		
+		
 
 		Node xTics = axes.appendChild(doc.createGroup("x-tics"));
 		for (double pos : cs.xAxis.ticLines()) {
@@ -269,6 +311,13 @@ public class SvgPlot {
 			to.translate(12, 0);
 			yTics.appendChild(doc.createLine(from, to));
 		}
+	}
+	
+	private Element createLabel(String text, Point pos, String id, String cssClass){
+		Element label = doc.createText(pos, text);
+		if(id != null && !id.isEmpty())label.setAttribute("id", id);
+		if(cssClass != null && !cssClass.isEmpty())label.setAttribute("class", cssClass);
+		return label;
 	}
 
 	private void createReferenceLines() {
@@ -300,6 +349,9 @@ public class SvgPlot {
 	}
 
 	private void createPlots() throws IOException, InterruptedException {
+		//TODO: add scatter plot
+		
+		
 		Node plots = viewbox.appendChild(doc.createGroup("plots"));
 
 		Gnuplot gnuplot = new Gnuplot(this.gnuplot);
@@ -347,6 +399,8 @@ public class SvgPlot {
 	}
 
 	private Element createOverlay(Overlay overlay) {
+		//TODO: create overlays for origin
+		
 		Element circle = doc.createCircle(cs.convert(overlay), Overlay.RADIUS);
 		circle.appendChild(doc.createTitle(format(overlay)));
 		if (overlay.getFunction() != null) {
@@ -355,6 +409,10 @@ public class SvgPlot {
 		return circle;
 	}
 
+	/**
+	 * Writes the external HTML description document
+	 * @param plotList
+	 */
 	private void createDesc(PlotList plotList) {
 		String tab = "    ";
 		String nl = "\n" + tab + tab;
@@ -363,14 +421,16 @@ public class SvgPlot {
 		div.appendChild(desc.createP(translateN("desc.intro", formatX(cs.xAxis.range.from), formatX(cs.xAxis.range.to), formatX(cs.xAxis.ticInterval), formatY(cs.yAxis.range.from), formatY(cs.yAxis.range.to), formatY(cs.yAxis.ticInterval), functions.size())));
 
 		if (!functions.isEmpty()) {
-			Node ol = div.appendChild(desc.createElement("ol"));
+			Node ol = div.appendChild(desc.createElement("ul"));
+			int f = 0;
 			for (Function function : functions) {
 				Element li = (Element) ol.appendChild(desc.createElement("li"));
+				li.appendChild(desc.createTextElement("span", "f_" + (++f) + "(x) = "));
 				if (function.hasTitle()) {
 					li.appendChild(desc.createTextElement("strong", function.getTitle() + ":"));
 					li.appendChild(desc.createTextNode(" " + function.getFunction() + nl + tab + tab));
 				} else {
-					li.setTextContent(function.getFunction());
+					li.appendChild(desc.createTextElement("span", function.getFunction()));
 				}
 			}
 
@@ -382,8 +442,8 @@ public class SvgPlot {
 						List<Point> intersections = plotList.get(i).getIntersections(plotList.get(k));
 						if (!intersections.isEmpty()) {
 							hasIntersections = true;
-							div.appendChild(desc.createP(translateN("desc.intersections", i + 1, k + 1, intersections.size())));
-							div.appendChild(createPointList(intersections));
+							div.appendChild(desc.createP(translateN("desc.intersections", "f_"+(i + 1), "f_"+(k + 1), intersections.size())));
+							div.appendChild(createPointList(intersections, "s"));
 						}
 					}
 				}
@@ -396,30 +456,80 @@ public class SvgPlot {
 		for (int i = 0; i < plotList.size(); i++) {
 			div = desc.appendBodyChild(desc.createDiv("function-" + (i + 1)));
 			List<Point> extrema = plotList.get(i).getExtrema();
-			String f = plotList.size() == 1 ? "" : " " + (i + 1);
+			String f = plotList.size() == 1 ? "" : " f_" + (i + 1);
 			div.appendChild(desc.createP(translateN("desc.extrema", f, extrema.size())));
 			if (!extrema.isEmpty()) {
-				div.appendChild(createPointList(extrema));
+				div.appendChild(createPointList(extrema, "E"));
 			}
 			List<Point> roots = plotList.get(i).getRoots();
 			div.appendChild(desc.createP(translateN("desc.roots", roots.size())));
 			if (!roots.isEmpty()) {
-				div.appendChild(createPointList(roots));
+				div.appendChild(createXPointList(roots));
 			}
 		}
 
 		desc.appendBodyChild(desc.createP(translate("desc.note")));
 	}
 
+	/**
+	 * Generates a HTML ul list with the Points as li list entries (x / y)
+	 * @param points
+	 * @return ul element with points as a list
+	 */
 	private Element createPointList(List<Point> points) {
+			return createPointList(points, null);
+	}
+	/**
+	 * Generates a HTML ul list with the Points as li list entries packed in the given caption string and brackets. E.g. E(x|y)
+	 * @param points
+	 * @return ul element with points as a list
+	 */
+	private Element createPointList(List<Point> points, String cap) {
 		Element list = desc.createElement("ul");
+		int i = 0;
 		for (Point point : points) {
-			list.appendChild(desc.createTextElement("li", format(point)));
+			if(cap != null && !cap.isEmpty()){
+				list.appendChild(desc.createTextElement("li", formatForText(point, cap+"_" + ++i)));				
+				}
+			else{
+				list.appendChild(desc.createTextElement("li", format(point)));
+			}
 		}
 		return list;
 	}
+	
+	
+	/**
+	 * Generates a HTML ul list with the Points as li list entries (x / y)
+	 * @param points
+	 * @return ul element with points as a list
+	 */
+	private Element createXPointList(List<Point> points) {
+			return createXPointList(points, "x");
+	}
+	/**
+	 * Generates a HTML ul list with the Points as li list entries packed in the given caption string and brackets. E.g. E(x|y)
+	 * @param points
+	 * @return ul element with points as a list
+	 */
+	private Element createXPointList(List<Point> points, String cap) {
+		Element list = desc.createElement("ul");
+		int i = 0;
+		for (Point point : points) {
+			if(cap != null && !cap.isEmpty()){
+				list.appendChild(desc.createTextElement("li", cap+"_" + ++i + " = " + formatX(point.x)));				
+				}
+			else{
+				list.appendChild(desc.createTextElement("li", formatX(point.x)));
+			}
+		}
+		return list;
+	}
+	
 
 	private void createLegend(Point pos) {
+		//TODO: change key
+		
 		int distance = 7;
 		pos.y += 2 * distance;
 
@@ -434,9 +544,9 @@ public class SvgPlot {
 
 			pos.translate(35, 0);
 			if (function.hasTitle()) {
-				legend.appendChild(legend.createText(pos, function.getTitle() + ":", function.getFunction()));
+				legend.appendChild(legend.createText(pos, "f_" +(i-1) +"(x) = "+ function.getTitle() + ":", function.getFunction()));
 			} else {
-				legend.appendChild(legend.createText(pos, function.getFunction()));
+				legend.appendChild(legend.createText(pos,  "f_" +(i-1) +"(x) = "+function.getFunction()));
 			}
 			pos.translate(-35, distance);
 		}
@@ -448,6 +558,11 @@ public class SvgPlot {
 		legend.appendChild(legend.createText(pos, translate("legend.yrange", formatY(cs.yAxis.range.from), formatY(cs.yAxis.range.to)), translate("legend.ytic", formatY(cs.yAxis.ticInterval))));
 	}
 
+	/**
+	 * Formats the x value of a point with respect to in Pi is set.
+	 * @param x	|	x-value
+	 * @return formated string for the point
+	 */
 	public String formatX(double x) {
 		String str = cs.xAxis.format(x);
 		if (pi && !"0".equals(str)) {
@@ -460,8 +575,27 @@ public class SvgPlot {
 		return cs.yAxis.format(y);
 	}
 
+	/**
+	 * Formats a Point that it is optimized for speech output.
+	 * E.g. (x / y)
+	 * @param point	|	The point that should be transformed into a textual representation
+	 * @return formated string for the point with '/' as delimiter
+	 */
 	public String format(Point point) {
 		return formatX(point.x) + " / " + formatY(point.y);
+	}
+	
+	/**
+	 * Formats a Point that it is optimized for textual output and packed into the caption with brackets.
+	 * E.g. E(x | y)
+	 * @param point	|	The point that should be transformed into a textual representation
+	 * @param cap	|	The caption sting without brackets
+	 * @return formated string for the point with '/' as delimiter if now caption is set, otherwise packed in the caption with brackets and the '|' as delimiter
+	 */
+	public String formatForText(Point point, String cap) {
+		String p = formatX(point.x) + " | " + formatY(point.y);
+		cap = cap.trim();
+		return (cap != null && !cap.isEmpty()) ? cap + "(" + p + ")" : p;
 	}
 
 	public static String translate(String key, Object... arguments) {

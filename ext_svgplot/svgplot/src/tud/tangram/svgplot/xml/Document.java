@@ -14,7 +14,13 @@ import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.Text;
-
+/**
+ * 
+ * @author Gregor Harlan
+ * Idea and supervising by Jens Bornschein jens.bornschein@tu-dresden.de
+ * Copyright by Technische Universität Dresden / MCI 2014
+ *
+ */
 public class Document {
 
 	protected final org.w3c.dom.Document doc;

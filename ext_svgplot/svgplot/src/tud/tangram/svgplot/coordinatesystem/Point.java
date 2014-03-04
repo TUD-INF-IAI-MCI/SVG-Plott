@@ -3,7 +3,13 @@ package tud.tangram.svgplot.coordinatesystem;
 import tud.tangram.svgplot.SvgPlot;
 
 import com.beust.jcommander.IStringConverter;
-
+/**
+ * 
+ * @author Gregor Harlan
+ * Idea and supervising by Jens Bornschein jens.bornschein@tu-dresden.de
+ * Copyright by Technische Universität Dresden / MCI 2014
+ *
+ */
 public class Point {
 
 	public double x;

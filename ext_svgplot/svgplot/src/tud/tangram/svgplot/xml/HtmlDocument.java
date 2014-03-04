@@ -8,10 +8,19 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 public class HtmlDocument extends Document {
+	
+	//TODO: make it more general in a mathematical way
+	
 
 	final protected Element head;
 	final protected Element body;
-
+	/**
+	 * 
+	 * @author Gregor Harlan
+	 * Idea and supervising by Jens Bornschein jens.bornschein@tu-dresden.de
+	 * Copyright by Technische Universität Dresden / MCI 2014
+	 *
+	 */
 	public HtmlDocument(String title) throws ParserConfigurationException {
 		super("html");
 

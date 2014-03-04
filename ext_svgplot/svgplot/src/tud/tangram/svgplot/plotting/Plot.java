@@ -8,7 +8,13 @@ import java.util.List;
 import java.util.Map;
 
 import tud.tangram.svgplot.coordinatesystem.Point;
-
+/**
+ * 
+ * @author Gregor Harlan
+ * Idea and supervising by Jens Bornschein jens.bornschein@tu-dresden.de
+ * Copyright by Technische Universität Dresden / MCI 2014
+ *
+ */
 public class Plot implements Iterable<List<Point>> {
 
 	final private Function function;

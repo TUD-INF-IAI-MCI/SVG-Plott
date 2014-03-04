@@ -5,7 +5,13 @@ import java.util.List;
 
 import tud.tangram.svgplot.coordinatesystem.CoordinateSystem;
 import tud.tangram.svgplot.coordinatesystem.Point;
-
+/**
+ * 
+ * @author Gregor Harlan
+ * Idea and supervising by Jens Bornschein jens.bornschein@tu-dresden.de
+ * Copyright by Technische Universität Dresden / MCI 2014
+ *
+ */
 public class PlotList extends ArrayList<Plot> {
 	private static final long serialVersionUID = 1L;
 

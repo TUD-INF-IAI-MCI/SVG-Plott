@@ -1,7 +1,13 @@
 package tud.tangram.svgplot.coordinatesystem;
 
 import java.text.DecimalFormat;
-
+/**
+ * 
+ * @author Gregor Harlan
+ * Idea and supervising by Jens Bornschein jens.bornschein@tu-dresden.de
+ * Copyright by Technische Universität Dresden / MCI 2014
+ *
+ */
 public class Axis {
 	final private static int minGridDistance = 10;
 
