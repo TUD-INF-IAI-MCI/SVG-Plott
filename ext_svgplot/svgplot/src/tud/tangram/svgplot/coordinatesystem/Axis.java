@@ -1,6 +1,7 @@
 package tud.tangram.svgplot.coordinatesystem;
 
 import java.text.DecimalFormat;
+import java.util.Locale;
 /**
  * 
  * @author Gregor Harlan
@@ -19,8 +20,10 @@ public class Axis {
 	final public int atomCount;
 	final public double[] intervalSteps;
 
-	final private DecimalFormat decimalFormat;
-
+	final private DecimalFormat decimalFormat = (DecimalFormat) DecimalFormat.getInstance(Locale.getDefault());
+	// FIXME: use this for publications
+	//final private DecimalFormat decimalFormat = (DecimalFormat) DecimalFormat.getInstance(Locale.US);
+		
 	public Axis(Range axisRange, double size) {
 		boolean finished = false;
 		double interval = 0;
@@ -51,6 +54,7 @@ public class Axis {
 			interval = factor * dimension;
 			range.from = ((int) (axisRange.from / interval)) * interval;
 			range.to = ((int) (axisRange.to / interval)) * interval;
+			range.name = axisRange.name;
 			if (range.from > axisRange.from) {
 				axisRange.from = range.from - interval;
 				finished = false;
@@ -66,7 +70,6 @@ public class Axis {
 		ticInterval = 2 * interval;
 		ticRange = new Range(((int) (range.from / ticInterval)) * ticInterval, ((int) (range.to / ticInterval)) * ticInterval);
 
-		decimalFormat = new DecimalFormat();
 		decimalFormat.setMaximumFractionDigits(Math.max(0, -dimensionExp + 2));
 
 		atom = dimension / 100;

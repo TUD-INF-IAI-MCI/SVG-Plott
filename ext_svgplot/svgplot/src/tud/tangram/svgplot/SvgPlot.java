@@ -50,7 +50,8 @@ import com.beust.jcommander.Parameters;
  */
 @Parameters(separators = "=", resourceBundle = "Bundle")
 public class SvgPlot {
-
+	final protected static String[] fnList = new String[]{"f", "g", "h", "i", "j", "k", "l", "m", "o", "p", "q", "r" };
+	
 	@Parameter(description = "functions")
 	private List<Function> functions = new ArrayList<>();
 
@@ -90,8 +91,6 @@ public class SvgPlot {
 	//TODO: add parameter and description for integrals
 	
 	//TODO: add parameter for scatter plot file
-	
-	//TODO: add a parameter for axes naming
 	
 	//TODO: add parameter for marking some points 
 
@@ -161,7 +160,6 @@ public class SvgPlot {
 
 	/**
 	 * Generates the basic css optimized for tactile output on a tiger embosser.
-	 * TODO: make this more general - maybe load this from the configuration
 	 * @param doc
 	 * @throws IOException
 	 */
@@ -240,7 +238,7 @@ public class SvgPlot {
 	 * Paint the axes to the svg file.
 	 */
 	private void createAxes() {
-		//TODO: name the axes
+		//TODO: mark the origin
 		
 		Node axes = viewbox.appendChild(doc.createGroup("axes"));
 
@@ -263,11 +261,10 @@ public class SvgPlot {
 		xAxisArrow.setAttribute("points", points);
 		xAxisArrow.appendChild(doc.createTitle(translate("xaxis")));
 		
-		// append x-label
+		// create x-label
 		Point pos2 = to;
 		pos2.translate(0, 13);
 		doc.appendChild(createLabel("x", pos2, "x_label", "label"));
-
 
 		from = cs.convert(0, yRange.from, 0, 10);
 		to = cs.convert(0, yRange.to, 0, -10);
@@ -285,16 +282,10 @@ public class SvgPlot {
 		yAxisArrow.setAttribute("points", points);
 		yAxisArrow.appendChild(doc.createTitle(translate("yaxis")));
 		
-		
-		/*
-		 *  create x title
-		 */
-		
+		//create y-label
 		Point pos3 = to;
 		pos3.translate(-15, 0);
 		doc.appendChild(createLabel("y", pos3, "y_label", "label"));
-		
-		
 
 		Node xTics = axes.appendChild(doc.createGroup("x-tics"));
 		for (double pos : cs.xAxis.ticLines()) {
@@ -360,10 +351,10 @@ public class SvgPlot {
 		gnuplot.setXRange(cs.xAxis.range, pi);
 		gnuplot.setYRange(cs.yAxis.range);
 
-		int i = 1;
+		int i = 0;
 		PlotList plotList = new PlotList(cs);
 		for (Function function : functions) {
-			Node graph = plots.appendChild(doc.createGroup("plot-" + i++));
+			Node graph = plots.appendChild(doc.createGroup("plot-" + getFunctionName(i++)));
 			Element path = (Element) graph.appendChild(doc.createElement("path"));
 			path.setAttribute("clip-path", "url(#plot-area)");
 
@@ -408,7 +399,7 @@ public class SvgPlot {
 		}
 		return circle;
 	}
-
+	
 	/**
 	 * Writes the external HTML description document
 	 * @param plotList
@@ -416,16 +407,25 @@ public class SvgPlot {
 	private void createDesc(PlotList plotList) {
 		String tab = "    ";
 		String nl = "\n" + tab + tab;
+		int s = 0; // intersection offset counter 
+		int e = 0; // extreme point offset counter
+		int r = 0; // root point offset counter
 
+		// general description
 		Node div = desc.appendBodyChild(desc.createDiv("functions"));
-		div.appendChild(desc.createP(translateN("desc.intro", formatX(cs.xAxis.range.from), formatX(cs.xAxis.range.to), formatX(cs.xAxis.ticInterval), formatY(cs.yAxis.range.from), formatY(cs.yAxis.range.to), formatY(cs.yAxis.ticInterval), functions.size())));
+		div.appendChild(desc.createP(translateN("desc.intro", 
+				formatX(cs.xAxis.range.from), formatX(cs.xAxis.range.to), formatX(cs.xAxis.ticInterval), 
+				formatY(cs.yAxis.range.from), formatY(cs.yAxis.range.to), formatY(cs.yAxis.ticInterval), 
+				formatName(cs.xAxis.range.name), formatName(cs.yAxis.range.name),
+				functions.size())));
 
+		// functions
 		if (!functions.isEmpty()) {
 			Node ol = div.appendChild(desc.createElement("ul"));
 			int f = 0;
 			for (Function function : functions) {
 				Element li = (Element) ol.appendChild(desc.createElement("li"));
-				li.appendChild(desc.createTextElement("span", "f_" + (++f) + "(x) = "));
+				li.appendChild(desc.createTextElement("span",  getFunctionName(f++) + "(x) = "));
 				if (function.hasTitle()) {
 					li.appendChild(desc.createTextElement("strong", function.getTitle() + ":"));
 					li.appendChild(desc.createTextNode(" " + function.getFunction() + nl + tab + tab));
@@ -434,6 +434,7 @@ public class SvgPlot {
 				}
 			}
 
+			// intersections between functions
 			if (functions.size() > 1) {
 				div = desc.appendBodyChild(desc.createDiv("intersections"));
 				boolean hasIntersections = false;
@@ -442,8 +443,9 @@ public class SvgPlot {
 						List<Point> intersections = plotList.get(i).getIntersections(plotList.get(k));
 						if (!intersections.isEmpty()) {
 							hasIntersections = true;
-							div.appendChild(desc.createP(translateN("desc.intersections", "f_"+(i + 1), "f_"+(k + 1), intersections.size())));
-							div.appendChild(createPointList(intersections, "s"));
+							div.appendChild(desc.createP(translateN("desc.intersections", getFunctionName(i), getFunctionName(k), intersections.size())));
+							div.appendChild(createPointList(intersections, "S", s));
+							s += intersections.size();
 						}
 					}
 				}
@@ -453,18 +455,21 @@ public class SvgPlot {
 			}
 		}
 
+		// extreme points & zero
 		for (int i = 0; i < plotList.size(); i++) {
-			div = desc.appendBodyChild(desc.createDiv("function-" + (i + 1)));
+			div = desc.appendBodyChild(desc.createDiv("function-" + getFunctionName(i)));
 			List<Point> extrema = plotList.get(i).getExtrema();
-			String f = plotList.size() == 1 ? "" : " f_" + (i + 1);
+			String f = plotList.size() == 1 ? "" : " " + getFunctionName(i);
 			div.appendChild(desc.createP(translateN("desc.extrema", f, extrema.size())));
 			if (!extrema.isEmpty()) {
-				div.appendChild(createPointList(extrema, "E"));
+				div.appendChild(createPointList(extrema, "E", e));
+				e += extrema.size();
 			}
 			List<Point> roots = plotList.get(i).getRoots();
 			div.appendChild(desc.createP(translateN("desc.roots", roots.size())));
 			if (!roots.isEmpty()) {
-				div.appendChild(createXPointList(roots));
+				div.appendChild(createXPointList(roots, r));
+				r += roots.size();
 			}
 		}
 
@@ -473,20 +478,32 @@ public class SvgPlot {
 
 	/**
 	 * Generates a HTML ul list with the Points as li list entries (x / y)
-	 * @param points
+	 * @param points	|	list of points to put in the listing
 	 * @return ul element with points as a list
 	 */
 	private Element createPointList(List<Point> points) {
-			return createPointList(points, null);
+			return createPointList(points, null, 0);
 	}
+	
 	/**
-	 * Generates a HTML ul list with the Points as li list entries packed in the given caption string and brackets. E.g. E(x|y)
-	 * @param points
+	 * Generates a HTML ul list with the Points as li list entries (x / y)
+	 * @param points	|	list of points to put in the listing
+	 * @param cap		|	caption for the points
 	 * @return ul element with points as a list
 	 */
 	private Element createPointList(List<Point> points, String cap) {
+			return createPointList(points, cap, 0);
+	}
+	/**
+	 * Generates a HTML ul list with the Points as li list entries packed in the given caption string and brackets. E.g. E(x|y)
+	 * @param points	|	list of points to put in the listing
+	 * @param cap		|	caption for the points
+	 * @param offset	|	counter offset
+	 * @return ul element with points as a list
+	 */
+	private Element createPointList(List<Point> points, String cap, int offset) {
 		Element list = desc.createElement("ul");
-		int i = 0;
+		int i = offset;
 		for (Point point : points) {
 			if(cap != null && !cap.isEmpty()){
 				list.appendChild(desc.createTextElement("li", formatForText(point, cap+"_" + ++i)));				
@@ -501,20 +518,31 @@ public class SvgPlot {
 	
 	/**
 	 * Generates a HTML ul list with the Points as li list entries (x / y)
-	 * @param points
+	 * @param points	|	list of points to put in the listing
 	 * @return ul element with points as a list
 	 */
 	private Element createXPointList(List<Point> points) {
-			return createXPointList(points, "x");
+			return createXPointList(points, "x", 0);
+	}
+	/**
+	 * Generates a HTML ul list with the Points as li list entries (x / y)
+	 * @param points	|	list of points to put in the listing
+	 * @param offset	|	counter offset
+	 * @return ul element with points as a list
+	 */
+	private Element createXPointList(List<Point> points, int offset) {
+			return createXPointList(points, "x", offset);
 	}
 	/**
 	 * Generates a HTML ul list with the Points as li list entries packed in the given caption string and brackets. E.g. E(x|y)
-	 * @param points
+	 * @param points	|	list of points to put in the listing
+	 * @param cap		|	caption for the points
+	 * @param offset	|	counter offset
 	 * @return ul element with points as a list
 	 */
-	private Element createXPointList(List<Point> points, String cap) {
+	private Element createXPointList(List<Point> points, String cap, int offset) {
 		Element list = desc.createElement("ul");
-		int i = 0;
+		int i = offset;
 		for (Point point : points) {
 			if(cap != null && !cap.isEmpty()){
 				list.appendChild(desc.createTextElement("li", cap+"_" + ++i + " = " + formatX(point.x)));				
@@ -597,6 +625,10 @@ public class SvgPlot {
 		cap = cap.trim();
 		return (cap != null && !cap.isEmpty()) ? cap + "(" + p + ")" : p;
 	}
+	
+	public static String formatName(String name){
+		return (name == null || name.isEmpty()) ? "" : " (" + name+")";
+	}
 
 	public static String translate(String key, Object... arguments) {
 		return MessageFormat.format(bundle.getString(key), arguments);
@@ -616,6 +648,17 @@ public class SvgPlot {
 			decimalFormat.setDecimalFormatSymbols(dfs);
 		}
 		return decimalFormat.format(value);
+	}
+	
+	/**
+	 * Try to translate the function index into an continuous literal starting with the char 'f'.
+	 * If the given index is not valid it returns the name as an combination of 'f' + the given number. 
+	 * @param f	|	the index if the function
+	 * @return a literal representation to the given function index e.g. 'f', 'g', 'h' or 'f1000'.
+	 */
+	public static String getFunctionName(int f){
+		if(f < 0 || f > (fnList.length - 1)) return "f" +String.valueOf(f);
+		return fnList[f];
 	}
 
 	/**

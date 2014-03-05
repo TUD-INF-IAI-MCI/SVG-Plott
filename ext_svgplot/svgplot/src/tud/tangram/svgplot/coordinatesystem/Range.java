@@ -20,7 +20,7 @@ public class Range {
 	}
 	
 	public Range(double from, double to)  { 
-		this(from, to, null);
+		this(from, to, "");
 	}
 
 	public double distance() {
@@ -29,7 +29,7 @@ public class Range {
 
 	@Override
 	public String toString() {
-		return from + ":" + to;
+		return name + " " + from + ":" + to;
 	}
 
 	public static class Converter implements IStringConverter<Range> {

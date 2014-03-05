@@ -8,9 +8,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 public class HtmlDocument extends Document {
-	
-	//TODO: make it more general in a mathematical way
-	
 
 	final protected Element head;
 	final protected Element body;
