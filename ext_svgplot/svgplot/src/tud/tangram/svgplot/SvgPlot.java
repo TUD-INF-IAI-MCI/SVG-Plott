@@ -354,7 +354,7 @@ public class SvgPlot {
 		int i = 0;
 		PlotList plotList = new PlotList(cs);
 		for (Function function : functions) {
-			Node graph = plots.appendChild(doc.createGroup("plot-" + getFunctionName(i++)));
+			Node graph = plots.appendChild(doc.createGroup("plot-" + ++i));
 			Element path = (Element) graph.appendChild(doc.createElement("path"));
 			path.setAttribute("clip-path", "url(#plot-area)");
 
