@@ -56,7 +56,7 @@ public class Gnuplot {
 		String pi = this.pi ? "*pi" : "";
 		command += "set xrange [" + xrange.from + pi + ":" + xrange.to + pi + "]; ";
 		command += "set yrange [" + yrange.from + ":" + yrange.to + "]; ";
-
+		//call gnuplot with command
 		Process p = Runtime.getRuntime().exec(new String[] { executable, "-e", command, "-e", "plot " + function });
 		BufferedReader bri = new BufferedReader(new InputStreamReader(p.getInputStream()));
 		BufferedReader bre = new BufferedReader(new InputStreamReader(p.getErrorStream()));
@@ -69,7 +69,20 @@ public class Gnuplot {
 		List<Point> sublist = null;
 		boolean newList = true;
 		boolean nextNewList = true;
+		
+		/*
+		 * When table mode is enabled, ‘plot‘ and ‘splot‘ commands print out a multicolumn 
+		 * ASCII table of X Y {Z} R values rather than creating an actual plot on the current 
+		 * terminal. The character R takes on one of three values: "i" if the point is in the 
+		 * active range, "o" if it is out-of-range, or "u" if it is undefined. The data 
+		 * format is determined by the format of the axis labels (see ‘set format‘), and the 
+		 * columns are separated by single spaces.
+		 */
+		
+		//read gnuplot
 		while ((line = bri.readLine()) != null) {
+			System.out.println(line);
+			
 			if (line.trim().length() == 0 || line.startsWith("#"))
 				continue;
 			scanner = new Scanner(line);

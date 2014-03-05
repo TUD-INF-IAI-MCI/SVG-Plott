@@ -9,3 +9,11 @@ java -jar svgplot.jar -o grafik2.svg -t "Grafik 2" -x -4:8 -y -6:6 "(x^5-12x^4+3
 Grafik 3:
 (wird verwendet für Frage 11)
 java -jar svgplot.jar -o grafik3.svg -t "Grafik 3" -x -6:10 -y -6:10 "1/(x-2)+2" "-0.3(x-3)^2+6"
+
+example gnuplot call
+
+C:\Program Files (x86)\gnuplot\bin\gnuplot.exe
+-e
+set table; set sample 1300; set xrange [-4.0:8.0]; set yrange [-6.0:6.0]; 
+-e
+plot (x**5-12*x**4+35*x**3+20*x**2-156*x+168)/56

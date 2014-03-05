@@ -25,7 +25,7 @@ public class Plot implements Iterable<List<Point>> {
 
 	public Plot(Function function, Gnuplot gnuplot) throws IOException, InterruptedException {
 		this.function = function;
-
+		//replacing uncommon signing to gnu plot format 
 		String gf = function.getFunction().replace("^", "**").replaceAll("(\\d|\\))\\s*([a-zA-z(])", "$1*$2");
 		plot = gnuplot.plot(gf);
 	}

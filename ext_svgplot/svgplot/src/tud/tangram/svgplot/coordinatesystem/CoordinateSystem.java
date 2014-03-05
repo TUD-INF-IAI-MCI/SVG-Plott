@@ -1,7 +1,7 @@
 package tud.tangram.svgplot.coordinatesystem;
 /**
  * 
- * @author Gregor Harlan
+ * @author Gregor Harlan, Jens Bornschein
  * Idea and supervising by Jens Bornschein jens.bornschein@tu-dresden.de
  * Copyright by Technische Universität Dresden / MCI 2014
  *

@@ -43,7 +43,7 @@ import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
 /**
  * 
- * @author Gregor Harlan
+ * @author Gregor Harlan, Jens Bornschein
  * Idea and supervising by Jens Bornschein jens.bornschein@tu-dresden.de
  * Copyright by Technische Universität Dresden / MCI 2014
  *
@@ -166,7 +166,7 @@ public class SvgPlot {
 	private void createCss(SvgDocument doc) throws IOException {
 		String css = "/* default */\n";
 		css += "svg { fill: none; stroke: #000000; stroke-width: " + strokeWidth + "; }\n";
-		css += "text { font-family: 'Braille DE Computer'; font-size: 36pt; fill: black; stroke: none; }\n";
+		css += "text { font-family: '_Braille DE Computer'; font-size: 36pt; fill: black; stroke: none; }\n";
 		css += "#grid { stroke: #777777; }\n";
 		css += "#axes, #reference-lines { stroke: #111111; fill: transparent; }\n";
 		double width = 2 * strokeWidth;
@@ -238,10 +238,7 @@ public class SvgPlot {
 	 * Paint the axes to the svg file.
 	 */
 	private void createAxes() {
-		//TODO: mark the origin
-		
 		Node axes = viewbox.appendChild(doc.createGroup("axes"));
-
 		Point from, to;
 		String points;
 
@@ -555,9 +552,8 @@ public class SvgPlot {
 	}
 	
 
+	//TODO: generate textual braille key
 	private void createLegend(Point pos) {
-		//TODO: change key
-		
 		int distance = 7;
 		pos.y += 2 * distance;
 
@@ -565,25 +561,26 @@ public class SvgPlot {
 		viewbox.setAttribute("viewBox", "0 0 " + format2svg(size.x) + " " + format2svg(size.y));
 
 		Node plots = viewbox.appendChild(legend.createGroup("plots"));
-		int i = 1;
+		int i = 0;
 		for (Function function : functions) {
-			Node plot = plots.appendChild(legend.createGroup("plot-" + i++));
+			Node plot = plots.appendChild(legend.createGroup("plot-" + (i+1)));
 			plot.appendChild(legend.createLine(new Point(pos.x, pos.y - 5), new Point(pos.x + 26, pos.y - 5)));
 
 			pos.translate(35, 0);
 			if (function.hasTitle()) {
-				legend.appendChild(legend.createText(pos, "f_" +(i-1) +"(x) = "+ function.getTitle() + ":", function.getFunction()));
+				legend.appendChild(legend.createText(pos, getFunctionName(i) + "(x) = "+ function.getTitle() + ":", function.getFunction()));
 			} else {
-				legend.appendChild(legend.createText(pos,  "f_" +(i-1) +"(x) = "+function.getFunction()));
+				legend.appendChild(legend.createText(pos,  getFunctionName(i) + "(x) = "+function.getFunction()));
 			}
 			pos.translate(-35, distance);
+			i++;
 		}
 
 		pos.translate(0, distance);
-		legend.appendChild(legend.createText(pos, translate("legend.xrange", formatX(cs.xAxis.range.from), formatX(cs.xAxis.range.to)), translate("legend.xtic", formatX(cs.xAxis.ticInterval))));
+		legend.appendChild(legend.createText(pos, translate("legend.xrange", formatX(cs.xAxis.range.from), formatX(cs.xAxis.range.to), formatName(cs.xAxis.range.name)), translate("legend.xtic", formatX(cs.xAxis.ticInterval))));
 
 		pos.translate(0, distance);
-		legend.appendChild(legend.createText(pos, translate("legend.yrange", formatY(cs.yAxis.range.from), formatY(cs.yAxis.range.to)), translate("legend.ytic", formatY(cs.yAxis.ticInterval))));
+		legend.appendChild(legend.createText(pos, translate("legend.yrange", formatY(cs.yAxis.range.from), formatY(cs.yAxis.range.to), formatName(cs.xAxis.range.name)), translate("legend.ytic", formatY(cs.yAxis.ticInterval))));
 	}
 
 	/**
