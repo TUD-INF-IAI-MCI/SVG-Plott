@@ -92,6 +92,8 @@ public class SvgPlot {
 	//TODO: add parameter for scatter plot file
 	
 	//TODO: add a parameter for axes naming
+	
+	//TODO: add parameter for marking some points 
 
 	private SvgDocument doc;
 
@@ -147,9 +149,7 @@ public class SvgPlot {
 
 		if (output != null) {
 			doc.writeTo(new FileOutputStream(output));
-			String parent = output.getParent() == null ? "" : output.getParent();
-			
-			//FIXME: if the target is given as an relative path "test/test.svg" the legend and the description are created in the parent directory --> the / is deleted  
+			String parent = output.getParent() == null ? "" : output.getParent() +  "\\";
 			String legendFile = parent + output.getName().replaceFirst("(\\.[^.]*)?$", "_legend$0");
 			legend.writeTo(new FileOutputStream(legendFile));
 			String descFile = parent + output.getName().replaceFirst("(\\.[^.]*)?$", "_desc.html");
