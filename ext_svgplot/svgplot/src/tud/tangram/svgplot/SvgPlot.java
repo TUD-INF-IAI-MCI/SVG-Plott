@@ -1,6 +1,5 @@
 package tud.tangram.svgplot;
 
-
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -26,11 +25,13 @@ import org.w3c.dom.Node;
 import tud.tangram.svgplot.coordinatesystem.CoordinateSystem;
 import tud.tangram.svgplot.coordinatesystem.Point;
 import tud.tangram.svgplot.coordinatesystem.PointListList;
+import tud.tangram.svgplot.coordinatesystem.PointListList.PointList;
 import tud.tangram.svgplot.coordinatesystem.Range;
 import tud.tangram.svgplot.plotting.Function;
 import tud.tangram.svgplot.plotting.Gnuplot;
 import tud.tangram.svgplot.plotting.Plot;
 import tud.tangram.svgplot.plotting.PlotList;
+import tud.tangram.svgplot.plotting.PointPlot;
 import tud.tangram.svgplot.plotting.PlotList.Overlay;
 import tud.tangram.svgplot.plotting.PlotList.OverlayList;
 import tud.tangram.svgplot.xml.HtmlDocument;
@@ -93,7 +94,7 @@ public class SvgPlot {
 	
 	//TODO: add parameter for scatter plot file
 	
-	//TODO: add parameter for marking some points 
+	//parameter for marking some points 
 	@Parameter(names = { "--points", "--pts" }, descriptionKey = "param.points")
 	private PointListList points;
 	
@@ -116,6 +117,13 @@ public class SvgPlot {
 
 	final private static ResourceBundle bundle = ResourceBundle.getBundle("Bundle");
 
+	/**
+	 * Main function. Combine all the elements and create all the output files. 
+	 * @throws ParserConfigurationException
+	 * @throws IOException
+	 * @throws InterruptedException
+	 * @throws TransformerException
+	 */
 	public void run() throws ParserConfigurationException, IOException, InterruptedException, TransformerException {
 		if (title == null && output != null) {
 			title = output.getName();
@@ -164,8 +172,8 @@ public class SvgPlot {
 
 	/**
 	 * Generates the basic css optimized for tactile output on a tiger embosser.
-	 * @param doc
-	 * @throws IOException
+	 * @param doc	|	the svg document in with this css should been added
+	 * @throws IOException if the set up css file is not readable or does not exist anymore.
 	 */
 	private void createCss(SvgDocument doc) throws IOException {
 		String css = "/* default */\n";
@@ -178,7 +186,10 @@ public class SvgPlot {
 		css += "#plot-1 { stroke-dasharray: none; }\n";
 		css += "#plot-2 { stroke-dasharray: " + width + ", " + width * 3 + "; }\n";
 		css += "#overlays { stroke: none; stroke-dasharray: none; fill: transparent; }";
-
+		
+		css += ".poi_symbol { stroke: black; stroke-dasharray: none; stroke-width:"+ (strokeWidth * 1.5) +";  fill: black; }";
+		css += ".poi_symbol_bg { stroke: white; stroke-dasharray: none; stroke-width:"+(width * 3)+";  fill: transparent; }";
+		
 		if (this.css != null) {
 			css += "\n\n/* custom */\n";
 			if (new File(this.css).isFile()) {
@@ -189,6 +200,12 @@ public class SvgPlot {
 		doc.appendCss(css);
 	}
 
+	/**
+	 * Adds the textual readable title to the svg document at a predefined position in the left top corner of the sheet.
+	 * @param doc	|	the svg document where the header text should be insert
+	 * @param text	|	the textual value
+	 * @return	the position of the added title node
+	 */
 	private Point createTitle(SvgDocument doc, String text) {
 		Point pos = new Point(margin[3], margin[0] + 10);
 		Element title = (Element) doc.appendChild(doc.createText(pos, text));
@@ -212,6 +229,9 @@ public class SvgPlot {
 		rect.setAttribute("height", format2svg(bottomRight.y - topLeft.y));
 	}
 
+	/**
+	 * Paint the grid to the svg file.
+	 */
 	private void createGrid() {
 		Node grid = viewbox.appendChild(doc.createGroup("grid"));
 
@@ -305,6 +325,14 @@ public class SvgPlot {
 		}
 	}
 	
+	/**
+	 * Creates a textual label and place it in the svg document previous the viewbox.
+	 * @param text		|	the textual value that should be diplayed
+	 * @param pos		|	pixel position in the svg file where the text should start
+	 * @param id		|	XML id of the node
+	 * @param cssClass	|	css class for this node
+	 * @return an textual Element already placed in the svg file with given text at given position.
+	 */
 	private Element createLabel(String text, Point pos, String id, String cssClass){
 		Element label = doc.createText(pos, text);
 		if(id != null && !id.isEmpty())label.setAttribute("id", id);
@@ -312,6 +340,9 @@ public class SvgPlot {
 		return label;
 	}
 
+	/**
+	 * Paint the vertical and horizontal additional reference lines to the svg file. 
+	 */
 	private void createReferenceLines() {
 		if (xLines == null && yLines == null) {
 			return;
@@ -340,6 +371,11 @@ public class SvgPlot {
 		}
 	}
 
+	/**
+	 * Paint the function-plots in the svg file.
+	 * @throws IOException if gnuplot could not be found
+	 * @throws InterruptedException if gnuplot causes some exceptions
+	 */
 	private void createPlots() throws IOException, InterruptedException {
 		//TODO: add scatter plot
 		
@@ -352,6 +388,7 @@ public class SvgPlot {
 		gnuplot.setXRange(cs.xAxis.range, pi);
 		gnuplot.setYRange(cs.yAxis.range);
 
+		// functions
 		int i = 0;
 		PlotList plotList = new PlotList(cs);
 		for (Function function : functions) {
@@ -372,6 +409,22 @@ public class SvgPlot {
 			path.setAttribute("d", points);
 		}
 
+		//points 
+		if(points != null && points.pointLists != null && points.pointLists.size() > 0){
+			int j = 0;
+			for (PointList pl : points.pointLists) {
+				if(pl != null && pl.points != null && pl.points.size() > 0){
+					for (Point p : pl.points) {	
+						Element symbol = PointPlot.getPointSymbolForIndex(j, doc);
+						PointPlot.paintPoint(doc, cs.convert(p), symbol , viewbox);
+					}
+				}
+				j++;
+			}
+		}
+		
+		
+		// overlays for audio tactile output
 		Node overlaysElement = viewbox.appendChild(doc.createGroup("overlays"));
 		OverlayList overlays = plotList.overlays();
 		for (Function function : functions) {
@@ -390,6 +443,11 @@ public class SvgPlot {
 		createDesc(plotList);
 	}
 
+	/**
+	 * Paints an overlay in the svg file
+	 * @param overlay	|	the overlay that should be insert, containing position and additional informations about the point underneath it.
+	 * @return a DOM Element representing the already inserted overlay node.
+	 */
 	private Element createOverlay(Overlay overlay) {
 		//TODO: create overlays for origin
 		
@@ -403,7 +461,7 @@ public class SvgPlot {
 	
 	/**
 	 * Writes the external HTML description document
-	 * @param plotList
+	 * @param plotList	|	???
 	 */
 	private void createDesc(PlotList plotList) {
 		String tab = "    ";
@@ -411,6 +469,8 @@ public class SvgPlot {
 		int s = 0; // intersection offset counter 
 		int e = 0; // extreme point offset counter
 		int r = 0; // root point offset counter
+		
+		//TODO: explain the poi points
 
 		// general description
 		Node div = desc.appendBodyChild(desc.createDiv("functions"));
@@ -516,7 +576,6 @@ public class SvgPlot {
 		return list;
 	}
 	
-	
 	/**
 	 * Generates a HTML ul list with the Points as li list entries (x / y)
 	 * @param points	|	list of points to put in the listing
@@ -555,8 +614,11 @@ public class SvgPlot {
 		return list;
 	}
 	
-
 	//TODO: generate textual braille key
+	/**
+	 * Paint the key as an svg file.
+	 * @param pos	|	??? //TODO: find out what this means
+	 */
 	private void createLegend(Point pos) {
 		int distance = 7;
 		pos.y += 2 * distance;
@@ -588,7 +650,7 @@ public class SvgPlot {
 	}
 
 	/**
-	 * Formats the x value of a point with respect to in Pi is set.
+	 * Formats the x value of a point with respect to if Pi is set.
 	 * @param x	|	x-value
 	 * @return formated string for the point
 	 */
@@ -627,14 +689,32 @@ public class SvgPlot {
 		return (cap != null && !cap.isEmpty()) ? cap + "(" + p + ")" : p;
 	}
 	
+	/**
+	 * Formats a additional Name of an object.
+	 * Checks if the name is set. If name is set the name is packed into brackets and prepend with an whitespace
+	 * @param name	|	optional name of an object or NULL
+	 * @return empty string or the name of the object packed into brackets and prepend with a whitespace e.g. ' (optional name)'
+	 */
 	public static String formatName(String name){
 		return (name == null || name.isEmpty()) ? "" : " (" + name+")";
 	}
 
+	/**
+	 * Try to translate a key in the localized version defined in the PropertyResourceBundle file.
+	 * @param key		|	PropertyResourceBundle key
+	 * @param arguments	|	arguments that should fill the placeholder in the returned PropertyResourceBundle value
+	 * @return a localized string for the given PropertyResourceBundle key, filled with the set arguments
+	 */
 	public static String translate(String key, Object... arguments) {
 		return MessageFormat.format(bundle.getString(key), arguments);
 	}
 
+	/**
+	 * Try to translate a key in the localized version defined in the PropertyResourceBundle file. This function is optimized for differing sentences depending on the amount of results.
+	 * @param key		|	PropertyResourceBundle key
+	 * @param arguments	|	arguments that should fill the placeholder in the returned PropertyResourceBundle value. The last argument gives the count and decide which value will be returned.
+	 * @return a localized string for the given amount depending PropertyResourceBundle key, filled with the set arguments
+	 */
 	public static String translateN(String key, Object... arguments) {
 		int last = (int) arguments[arguments.length - 1];
 		String suffix = last == 0 ? "_0" : last == 1 ? "_1" : "_n";
@@ -707,6 +787,9 @@ public class SvgPlot {
 		}
 	}
 
+	/**
+	 * Returns a converter for the special class-types of this project for JCommander interpretation.
+	 */
 	public static class StringConverterFactory implements IStringConverterFactory {
 		@SuppressWarnings({ "unchecked", "rawtypes" })
 		public Class<? extends IStringConverter<?>> getConverter(Class forType) {

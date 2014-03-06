@@ -18,7 +18,7 @@ import tud.tangram.svgplot.coordinatesystem.Point;
  */
 public class SvgDocument extends Document {
 
-	final protected Node defs;
+	final public Node defs;
 	final protected double textEnd;
 
 	final protected static int LINE_HEIGHT = 13;
@@ -28,6 +28,7 @@ public class SvgDocument extends Document {
 
 		root.setAttribute("xmlns", "http://www.w3.org/2000/svg");
 		root.setAttribute("version", "1.1");
+		root.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
 		root.setAttribute("width", SvgPlot.format2svg(size.x) + "mm");
 		root.setAttribute("height", SvgPlot.format2svg(size.y) + "mm");
 
@@ -79,6 +80,16 @@ public class SvgDocument extends Document {
 		circle.setAttribute("r", SvgPlot.format2svg(radius));
 		return circle;
 	}
+	
+	public Element createRectangle(Point center, double width, double height) {
+		Element rect = createElement("rect");
+		rect.setAttribute("x", center.x());
+		rect.setAttribute("y", center.y());
+		rect.setAttribute("width", SvgPlot.format2svg(width));
+		rect.setAttribute("height", SvgPlot.format2svg(height));
+		return rect;
+	}
+	
 
 	public Element createTitle(String title) {
 		return createTextElement("title", title);

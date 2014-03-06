@@ -17,6 +17,8 @@ public class PointListList{
 	
 	public PointListList(String pointLists) {
 		
+		//TODO: load from file
+		
 		pointLists = pointLists.replaceAll("[^\\d.,^\\s+,^\\{^\\}^-]", "");
 		String[] lists = pointLists.split("\\}");
 		for (String l : lists) {
