@@ -1,7 +1,6 @@
 package tud.tangram.svgplot.coordinatesystem;
 
 import tud.tangram.svgplot.SvgPlot;
-
 import com.beust.jcommander.IStringConverter;
 /**
  * 
@@ -51,7 +50,7 @@ public class Point {
 		@Override
 		public Point convert(String value) {
 			String[] s = value.split(",");
-			return new Point(Double.parseDouble(s[0]), Double.parseDouble(s[1]));
+			return new Point(s.length >0 ? Double.parseDouble(s[0]) : 0, s.length > 1 ? Double.parseDouble(s[1]) : 0);
 		}
 	}
 }

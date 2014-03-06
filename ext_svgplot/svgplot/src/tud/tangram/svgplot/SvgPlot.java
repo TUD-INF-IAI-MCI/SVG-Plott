@@ -25,6 +25,7 @@ import org.w3c.dom.Node;
 
 import tud.tangram.svgplot.coordinatesystem.CoordinateSystem;
 import tud.tangram.svgplot.coordinatesystem.Point;
+import tud.tangram.svgplot.coordinatesystem.PointListList;
 import tud.tangram.svgplot.coordinatesystem.Range;
 import tud.tangram.svgplot.plotting.Function;
 import tud.tangram.svgplot.plotting.Gnuplot;
@@ -85,7 +86,7 @@ public class SvgPlot {
 	@Parameter(names = { "--output", "-o" }, descriptionKey = "param.output")
 	private File output = null;
 
-	@Parameter(names = { "--help", "-h" }, help = true, descriptionKey = "param.help")
+	@Parameter(names = { "--help", "-h", "-?" }, help = true, descriptionKey = "param.help")
 	private boolean help;
 	
 	//TODO: add parameter and description for integrals
@@ -93,6 +94,9 @@ public class SvgPlot {
 	//TODO: add parameter for scatter plot file
 	
 	//TODO: add parameter for marking some points 
+	@Parameter(names = { "--points", "--pts" }, descriptionKey = "param.points")
+	private PointListList points;
+	
 
 	private SvgDocument doc;
 
@@ -712,7 +716,10 @@ public class SvgPlot {
 				return Range.Converter.class;
 			else if (forType.equals(Function.class))
 				return Function.Converter.class;
+			else if (forType.equals(PointListList.class))
+				return PointListList.Converter.class;
 			else
+				System.out.println("Cant't find converter for Class: '" + forType + "'");
 				return null;
 		}
 	}
