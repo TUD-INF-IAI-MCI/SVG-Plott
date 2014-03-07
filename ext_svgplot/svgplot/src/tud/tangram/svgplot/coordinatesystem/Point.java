@@ -1,5 +1,7 @@
 package tud.tangram.svgplot.coordinatesystem;
 
+import org.w3c.dom.Element;
+
 import tud.tangram.svgplot.SvgPlot;
 import com.beust.jcommander.IStringConverter;
 /**
@@ -13,35 +15,100 @@ public class Point {
 
 	public double x;
 	public double y;
+	public String name;
+	public Element symbol;
 
-	public Point(double x, double y) {
+	/**
+	 * Represents a two dimensional Point in the plot
+	 * 
+	 * @param x	|	x (horizontal) position of the point
+	 * @param y	|	y (vertical) position of the point
+	 */
+	public Point(double x, double y) { this(x,y,"",null); }
+	
+	/**
+	 * Represents a two dimensional Point in the plot
+	 * 
+	 * @param x		|	x (horizontal) position of the point
+	 * @param y		|	y (vertical) position of the point
+	 * @param name	|	the name of the point
+	 */
+	public Point(double x, double y, String name) { this(x,y,name, null); }
+	
+	/**
+	 * Represents a two dimensional Point in the plot
+	 * 
+	 * @param x			|	x (horizontal) position of the point
+	 * @param y			|	y (vertical) position of the point
+	 * @param symbol	|	the symbol to use for the point
+	 */
+	public Point(double x, double y, Element symbol) { this(x,y,"",symbol);	}
+	
+	/**
+	 * Represents a two dimensional Point in the plot
+	 * 
+	 * @param x			|	x (horizontal) position of the point
+	 * @param y			|	y (vertical) position of the point
+	 * @param name		|	the name of the point
+	 * @param symbol	|	the symbol to use for the point
+	 */
+	public Point(double x, double y, String name, Element symbol) {
 		this.x = x;
 		this.y = y;
+		this.name = name;
+		this.symbol = symbol;
 	}
 
+	/**
+	 * Move the point
+	 * 
+	 * @param dx	|	movement in x (horizontal) direction
+	 * @param dy	|	movement in y (vertical) direction
+	 */
 	public void translate(double dx, double dy) {
 		x += dx;
 		y += dy;
 	}
 
+	/**
+	 * formats the x value as an svg compatible decimal value.
+	 * 
+	 * @return
+	 */
 	public String x() {
 		return SvgPlot.format2svg(x);
 	}
 
+	/**
+	 * formats the y value as an svg compatible decimal value.
+	 * 
+	 * @return
+	 */
 	public String y() {
 		return SvgPlot.format2svg(y);
 	}
 
 	@Override
+	/**
+	 * formats the x and y values as svg compatible decimal values and combine them by a comma.
+	 * 
+	 * @return x,y
+	 */
 	public String toString() {
 		return x() + "," + y();
 	}
 
 	@Override
 	public Point clone() {
-		return new Point(x, y);
+		return new Point(x, y,name, symbol);
 	}
 
+	/**
+	 * computes the two dimensional euclidean distance of two points. 
+	 * 
+	 * @param other	|	second point
+	 * @return the two dimensional euclidean distance between this and the other point.
+	 */
 	public double distance(Point other) {
 		return Math.sqrt(Math.pow(other.x - x, 2) + Math.pow(other.y - y, 2));
 	}
