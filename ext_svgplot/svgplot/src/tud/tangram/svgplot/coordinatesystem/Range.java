@@ -35,9 +35,23 @@ public class Range {
 	public static class Converter implements IStringConverter<Range> {
 		@Override
 		public Range convert(String value) {
-			String[] s = value.split(":");	
-			if(s.length < 2) return new Range(-8,8);
-			return s.length > 2 ? new Range(Double.parseDouble(s[0]), Double.parseDouble(s[1]), s[2]) : new Range(Double.parseDouble(s[0]), Double.parseDouble(s[1]));
-		}
+			String[] parts = value.split("::");
+			String[] s;
+			String name = "";
+			
+			if(parts.length > 1){
+				name = parts[0].replace("\"", "").trim();
+				s = parts[1].split(":");
+			}else{
+				s = parts[0].split(":");
+			}			
+			
+			if (s.length < 2)
+				return new Range(-8, 8);
+			return s.length > 2 ? new Range(Double.parseDouble(s[0]),
+					Double.parseDouble(s[1]), s[2]) : new Range(
+					Double.parseDouble(s[0]), Double.parseDouble(s[1]), name);				
+			}
+		
 	}
 }

@@ -13,8 +13,8 @@ import tud.tangram.svgplot.coordinatesystem.Point;
  *
  */
 public class PlotList extends ArrayList<Plot> {
-	private static final long serialVersionUID = 1L;
 
+	private static final long serialVersionUID = 2449399739807644999L;
 	final private CoordinateSystem cs;
 
 	public PlotList(CoordinateSystem cs) {
@@ -62,7 +62,8 @@ public class PlotList extends ArrayList<Plot> {
 	}
 
 	public class OverlayList extends ArrayList<Overlay> {
-		private static final long serialVersionUID = 1L;
+
+		private static final long serialVersionUID = -1031062986430320978L;
 
 		@Override
 		public boolean add(Overlay overlay) {
@@ -109,6 +110,10 @@ public class PlotList extends ArrayList<Plot> {
 
 		private Function function = null;
 
+		public Overlay(Point p){
+			super(p.x, p.y, p.name, p.symbol);
+		}
+		
 		public Overlay(double x, double y) {
 			super(x, y);
 		}

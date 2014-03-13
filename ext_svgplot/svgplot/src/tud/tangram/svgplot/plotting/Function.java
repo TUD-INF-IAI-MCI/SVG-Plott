@@ -46,6 +46,8 @@ public class Function {
 	public static class Converter implements IStringConverter<Function> {
 		@Override
 		public Function convert(String value) {
+			//TODO: add file or table for functions
+			
 			String[] s = value.replaceFirst("^\\\\", "").split("::");
 			if (s.length == 1) {
 				return new Function(s[0].trim());

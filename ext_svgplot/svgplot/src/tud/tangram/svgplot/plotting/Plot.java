@@ -2,6 +2,7 @@ package tud.tangram.svgplot.plotting;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -28,6 +29,11 @@ public class Plot implements Iterable<List<Point>> {
 		//replacing uncommon signing to gnu plot format 
 		String gf = function.getFunction().replace("^", "**").replaceAll("(\\d|\\))\\s*([a-zA-z(])", "$1*$2");
 		plot = gnuplot.plot(gf);
+		if(plot != null){
+			for (List<Point> pList : plot) {
+				Collections.sort(pList);
+			}
+		}	
 	}
 
 	public Function getFunction() {
@@ -39,6 +45,7 @@ public class Plot implements Iterable<List<Point>> {
 			List<Point> intersectionsPoints = new ArrayList<>();
 			Iterator<List<Point>> it1 = otherPlot.iterator();
 			if (!it1.hasNext()) {
+				Collections.sort(intersectionsPoints);
 				return intersectionsPoints;
 			}
 			Iterator<Point> it2 = it1.next().iterator();
@@ -50,6 +57,7 @@ public class Plot implements Iterable<List<Point>> {
 					while (other.x < point.x) {
 						if (!it2.hasNext()) {
 							if (!it1.hasNext()) {
+								Collections.sort(intersectionsPoints);
 								return intersectionsPoints;
 							}
 							it2 = it1.next().iterator();
@@ -95,7 +103,8 @@ public class Plot implements Iterable<List<Point>> {
 					lastDirection = direction;
 				}
 			}
-		}
+			Collections.sort(extrema);
+		}		
 		return extrema;
 	}
 
@@ -115,7 +124,8 @@ public class Plot implements Iterable<List<Point>> {
 					last = point;
 				}
 			}
-		}
+			Collections.sort(roots);
+		}		
 		return roots;
 	}
 

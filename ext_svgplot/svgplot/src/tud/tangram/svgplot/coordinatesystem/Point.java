@@ -11,7 +11,7 @@ import com.beust.jcommander.IStringConverter;
  * Copyright by Technische Universität Dresden / MCI 2014
  *
  */
-public class Point {
+public class Point implements Comparable<Point> {
 
 	public double x;
 	public double y;
@@ -120,4 +120,30 @@ public class Point {
 			return new Point(s.length >0 ? Double.parseDouble(s[0]) : 0, s.length > 1 ? Double.parseDouble(s[1]) : 0);
 		}
 	}
+
+	@Override
+	public int compareTo(Point p2) {
+		if(p2 != null){
+			if(p2.x == x){
+				return y < p2.y ? -1 : 1;
+			}
+			else return x < p2.x ? -1 : 1;
+		}
+		return -1;
+	}
+	
+	public int compareToY(Point p2) {
+		if(p2 != null){
+			return y < p2.y ? -1 : 1;
+		}
+		return -1;
+	}
+	
+	public int compareToX(Point p2) {
+		if(p2 != null){
+			return x < p2.x ? -1 : 1;
+		}
+		return -1;
+	}
+	
 }

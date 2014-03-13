@@ -81,7 +81,7 @@ public class Gnuplot {
 		
 		//read gnuplot
 		while ((line = bri.readLine()) != null) {
-			System.out.println(line);
+			//System.out.println(line);
 			
 			if (line.trim().length() == 0 || line.startsWith("#"))
 				continue;
