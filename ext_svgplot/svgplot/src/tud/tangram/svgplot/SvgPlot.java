@@ -30,6 +30,7 @@ import tud.tangram.svgplot.coordinatesystem.PointListList.PointList;
 import tud.tangram.svgplot.coordinatesystem.Range;
 import tud.tangram.svgplot.plotting.Function;
 import tud.tangram.svgplot.plotting.Gnuplot;
+import tud.tangram.svgplot.plotting.IntegralPlot;
 import tud.tangram.svgplot.plotting.Plot;
 import tud.tangram.svgplot.plotting.PlotList;
 import tud.tangram.svgplot.plotting.PointPlot;
@@ -91,7 +92,6 @@ public class SvgPlot {
 	@Parameter(names = { "--help", "-h", "-?" }, help = true, descriptionKey = "param.help")
 	private boolean help;
 	
-	//TODO: add parameter and description for integrals
 	//parameter for marking some points 
 	@Parameter(names = { "--integral", "-i" }, descriptionKey = "param.integral")
 	private String integral;
@@ -158,8 +158,11 @@ public class SvgPlot {
 		cs = new CoordinateSystem(xRange, yRange, size, margin);
 
 		createViewbox();
-		createGrid();
-		createAxes();
+		Node grid = createGrid();
+		Node axes = createAxes();
+		
+		
+		
 		createReferenceLines();
 		createPlots();
 		createLegend(legendPos);
@@ -196,8 +199,14 @@ public class SvgPlot {
 		//FIXME: only for debuging
 //		css += "#overlays { stroke: black; stroke-dasharray: none; fill: transparent; }";
 		
-		css += ".poi_symbol { stroke: black; stroke-dasharray: none; stroke-width:"+ (strokeWidth * 1.5) +";  fill: black; }";
-		css += ".poi_symbol_bg { stroke: white; stroke-dasharray: none; stroke-width:"+(width * 3)+";  fill: transparent; }";
+		css += ".poi_symbol { stroke: black; stroke-dasharray: none; stroke-width:"+ (strokeWidth * 1.5) +";  fill: black; }\n";
+		css += ".poi_symbol_bg { stroke: white; stroke-dasharray: none; stroke-width:"+(width * 3)+";  fill: transparent; }\n";
+		
+		css += ".integral { stroke: white; stroke-dasharray: none; stroke-width:"+(width * 3)+"; }\n";
+		
+		css += ".integral-1 { fill: url(#diagonal_line1_PD); }\n";
+		css += ".integral-2 { fill: white; }\n";
+		
 		
 		if (this.css != null) {
 			css += "\n\n/* custom */\n";
@@ -241,7 +250,7 @@ public class SvgPlot {
 	/**
 	 * Paint the grid to the svg file.
 	 */
-	private void createGrid() {
+	private Node createGrid() {
 		Node grid = viewbox.appendChild(doc.createGroup("grid"));
 
 		Element xGrid = (Element) grid.appendChild(doc.createGroup("x-grid"));
@@ -265,12 +274,13 @@ public class SvgPlot {
 			Point to = cs.convert(cs.xAxis.range.to, pos, strokeWidth / 2, 0);
 			yGrid.appendChild(doc.createLine(from, to));
 		}
+		return grid;
 	}
 
 	/**
 	 * Paint the axes to the svg file.
 	 */
-	private void createAxes() {
+	private Node createAxes() {
 		Node axes = viewbox.appendChild(doc.createGroup("axes"));
 		Point from, to;
 		String points;
@@ -332,6 +342,8 @@ public class SvgPlot {
 			to.translate(12, 0);
 			yTics.appendChild(doc.createLine(from, to));
 		}
+		
+		return axes;
 	}
 	
 	/**
@@ -416,8 +428,17 @@ public class SvgPlot {
 			path.setAttribute("d", points);
 		}
 
+		//TODO: do this for parameterized integrals
+		Element parent = viewbox;
+		Element a = doc.getChildElementById(viewbox, "axes");
+		if(a != null){
+			Element integralContainer = doc.createGroup("integrals");
+			viewbox.insertBefore(integralContainer, a);
+			parent = integralContainer;
+		}
 		
-		handlePlotListIntergrals(plotList, doc, viewbox, new Point(cs.xAxis.range.from, 0), new Point(cs.xAxis.range.to, 0));
+		
+		new IntegralPlot(cs).handlePlotListIntergrals(plotList, doc, parent, new Point(cs.xAxis.range.from, 0), new Point(cs.xAxis.range.to, 0));
 		
 		
 		// overlays for audio tactile output
@@ -809,7 +830,6 @@ public class SvgPlot {
 		// TODO: adopt the view range to the set points.
 		
 		try {
-			//plot.xAxes = new Plot(new Function("x*0"), new Gnuplot(plot.gnuplot));
 			plot.run();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -849,268 +869,6 @@ public class SvgPlot {
 	
 	
 	
-	private void handlePlotListIntergrals(PlotList plotList, SvgDocument doc,
-			Element parent, Point from, Point to) {
-		if(plotList == null || plotList.size() < 1) return;
-		
-		Element integralContainer = doc.createGroup("integrals");
-		parent.appendChild(integralContainer);
-		
-		int i =0;	
-		for (Plot plot : plotList) { // Iterate plots
-			
-			if(i != 0) { i++; continue;} //FIXME: only for debug
-			//handlePlotIntergral(plot, doc, integralContainer, from, to);
-			//handlePlotIntergral(plot, doc, integralContainer, from, to, plotList.get(1)); //FIXME: only for debug
-			handlePlotIntergral(plot, doc, integralContainer, from, to, null); //FIXME: only for debug
-			i++;
-		}
-	}
-	
-	
-	@SuppressWarnings("unused")
-	private void handlePlotIntergral(Plot plot, SvgDocument doc,
-			Element parent, Point from, Point to)
-	{handlePlotIntergral(plot, doc, parent, from, to, null);}
-	private void handlePlotIntergral(Plot plot, SvgDocument doc,
-			Element parent, Point from, Point to, Plot intersectionPlot) {
-		
-		
-		//list of fill colors
-		List<String> color = new ArrayList<String>() {{
-			add("red"); add("blue"); add("green"); add("yellow");
-			}};
-			
-			int i = 0;
-
-
-			
-			//crate container for Element
-			Node graph = parent.appendChild(doc.createGroup("plot_integral-" + ++i));
-			//create path element
-			Element path = (Element) graph.appendChild(doc.createElement("path"));
-			path.setAttribute("clip-path", "url(#plot-area)");
-
-			//find the root points			
-			List<Point> zero = plot.getRoots();			
-			
-			//find the intersection points	
-			List<Point> ispts = new ArrayList<Point>();
-			
-			if (intersectionPlot != null) {
-				if(!intersectionPlot.equals(plot)){					
-					ispts = plot.getIntersections(intersectionPlot);
-					Collections.sort(ispts);
-				}
-			}
-			
-						
-			String points = "";
-			String backPoints = "";
-			
-			
-			for (List<Point> list : plot) {
-				
-				/******* START PAINTING EACH PLOT *********/
-				if(list != null && list.size() > 0){
-					String op = "M"; // "moveto" command - start path
-					
-					//check if the path should start at the x axes
-					if(intersectionPlot == null && (zero == null || zero.size() < 2) && list.get(0) != null && (list.get(0).x > cs.xAxis.range.from || list.get(0).y != 0)){
-						points += op + cs.convert(cs.xAxis.range.from,0) + " ";						
-						op = "L";
-						
-						if(list.get(0).y != 0){
-							if(list.get(0).y < 0){ points += op + cs.convert(cs.xAxis.range.from,cs.yAxis.range.from) + " ";}
-							else{ points += op + cs.convert(cs.xAxis.range.from,cs.yAxis.range.to) + " ";}
-						}
-						
-					}					
-					
-					//plot the function
-					boolean started = false;
-					/******* START PAINTING EACH POINTOF A PLOT *********/
-					for (Point point : list) {
-						
-						if(!started){ //start integrals after first visible intersection
-							if(!ispts.contains(point) && intersectionPlot != null) continue;
-							else started = true;
-						}
-						
-						
-						
-						/******************* INTERSECION START ***********************/
-						if(ispts.size() > 0 && ispts.contains(point)){
-								
-							
-
-							
-							
-							
-							int j = 0;
-							//try to find the index of the intersection point
-							for(j = 0; j < ispts.size(); j++){
-								if(ispts.get(j) != null && ispts.get(j).equals(point))
-									break;
-							}
-							
-							Point nextIspt = null;
-							List<Point> otherPath = new ArrayList<Point>();
-							if(j >= 0 && j < ispts.size()){
-								//get next point
-								if(j+1 < (ispts.size())) {
-									nextIspt = ispts.get(j+1);								
-									otherPath = getFunctionAreaPoints(ispts.get(j), nextIspt, intersectionPlot);
-								}
-							}
-							
-							if(otherPath != null && otherPath.size() > 0){
-								
-								if(op.equals("L")){
-									//end the path	
-									points += "Z";						
-									
-									//end the actual path - open an new
-									path.setAttribute("d", points);
-									
-									//set some attributes (for FIXING)
-									path.setAttribute("fill", color.get(i %color.size()));
-									path.setAttribute("fill-opacity", "0.1");
-									path.setAttribute("stroke-opacity", "0.2");
-									
-									//create new path
-									path = (Element) graph.appendChild(doc.createElement("path"));
-									path.setAttribute("clip-path", "url(#plot-area)");
-									
-									//clear points
-									points ="";
-									op = "M";
-									
-									i++;
-								}								
-															
-								Collections.reverse(otherPath);
-								for (Point point2 : otherPath) {
-									backPoints += op + cs.convert(point2) + " ";
-									op = "L";
-								}	
-								points += backPoints;	
-								backPoints = "";
-							}
-							
-													
-							
-
-						}
-					/******************* INTERSECION END ***********************/
-						
-						
-						// add the point to the path list
-						points += op + cs.convert(point) + " ";
-						
-						// if point is the last intersection point exit the handling
-						if(ispts != null && ispts.size() >0 && point.equals(ispts.get(ispts.size() -1)))
-							break;
-						
-						
-						
-						//START if is a root point (approximately)
-					/******************* ROOT START ***********************/
-						if(intersectionPlot == null && zero.contains(point)){ 
-							points += "Z";
-							//end the actual path - open an new
-							path.setAttribute("d", points);
-							
-							//set some attributes (for FIXING)
-							path.setAttribute("fill", color.get(i %color.size()));
-							path.setAttribute("fill-opacity", "0.1");
-							
-							//create new path
-							path = (Element) graph.appendChild(doc.createElement("path"));
-							path.setAttribute("clip-path", "url(#plot-area)");
-							
-							//clear points
-							points = "M" + cs.convert(point) + " ";							
-							
-							i++;
-						}	
-					/******************* ROOT END ***********************/
-						op = "L";
-					}
-										
-					//check if the path should end at the x axes
-					if(intersectionPlot == null && (zero == null || zero.size() < 2) && list.get(list.size()-1) != null && (list.get(list.size()-1).x < cs.xAxis.range.to || list.get(list.size()-1).y != 0)){
-							if(list.get(list.size()-1).y != 0){
-								if(list.get(list.size()-1).y < 0){ points += op + cs.convert(cs.xAxis.range.to,cs.yAxis.range.from) + " ";}
-								else{ points += op + cs.convert(cs.xAxis.range.to,cs.yAxis.range.to) + " ";}
-						}						
-						points += op + cs.convert(cs.xAxis.range.to,0) + " ";
-					}
-
-					points += " Z";
-				}
-			}
-
-			path.setAttribute("d", points);
-			path.setAttribute("fill", color.get(i %color.size()));
-			path.setAttribute("fill-opacity", "0.1");
-			path.setAttribute("stroke-opacity", "0.2");
-			
-			
-	}
-	
-	
-	/**
-	 * Try to get the function points between the given points
-	 * 
-	 * @param from	|	Point to start
-	 * @param to	|	Point to end
-	 * @param plot	|	the function to search
-	 * @return List of points
-	 */
-	private List<Point> getFunctionAreaPoints(Point from, Point to, Plot plot){
-		List<Point> pl = new ArrayList<Point>();
-		if(from != null && to != null && plot != null) {
-			for (List<Point> list : plot) {
-				if(list != null && list.size() > 0){
-					for (Point point : list) {
-						if(point.compareToX(from) >= 0  && point.compareTo(to) <= 0 ){
-							pl.add(point);
-						}
-					}
-				}				
-			}			
-		}		
-		return pl;		
-	}
-	
-	
-	@SuppressWarnings("unused")
-	private Point findFirstPointInList(List<Point> ip, Point object){
-		if(ip != null && ip.size() > 0 && object != null){
-			for (Point o : ip) {
-				if(o.equals(object)) return o;
-			}
-		}
-		return null;
-	}
-	
-	
-	@SuppressWarnings("unused")
-	private Point getListPointAtX(double x, List<Point> list){
-		
-		Point lp = null;
-		if(list != null && list.size() > 0){
-			
-			for (Point point : list) {
-				if(x == point.x) return point;
-				else if(x > point.x) lp = point;
-				else if(x < point.x) return lp;
-			}
-		}
-		return lp;
-		
-	}
 	
 	
 	
