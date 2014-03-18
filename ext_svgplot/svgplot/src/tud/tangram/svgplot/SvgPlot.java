@@ -55,6 +55,7 @@ import com.beust.jcommander.Parameters;
 @Parameters(separators = "=", resourceBundle = "Bundle")
 public class SvgPlot {
 	final protected static String[] fnList = new String[]{"f", "g", "h", "i", "j", "k", "l", "m", "o", "p", "q", "r" }; //TODO: extend this?
+	public final static String spacerCssClass = "poi_symbol_bg";	
 	
 	@Parameter(description = "functions")
 	private List<Function> functions = new ArrayList<>();
@@ -92,11 +93,9 @@ public class SvgPlot {
 	@Parameter(names = { "--help", "-h", "-?" }, help = true, descriptionKey = "param.help")
 	private boolean help;
 	
-	//parameter for marking some points 
 	@Parameter(names = { "--integral", "-i" }, descriptionKey = "param.integral")
 	private String integral;
-	
-	
+		
 	//TODO: add parameter for scatter plot file	
 	//parameter for marking some points 
 	@Parameter(names = { "--points", "--pts" }, descriptionKey = "param.points")
@@ -116,7 +115,7 @@ public class SvgPlot {
 
 	final private double strokeWidth = 0.5;
 
-	final private int[] margin = { 20, 10, 10, 10 };
+	final private int[] margin = { 20, 10, 20, 10 };
 
 	private static DecimalFormat decimalFormat = null;
 
@@ -143,7 +142,11 @@ public class SvgPlot {
 
 		createCss(doc);
 		createCss(legend);
-
+		
+		Element bg = doc.createRectangle(new Point(0, 0), "100%", "100%");
+		bg.setAttribute("id", "background");
+		doc.appendChild(bg);
+		
 		Point pos = createTitle(doc, title);
 		Point legendPos = createTitle(legend, legendTitle);
 
@@ -158,10 +161,8 @@ public class SvgPlot {
 		cs = new CoordinateSystem(xRange, yRange, size, margin);
 
 		createViewbox();
-		Node grid = createGrid();
-		Node axes = createAxes();
-		
-		
+		createGrid();
+		createAxes();		
 		
 		createReferenceLines();
 		createPlots();
@@ -187,23 +188,22 @@ public class SvgPlot {
 	private void createCss(SvgDocument doc) throws IOException {
 		String css = "/* default */\n";
 		css += "svg { fill: none; stroke: #000000; stroke-width: " + strokeWidth + "; }\n";
-		css += "text { font-family: '_Braille DE Computer'; font-size: 36pt; fill: black; stroke: none; }\n";
+		css += "text { font-family: 'Braille DE Computer'; font-size: 36pt; fill: black; stroke: none; }\n";
 		css += "#grid { stroke: #777777; }\n";
 		css += "#axes, #reference-lines { stroke: #111111; fill: transparent; }\n";
 		double width = 2 * strokeWidth;
 		css += "#plots { stroke-width: " + width + "; stroke-dasharray: " + width * 5 + ", " + width * 5 + "; }\n";
 		css += "#plot-1 { stroke-dasharray: none; }\n";
 		css += "#plot-2 { stroke-dasharray: " + width + ", " + width * 3 + "; }\n";
-		css += "#overlays { stroke: none; stroke-dasharray: none; fill: transparent; }";
+		css += "#overlays { stroke: none; stroke-dasharray: none; fill: transparent; }\n";
 		
 		//FIXME: only for debuging
 //		css += "#overlays { stroke: black; stroke-dasharray: none; fill: transparent; }";
 		
 		css += ".poi_symbol { stroke: black; stroke-dasharray: none; stroke-width:"+ (strokeWidth * 1.5) +";  fill: black; }\n";
-		css += ".poi_symbol_bg { stroke: white; stroke-dasharray: none; stroke-width:"+(width * 3)+";  fill: transparent; }\n";
+		css += "."+spacerCssClass+" { stroke: white; stroke-dasharray: none; stroke-width:"+(width * 3)+";  fill: transparent; stroke-linecap: round; }\n";
 		
 		css += ".integral { stroke: white; stroke-dasharray: none; stroke-width:"+(width * 3)+"; }\n";
-		
 		css += ".integral-1 { fill: url(#diagonal_line1_PD); }\n";
 		css += ".integral-2 { fill: white; }\n";
 		
@@ -301,6 +301,7 @@ public class SvgPlot {
 		xAxisArrow.setAttribute("points", points);
 		xAxisArrow.appendChild(doc.createTitle(translate("xaxis")));
 		
+		
 		// create x-label
 		Point pos2 = to;
 		pos2.translate(0, 13);
@@ -343,6 +344,13 @@ public class SvgPlot {
 			yTics.appendChild(doc.createLine(from, to));
 		}
 		
+		//Duplicate axes and append them as spacers		
+		Element axesClone = (Element)axes.cloneNode(true);
+		axesClone.setAttribute("id", "axes_spacer");
+		axesClone.setAttribute("class", axesClone.hasAttribute("class") ? axesClone.getAttribute("class") + " " + spacerCssClass : spacerCssClass );
+		
+		axes.insertBefore(axesClone, xAxisLine);
+				
 		return axes;
 	}
 	
@@ -429,17 +437,16 @@ public class SvgPlot {
 		}
 
 		//TODO: do this for parameterized integrals
-		Element parent = viewbox;
-		Element a = doc.getChildElementById(viewbox, "axes");
-		if(a != null){
-			Element integralContainer = doc.createGroup("integrals");
-			viewbox.insertBefore(integralContainer, a);
-			parent = integralContainer;
+		if (integral != null && !integral.isEmpty()) {
+			Element parent = viewbox;
+			Element a = doc.getChildElementById(viewbox, "axes");
+			if(a != null){
+				Element integralContainer = doc.createGroup("integrals");
+				viewbox.insertBefore(integralContainer, a);
+				parent = integralContainer;
+			}		
+			new IntegralPlot(cs).handlePlotListIntergrals(plotList, doc, parent, new Point(cs.xAxis.range.from, 0), new Point(cs.xAxis.range.to, 0));
 		}
-		
-		
-		new IntegralPlot(cs).handlePlotListIntergrals(plotList, doc, parent, new Point(cs.xAxis.range.from, 0), new Point(cs.xAxis.range.to, 0));
-		
 		
 		// overlays for audio tactile output
 		OverlayList overlays = plotList.overlays();

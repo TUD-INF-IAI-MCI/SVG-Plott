@@ -10,6 +10,7 @@ import org.w3c.dom.Node;
 
 import tud.tangram.svgplot.coordinatesystem.CoordinateSystem;
 import tud.tangram.svgplot.coordinatesystem.Point;
+import tud.tangram.svgplot.coordinatesystem.Range;
 import tud.tangram.svgplot.xml.SvgDocument;
 
 public class IntegralPlot {
@@ -91,10 +92,10 @@ public class IntegralPlot {
 						points += op + cs.convert(cs.xAxis.range.from,0) + " ";						
 						op = "L";
 						
-						if(list.get(0).y != 0){
-							if(list.get(0).y < 0){ points += op + cs.convert(cs.xAxis.range.from,cs.yAxis.range.from) + " ";}
-							else{ points += op + cs.convert(cs.xAxis.range.from,cs.yAxis.range.to) + " ";}
-						}
+//						if(list.get(0).y != 0){
+//							if(list.get(0).y < 0){ points += op + cs.convert(cs.xAxis.range.from,cs.yAxis.range.from) + " ";}
+//							else{ points += op + cs.convert(cs.xAxis.range.from,cs.yAxis.range.to) + " ";}
+//						}
 						
 					}					
 					
@@ -221,10 +222,10 @@ public class IntegralPlot {
 										
 					//check if the path should end at the x axes
 					if(intersectionPlot == null && (zero == null || zero.size() < 2) && list.get(list.size()-1) != null && (list.get(list.size()-1).x < cs.xAxis.range.to || list.get(list.size()-1).y != 0)){
-							if(list.get(list.size()-1).y != 0){
-								if(list.get(list.size()-1).y < 0){ points += op + cs.convert(cs.xAxis.range.to,cs.yAxis.range.from) + " ";}
-								else{ points += op + cs.convert(cs.xAxis.range.to,cs.yAxis.range.to) + " ";}
-						}						
+//							if(list.get(list.size()-1).y != 0){
+//								if(list.get(list.size()-1).y < 0){ points += op + cs.convert(cs.xAxis.range.to,cs.yAxis.range.from) + " ";}
+//								else{ points += op + cs.convert(cs.xAxis.range.to,cs.yAxis.range.to) + " ";}
+//						}						
 						points += op + cs.convert(cs.xAxis.range.to,0) + " ";
 					}
 
@@ -406,6 +407,20 @@ public class IntegralPlot {
 		
 	}
 	
+	public class IntegralPlotSettings {
+		
+		public Range xRange;
+		public Range yRange;
+		public int function1;
+		public int function2;
+		public String name;
+		
+		
+		
+		
+		
+		
+	}
 	
 	
 	

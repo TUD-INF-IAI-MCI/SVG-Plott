@@ -19,8 +19,8 @@ public class CoordinateSystem {
 		this.size = size.clone();
 		this.size.x -= margin[1] + margin[3];
 		this.size.y -= margin[0] + margin[2];
-		this.size.x = Math.min(this.size.x, this.size.y);
-		this.size.y = this.size.x;
+//		this.size.x = Math.min(this.size.x, this.size.y);
+//		this.size.y = this.size.x;
 
 		xAxis = new Axis(xRange, this.size.x);
 		yAxis = new Axis(yRange, this.size.y);

@@ -81,12 +81,21 @@ public class SvgDocument extends Document {
 		return circle;
 	}
 	
-	public Element createRectangle(Point center, double width, double height) {
+	public Element createRectangle(Point start, double width, double height) {
 		Element rect = createElement("rect");
-		rect.setAttribute("x", center.x());
-		rect.setAttribute("y", center.y());
+		rect.setAttribute("x", start.x());
+		rect.setAttribute("y", start.y());
 		rect.setAttribute("width", SvgPlot.format2svg(width));
 		rect.setAttribute("height", SvgPlot.format2svg(height));
+		return rect;
+	}
+	
+	public Element createRectangle(Point start, String width, String height) {
+		Element rect = createElement("rect");
+		rect.setAttribute("x", start.x());
+		rect.setAttribute("y", start.y());
+		rect.setAttribute("width", width);
+		rect.setAttribute("height", height);
 		return rect;
 	}
 	
