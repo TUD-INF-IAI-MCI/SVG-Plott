@@ -1,0 +1,15 @@
+svg { fill: none; stroke: #000000; stroke-width: 0.5; }
+text { font-family: sans-serif; font-size: 36pt; fill: white; stroke: none; }
+#grid { stroke: #777777; }
+#axes, #reference-lines { stroke: white; fill: transparent; }
+#plots { stroke-width: 1.5; stroke-dasharray: none; stroke: yellow;}
+#plot-2 { stroke-dasharray: 2.0, 3.0; stroke: #00ffff;}
+#plot-3 { stroke-dasharray: 5.0, 5.0; stroke: #ff00ff;}
+#overlays { stroke: none; stroke-dasharray: none; fill: transparent; }
+.poi_symbol { stroke: white; stroke-dasharray: none; stroke-width:0.75;  fill: white; }
+.poi_symbol_bg { stroke: black; stroke-dasharray: none; stroke-width:3.0;  fill: transparent; }
+.integral { stroke: black; stroke-dasharray: none; stroke-width:3.0; }
+.integral-1 { fill: url(#diagonal_line1_PD); fill-opacity: 0.5; }
+.integral-2 { fill: white; }
+.box { stroke: white; }
+.background { fill: black; }
