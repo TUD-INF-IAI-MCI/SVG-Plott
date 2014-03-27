@@ -137,6 +137,7 @@ public class PointPlot {
 	 * The list of available POI point symbols
 	 */
 	private static List<Element> POI_SYMBOL_ELEMNTS = new ArrayList<Element>();
+	private static SvgDocument POI_SYMBOL_DOC;
 	/**
 	 * fills the POI_SYMBOL_ELEMNTS list with the svg symbols.
 	 * 
@@ -146,7 +147,9 @@ public class PointPlot {
 	private static boolean initSymbolArray(SvgDocument doc) {
 		if (doc == null)
 			return false;
-		if (POI_SYMBOL_ELEMNTS == null || POI_SYMBOL_ELEMNTS.size() < 1) {
+		if (POI_SYMBOL_ELEMNTS == null || POI_SYMBOL_ELEMNTS.size() < 1 || POI_SYMBOL_DOC == null || !POI_SYMBOL_DOC.equals(doc)) {
+			POI_SYMBOL_DOC = doc;
+			POI_SYMBOL_ELEMNTS = new ArrayList<Element>();
 			POI_SYMBOL_ELEMNTS.add(createCrossSymbol(doc));
 			POI_SYMBOL_ELEMNTS.add(createRhombusSymbol(doc));
 			POI_SYMBOL_ELEMNTS.add(createCircleSymbol(doc));

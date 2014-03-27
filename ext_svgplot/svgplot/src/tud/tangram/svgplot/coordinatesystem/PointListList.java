@@ -26,7 +26,7 @@ public class PointListList extends ArrayList<PointListList.PointList>{
 		//TODO: load from file
 		
 		//pointLists = pointLists.replaceAll("[^\\d.,^\\s+,^\\{^\\}^-]", "");
-		String[] lists = pointLists.split("\\{");
+		String[] lists = pointLists.split("\\}");
 		for (String l : lists) {
 			PointList pl = new PointList(l);
 			if(pl.size() > 0){

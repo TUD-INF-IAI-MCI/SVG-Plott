@@ -57,6 +57,7 @@ import com.beust.jcommander.Parameters;
 public class SvgPlot {
 	final protected static String[] fnList = new String[] { "f", "g", "h", "i",
 			"j", "k", "l", "m", "o", "p", "q", "r" }; 
+	final protected static String[] pnList = new String[] { "A", "B", "C", "D", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "T"}; 
 	public final static String spacerCssClass = "poi_symbol_bg";
 
 	@Parameter(description = "functions")
@@ -606,8 +607,6 @@ public class SvgPlot {
 		int e = 0; // extreme point offset counter
 		int r = 0; // root point offset counter
 
-		// TODO: explain the poi points
-
 		// general description
 		Node div = desc.appendBodyChild(desc.createDiv("functions"));
 		div.appendChild(desc.createP(translateN("desc.intro",
@@ -679,6 +678,22 @@ public class SvgPlot {
 			if (!roots.isEmpty()) {
 				div.appendChild(createXPointList(roots, r));
 				r += roots.size();
+			}
+		}
+		
+		if(points != null && points.size() > 0){
+			div = desc.appendBodyChild(desc.createDiv("points"));
+			div.appendChild(desc.createP(translateN("legend.poi.intro", points.size())));			
+			
+			int j = 0;
+			for (PointList pts : points) {
+				if(pts != null && pts.size() > 0 ){
+					String text = pts.name.isEmpty() ? getPointName(j) : pts.name;					
+					div.appendChild(desc.createP(translateN("legend.poi.list", text, pts.size())));
+					
+					div.appendChild(createPointList(pts, getPointName(j), 0));
+					j++;
+				}
 			}
 		}
 		
@@ -810,6 +825,7 @@ public class SvgPlot {
 	 * 
 	 * @param pos
 	 *            | ??? //TODO: find out what this means
+	 *            TODO: paging
 	 */
 	private void createLegend(Point pos) {
 		int distance = 7;
@@ -843,7 +859,32 @@ public class SvgPlot {
 		
 		//points
 		if(points != null && points.size() > 0){
-			//get point lists
+			pos.translate(0, -10);
+			if (points != null && points.size() > 0) {
+				int j = 0;
+				Element poiGroup = legend.createElement("g", "points");
+				viewbox.appendChild(poiGroup);
+				for (PointList pl : points) {
+					if (pl != null && pl.size() > 0) {
+						Element plGroup = legend.createElement("g", "points_" + j);
+						poiGroup.appendChild(plGroup);
+						
+						pos.translate(5,3);
+						
+						Element symbol = PointPlot.getPointSymbolForIndex(j, legend);
+						PointPlot.paintPoint(legend, pos, symbol, plGroup != null ? plGroup : viewbox);
+						
+						pos.translate(-5, -3);
+
+						String text = pl.name.isEmpty() ? translateN("legend.poi",  getPointName(j), pl.size()) : pl.name;
+						pos.translate(20, distance);
+						legend.appendChild(legend.createText(pos, text));
+						
+						pos.translate(-20, 0);						
+					}
+					j++;
+				}
+			}						
 		}
 
 		//integrals
@@ -898,6 +939,7 @@ public class SvgPlot {
 				translate("legend.ytic", formatY(cs.yAxis.ticInterval))));
 	}
 
+	
 	/**
 	 * Formats the x value of a point with respect to if Pi is set.
 	 * 
@@ -1025,6 +1067,12 @@ public class SvgPlot {
 			return "f" + String.valueOf(f);
 		return fnList[f];
 	}
+	
+	public static String getPointName(int p) {
+		if (p < 0 || p > (pnList.length - 1))
+			return "P" + String.valueOf(p);
+		return pnList[p];
+	}
 
 	/**
 	 * @param args
@@ -1067,9 +1115,12 @@ public class SvgPlot {
 		}
 
 		plot.points = (new PointListList.Converter()).convert(plot.pts);
-		// if(plot.xRange.from > plot.points.minX) plot.xRange.from =
-		// plot.points.minX + plot.xRange.
-		// TODO: adopt the view range to the set points.
+		if(plot.points != null){
+			if(plot.xRange.from > plot.points.minX) plot.xRange.from = plot.points.minX * 1.05;
+			if(plot.xRange.to < plot.points.maxX) plot.xRange.to = plot.points.maxX * 1.05;
+			if(plot.yRange.from > plot.points.minY) plot.yRange.from = plot.points.minY * 1.05;
+			if(plot.yRange.to < plot.points.maxY) plot.yRange.to = plot.points.maxY * 1.05;
+		}
 
 		try {
 			plot.run();
