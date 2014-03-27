@@ -8,6 +8,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
+import tud.tangram.svgplot.SvgPlot;
 import tud.tangram.svgplot.coordinatesystem.CoordinateSystem;
 import tud.tangram.svgplot.coordinatesystem.Point;
 import tud.tangram.svgplot.xml.SvgDocument;
@@ -36,11 +37,20 @@ public class IntegralPlot {
 		}
 		int i = 0;
 
-		String title = "integral "
-				+ plot.getFunction().getTitle()
-				+ " mit "
-				+ (intersectionPlot != null ? intersectionPlot.getFunction()
-						.getTitle() : "");
+		String title = "integral";
+//				+ plot.getFunction().getTitle()
+//				+ " mit "
+//				+ (intersectionPlot != null ? intersectionPlot.getFunction()
+//						.getTitle() : "");
+		
+		if(intersectionPlot != null){
+			title = SvgPlot.translate("legend.integral_1", from, to, plot.Name, intersectionPlot.Name);
+		}else{
+			title = SvgPlot.translate("legend.integral_0", from, to, plot.Name);
+		}
+		
+		
+		
 		String css = "integral-";
 
 		// crate container for Element
@@ -357,9 +367,7 @@ public class IntegralPlot {
 
 		pattern1.appendChild(rect);
 		pattern1.appendChild(line);
-		
-		
-		
+				
 		
 		Element pattern2 = doc.createElement("pattern");
 		pattern2.setAttribute("id", "diagonal_line1_PD_");

@@ -23,6 +23,7 @@ public class Plot implements Iterable<List<Point>> {
 	final private Map<Plot, List<Point>> intersections = new HashMap<>();
 	private List<Point> extrema = null;
 	private List<Point> roots = null;
+	public String Name = "f";
 
 	public Plot(Function function, Gnuplot gnuplot) throws IOException, InterruptedException {
 		this.function = function;

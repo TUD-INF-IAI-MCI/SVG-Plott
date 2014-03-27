@@ -322,7 +322,7 @@ public class SvgPlot {
 		Point from, to;
 		String points;
 
-		from = cs.convert(xRange.from, 0, -10, 0);
+		from = cs.convert(xRange.from, 0, -15, 0);
 		to = cs.convert(xRange.to, 0, 10, 0);
 		Element xAxisLine = doc.createLine(from, to);
 		axes.appendChild(xAxisLine);
@@ -343,7 +343,7 @@ public class SvgPlot {
 		pos2.translate(0, 13);
 		doc.appendChild(createLabel("x", pos2, "x_label", "label"));
 
-		from = cs.convert(0, yRange.from, 0, 10);
+		from = cs.convert(0, yRange.from, 0, 15);
 		to = cs.convert(0, yRange.to, 0, -10);
 		Element yAxisLine = doc.createLine(from, to);
 		axes.appendChild(yAxisLine);
@@ -491,6 +491,7 @@ public class SvgPlot {
 
 			String points = "";
 			Plot plot = new Plot(function, gnuplot);
+			plot.Name = getFunctionName(i-1);
 			plotList.add(plot);
 			for (List<Point> list : plot) {
 				String op = "M";
@@ -839,6 +840,11 @@ public class SvgPlot {
 			pos.translate(-35, distance);
 			i++;
 		}
+		
+		//points
+		if(points != null && points.size() > 0){
+			//get point lists
+		}
 
 		//integrals
 		if(integral != null && integral.function1 >= 0){
@@ -873,7 +879,8 @@ public class SvgPlot {
 			
 			pos.translate(-35, distance);
 		}		
-		
+				
+		//footnote
 		pos.translate(0, distance);
 		legend.appendChild(legend.createText(
 				pos,
