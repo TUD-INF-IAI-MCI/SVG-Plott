@@ -1,5 +1,5 @@
 svg { fill: none; stroke: #000000; stroke-width: 0.5; }
-text { font-family: 'TUD Euro-8-Braille equidistant Standard'; font-size: 36pt; fill: black; stroke: black; stroke-width: 4.5; }
+text { font-family: sans-serif; font-size: 36pt; fill: black; stroke: none; stroke-width:0; text-transform:uppercase;}
 #grid { stroke: none; }
 #axes, #reference-lines { stroke: #111111; fill: transparent; stroke-width: 2}
 #plots { stroke-width: 2.0; stroke-dasharray: none; }

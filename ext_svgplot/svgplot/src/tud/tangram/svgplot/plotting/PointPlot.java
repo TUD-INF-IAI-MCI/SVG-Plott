@@ -150,12 +150,12 @@ public class PointPlot {
 		if (POI_SYMBOL_ELEMNTS == null || POI_SYMBOL_ELEMNTS.size() < 1 || POI_SYMBOL_DOC == null || !POI_SYMBOL_DOC.equals(doc)) {
 			POI_SYMBOL_DOC = doc;
 			POI_SYMBOL_ELEMNTS = new ArrayList<Element>();
+			POI_SYMBOL_ELEMNTS.add(createSquareSymbol(doc));
 			POI_SYMBOL_ELEMNTS.add(createCrossSymbol(doc));
 			POI_SYMBOL_ELEMNTS.add(createRhombusSymbol(doc));
-			POI_SYMBOL_ELEMNTS.add(createCircleSymbol(doc));
-			POI_SYMBOL_ELEMNTS.add(createSquareSymbol(doc));
 			POI_SYMBOL_ELEMNTS.add(createPlusSymbol(doc));
 			POI_SYMBOL_ELEMNTS.add(createDotSymbol(doc));
+			POI_SYMBOL_ELEMNTS.add(createCircleSymbol(doc));
 		}
 		return true;
 	}
