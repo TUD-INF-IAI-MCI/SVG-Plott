@@ -1,7 +1,7 @@
 SVG-Plott
 =========
 
-**Import!** This is not the git of [JavaScript API - SVGPlot of SVGKIT] [svgkit] 
+**Import!** This is not the git of [JavaScript API - SVGPlot of SVGKIT][svgkit] 
 
 SVG-Plott is a Java-program which uses *[gnuplot]*. Gregor Harlan started the development during his assignment. 
 This program generates and creates a svg-file for blind user. After the creation the file can be printed on a tactile printer. Our system just generates the svg-file. If you want the see the svg, you has to open the file in a browser, e.g. Internet Explorer, Chrome, Mozilla Firefox.
@@ -11,6 +11,7 @@ This program generates and creates a svg-file for blind user. After the creation
 - download and install gnuplot v4.6 [gnuplot]
 - download and install Java
 - add the Java and gnuplat to PATH-Variable
+- Braille Font **Braille DE Computer** by [Viewplus Website][viewplus]
 
 ## Commands
 
@@ -28,7 +29,7 @@ Option:
 |:-------------|:-------------------------------------------------------------|
 |  --title, -t |                    title of the graphic                      |
 |  --size, -s  |  size of the graphic in millimeter (Default: A4 = 210,297)   |
-| --xrange, -x | range of x-axis (Default: -8:8) and alternative title Titel, e.g. [--xrange "Jahre::-35"]|
+| --xrange, -x | range of x-axis (Default: -8:8) and alternative title Titel, e.g. [--xrange "Years::-3:5"]|
 |--yrange, -y  | range of y-axis (Default: -8:8) and alternative title (e.g. [--yrange -3:5])|											  |
 |--pi, -p  	   | division of the x-axis by multiples of pi (Default: false)|
 |--xlines	   | help lines of the x-axis, seperated by spaces (e.g. [--xlines "1 3.5"])|
@@ -47,3 +48,4 @@ Coming soon ...
 
 [gnuplot]: http://gnuplot.info
 [svgkit]: http://svgkit.sourceforge.net/SVGPlot.html
+[viewplus]: http://viewplus.com
