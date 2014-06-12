@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height="297mm" id="legend" version="1.1" width="210mm">
+    <defs>
+        <style type="text/css"><![CDATA[
+            /* default */
+            svg { fill: none; stroke: #000000; stroke-width: 0.5; }
+            text { font-family: serif; font-size: 36pt; fill: black; stroke: none; }
+            #grid { stroke: #777777; }
+            #axes, #reference-lines, .box { stroke: #111111; fill: transparent; }
+            #plots { stroke-width: 1.0; stroke-dasharray: 5.0, 5.0; }
+            #plot-1 { stroke-dasharray: none; }
+            #plot-2 { stroke-dasharray: 1.0, 3.0; }
+            #overlays { stroke: none; stroke-dasharray: none; fill: transparent; }
+            .poi_symbol { stroke: black; stroke-dasharray: none; stroke-width:0.75;  fill: black; }
+            .poi_symbol_bg { stroke: white; stroke-dasharray: none; stroke-width:3.0;  fill: transparent; stroke-linecap: round; }
+            .integral { stroke: white; stroke-dasharray: none; stroke-width:3.0; }
+            .integral-1 { fill: url(#diagonal_line1_PD); }
+            .integral-2 { fill: white; }
+            @media print{
+            text { font-family: 'Braille DE Computer'; font-size: 36pt; fill: black; stroke: none; }
+             }
+            
+        ]]></style>
+    </defs>
+    <title>Legende: example 3</title>
+    <rect height="100%" id="background" width="100%" x="0" y="0"/>
+    <text id="title" x="10mm" y="30mm">Legende: example 3</text>
+    <svg viewBox="0 0 210 297">
+        <g id="plots">
+            <g id="plot-1">
+                <line x1="10" x2="36" y1="52" y2="52"/>
+            </g>
+            <g id="plot-2">
+                <line x1="10" x2="36" y1="72" y2="72"/>
+            </g>
+        </g>
+    </svg>
+    <text x="45mm" y="57mm">f(x) = 1/(x-2)+2</text>
+    <text x="45mm" y="77mm">g(x) = -0.3(x-3)^2+6</text>
+    <text>
+        <tspan x="10mm" y="104mm">X-Bereich: -6 bis 10</tspan>
+        <tspan x="10mm" y="117mm">Skaleneinteilung: 2</tspan>
+    </text>
+    <text>
+        <tspan x="10mm" y="137mm">Y-Bereich: -6 bis 10</tspan>
+        <tspan x="10mm" y="150mm">Skaleneinteilung: 2</tspan>
+    </text>
+</svg>
