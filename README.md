@@ -6,6 +6,14 @@ SVG-Plott
 SVG-Plott is a Java-program which uses *[gnuplot]*. Gregor Harlan started the development during his assignment. 
 This program generates and creates a svg-file for blind user. After the creation the file can be printed on a tactile printer. Our system just generates the svg-file. If you want the see the svg, you has to open the file in a browser, e.g. Internet Explorer, Chrome, Mozilla Firefox.
 
+The program generates 3 files:
+
+- title.svg
+- title_desc.html
+- title_legend.svg
+
+**Hint** Title can be set by using the option --title name (see [options](#options))
+
 ## Requirements
 
 - download and install gnuplot v4.6 [gnuplot]
@@ -17,7 +25,7 @@ This program generates and creates a svg-file for blind user. After the creation
 
 For creation a SVG-File 
 
-	java -jar svgplot.jar [options] function1 [function2 [function3]]  
+	java -jar svg-plott.jar [options] function1 [function2 [function3]]  
 
 ### Options
 
@@ -44,7 +52,19 @@ Option:
 
 ## Examples
 
-Coming soon ... 
+###Example 1
+	java -jar svg-plott.jar -o example_1.svg -t "example 1" "(x^3-3x^2-10x+12)/6" "-0.25x^2+1"
+![](https://github.com/TUD-INF-IAI-MCI/SVG-Plott/raw/master/docs/screenshots/example_3.jpg)
+###Example 2
+	java -jar svg-plott.jar -o example2.svg -t "example 2" -x -4:8 -y -6:6 "(x^5-12x^4+35x^3+20x^2-156x+168)/56" "-x+3" "-(x-2)^2+3"
+![](https://github.com/TUD-INF-IAI-MCI/SVG-Plott/raw/master/docs/screenshots/example_3.jpg)
+
+###Example 3
+	java -jar svg-plott.jar -o example_3.svg -t "example 3" -x -6:10 -y -6:10 "1/(x-2)+2" "-0.3(x-3)^2+6"
+![](https://github.com/TUD-INF-IAI-MCI/SVG-Plott/raw/master/docs/screenshots/example_3.jpg)
+
+
+
 
 [gnuplot]: http://gnuplot.info
 [svgkit]: http://svgkit.sourceforge.net/SVGPlot.html
