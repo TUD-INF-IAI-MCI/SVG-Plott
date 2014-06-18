@@ -1,0 +1,18 @@
+
+## Normal ###
+-o test/threeFunctionsAndRangeNames.svg -t "Grafik 2" -x -4:8:"Year" -y -6:6:"Income" "(x^5-12x^4+35x^3+20x^2-156x+168)/56" "-x+3" "-(x-2)^2+3"
+
+### High Contrast ###
+-o test/threeFunctionsAndRangeNames(HC).svg -t "Grafik 2" -x -4:8:"Year" -y -6:6:"Income" "(x^5-12x^4+35x^3+20x^2-156x+168)/56" "-x+3" "-(x-2)^2+3" --css "test/css/highContrast_style.css"
+
+### function with all point styles ###
+-o test/FunctionAndPoints.svg -t "Function and Points" -x -4:8 -y -6:6 "(x^5-12x^4+35x^3+20x^2-156x+168)/56" --pts "{3,4.5 4.41,0}{1.23,-4.567 0,3}{-2,1.05 2,3} {7.2,4.32 2.3,-1.5} {6.05,-4.73 -1.4,2.8} {6.92,0 -3.4,-5}"
+
+### function with all point styles - High Contrast###
+-o test/FunctionAndPoints(HC).svg -t "Function and Points" -x -4:8 -y -6:6 "(x^5-12x^4+35x^3+20x^2-156x+168)/56" --pts "{3,4.5 4.41,0}{1.23,-4.567 0,3}{-2,1.05 2,3} {7.2,4.32 2.3,-1.5} {6.05,-4.73 -1.4,2.8} {6.92,0 -3.4,-5}" -c "test/css/highContrast_style.css"
+
+### gauss function integral ###
+-o test/gausIntegral.svg -t "Gauss Normalverteilung" -x -2:2 -y 0:0.5 "(1/(((2pi)^(1.0/2.0))))exp(1)^(-0.5x^2)" --integral "Wahrscheinlichkeit::1[-1:1]"
+
+### gauss function integral - High Contrast###
+-o test/gausIntegral(HC).svg -t "Gauss Normalverteilung" -x -2:2 -y 0:0.5 "(1/(((2pi)^(1.0/2.0))))exp(1)^(-0.5x^2)" --integral "Wahrscheinlichkeit::1[-1:1]" -c "test/css/highContrast_style.css"
