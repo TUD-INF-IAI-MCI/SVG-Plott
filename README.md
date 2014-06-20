@@ -4,7 +4,7 @@ SVG-Plott
 **Import!** This is not the git of [JavaScript API - SVGPlot of SVGKIT][svgkit] 
 
 SVG-Plott is a Java-program which uses *[gnuplot]*. Gregor Harlan started the development during his assignment. 
-This program generates and creates a svg-file for blind user. After the creation the file can be printed on a tactile printer. Our system just generates the svg-file. If you want the see the svg, you has to open the file in a browser, e.g. Internet Explorer, Chrome, Mozilla Firefox.
+This program generates and creates an svg-file for blind users. After the creation the file can be printed on a tactile printer. Our system just generates the svg-file. If you want the see the svg, you have to open the file in a browser, e.g. Internet Explorer, Chrome, Mozilla Firefox.
 
 The program generates 3 files:
 
@@ -16,9 +16,9 @@ The program generates 3 files:
 
 ## Requirements
 
-- download and install gnuplot v4.6 [gnuplot]
+- download and install gnuplot v4.6 [gnuplot] or higher
 - download and install Java
-- add the Java and gnuplat to PATH-Variable
+- add the Java and gnuplot to PATH-Variable
 - Braille Font **Braille DE Computer** by [Viewplus Website][viewplus]
 
 ## Commands
