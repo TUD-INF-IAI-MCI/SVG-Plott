@@ -23,7 +23,7 @@ The program generates 3 files:
 
 ## Commands
 
-For creation a SVG-File 
+For creating an SVG-File 
 
 	java -jar svg-plott.jar [options] function1 [function2 [function3]]  
 
