@@ -52,6 +52,9 @@ Option:
 
 ## Examples
 
+Here you can find some example program calls and the resulting images.
+
+
 ###Example 1
 	java -jar svg-plott.jar -o example_1.svg -t "example 1" "(x^3-3x^2-10x+12)/6" "-0.25x^2+1"
 ![](https://github.com/TUD-INF-IAI-MCI/SVG-Plott/raw/master/docs/screenshot/example_1.JPG)
