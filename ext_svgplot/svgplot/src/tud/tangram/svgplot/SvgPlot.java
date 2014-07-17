@@ -440,7 +440,7 @@ public class SvgPlot {
 					.createGroup("x-reference-lines"));
 			for (String line : xLines.trim().split("\\s+")) {
 				if (line != null && !line.isEmpty()) {
-					double pos = Double.parseDouble(line);
+					double pos = Double.parseDouble(line.replace("\\", ""));
 					Point from = cs.convert(pos, cs.yAxis.range.to, 0,
 							-strokeWidth / 2);
 					Point to = cs.convert(pos, cs.yAxis.range.from, 0,
