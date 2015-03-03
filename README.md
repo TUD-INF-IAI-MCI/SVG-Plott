@@ -3,7 +3,7 @@ SVG-Plott
 
 **Import!** This is not the git of [JavaScript API - SVGPlot of SVGKIT][svgkit] 
 
-SVG-Plott is a Java-program which uses *[gnuplot]*. Gregor Harlan started the development during his assignment. 
+SVG-Plott is a Java-program which uses *[gnuplot]*. Gregor Harlan started the development during his assignment supervised by Jens Bornschein and Denise Prescher. The Tangram team of the TU Dresden extend this project with several new features. 
 This program generates and creates an svg-file for blind users. After the creation the file can be printed on a tactile printer. Our system just generates the svg-file. If you want the see the svg, you have to open the file in a browser, e.g. Internet Explorer, Chrome, Mozilla Firefox.
 
 The program generates 3 files:
