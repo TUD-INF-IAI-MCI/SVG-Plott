@@ -19,6 +19,7 @@ import java.util.ResourceBundle;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
+import org.w3c.dom.DOMException;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
@@ -62,59 +63,188 @@ public class SvgPlot {
 
 	@Parameter(description = "functions")
 	private List<Function> functions = new ArrayList<>();
+	public List<Function> getFunctions() {
+		return functions;
+	}
+
+	public void setFunctions(List<Function> functions) {
+		this.functions = functions;
+	}
 
 	@Parameter(names = { "--size", "-s" }, descriptionKey = "param.size")
 	private Point size = new Point(210, 297);
-
+	public Point getSize() {
+		return size;
+	}
+	/**
+	 * Page size in mm
+	 * @param size
+	 */
+	public void setSize(Point size) {
+		this.size = size;
+	}
+	
 	@Parameter(names = { "--xrange", "-x" }, descriptionKey = "param.xrange")
 	private Range xRange = new Range(-8, 8);
+	public Range getxRange() {
+		return xRange;
+	}
+
+	public void setxRange(Range xRange) {
+		this.xRange = xRange;
+	}
 
 	@Parameter(names = { "--yrange", "-y" }, descriptionKey = "param.yrange")
 	private Range yRange = new Range(-8, 8);
+	public Range getyRange() {
+		return yRange;
+	}
+
+	public void setyRange(Range yRange) {
+		this.yRange = yRange;
+	}
 
 	@Parameter(names = { "--pi", "-p" }, descriptionKey = "param.pi")
 	private boolean pi = false;
+	public boolean isPi() {
+		return pi;
+	}
+
+	public void setPi(boolean pi) {
+		this.pi = pi;
+	}
 
 	@Parameter(names = { "--xlines" }, descriptionKey = "param.xlines")
 	private String xLines = null;
+	public String getxLines() {
+		return xLines;
+	}
+
+	public void setxLines(String xLines) {
+		this.xLines = xLines;
+	}
 
 	@Parameter(names = { "--ylines" }, descriptionKey = "param.ylines")
 	private String yLines = null;
+	public String getyLines() {
+		return yLines;
+	}
+
+	public void setyLines(String yLines) {
+		this.yLines = yLines;
+	}
 
 	@Parameter(names = { "--title", "-t" }, descriptionKey = "param.title")
 	private String title = null;
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
 
 	@Parameter(names = { "--gnuplot", "-g" }, descriptionKey = "param.gnuplot")
 	private String gnuplot = null;
 
 	@Parameter(names = { "--css", "-c" }, descriptionKey = "param.css")
 	private String css = null;
+	public String getCss() {
+		return css;
+	}
+
+	public void setCss(String css) {
+		this.css = css;
+	}
 
 	@Parameter(names = { "--output", "-o" }, descriptionKey = "param.output")
 	private File output = null;
+	public File getOutput() {
+		return output;
+	}
+
+	public void setOutput(File output) {
+		this.output = output;
+	}
 
 	@Parameter(names = { "--help", "-h", "-?" }, help = true, descriptionKey = "param.help")
 	private boolean help;
 
 	@Parameter(names = { "--integral", "-i" }, descriptionKey = "param.integral")
 	private IntegralPlotSettings integral;
+	public IntegralPlotSettings getIntegral() {
+		return integral;
+	}
+
+	public void setIntegral(IntegralPlotSettings integral) {
+		this.integral = integral;
+	}
 
 	// TODO: add parameter for scatter plot file
 	// parameter for marking some points
 	@Parameter(names = { "--points", "--pts" }, descriptionKey = "param.points")
 	private String pts;
+	public String getPts() {
+		return pts;
+	}
 
+	public void setPts(String pts) {
+		this.pts = pts;
+	}
+	
 	private PointListList points;
+	public PointListList getPoints() {
+		return points;
+	}
+
+	public void setPoints(PointListList points) {
+		this.points = points;
+	}
 
 	private SvgDocument doc;
+	/**
+	 * Final function graph svg
+	 * @return
+	 */
+	public SvgDocument getDoc() {
+		return doc;
+	}
 
 	private Element viewbox;
+	public Element getViewbox() {
+		return viewbox;
+	}
+
+	public void setViewbox(Element viewbox) {
+		this.viewbox = viewbox;
+	}
 
 	private SvgDocument legend;
+	/**
+	 * key to the graphic
+	 * @return
+	 */
+	public SvgDocument getLegend() {
+		return legend;
+	}
 
 	private HtmlDocument desc;
+	/**
+	 * description of the plotted functions in html format
+	 * @return
+	 */
+	public HtmlDocument getDesc() {
+		return desc;
+	}
+
+	public void setDesc(HtmlDocument desc) {
+		this.desc = desc;
+	}
 
 	private CoordinateSystem cs;
+	public CoordinateSystem getCs() {
+		return cs;
+	}
 
 	final private double strokeWidth = 0.5;
 
@@ -138,6 +268,34 @@ public class SvgPlot {
 		if (title == null && output != null) {
 			title = output.getName();
 		}
+		
+		create();
+
+		if (output != null) {
+			doc.writeTo(new FileOutputStream(output));
+			String parent = output.getParent() == null ? "" : output
+					.getParent() + "\\";
+			String legendFile = parent
+					+ output.getName()
+							.replaceFirst("(\\.[^.]*)?$", "_legend$0");
+			legend.writeTo(new FileOutputStream(legendFile));
+			String descFile = parent
+					+ output.getName().replaceFirst("(\\.[^.]*)?$",
+							"_desc.html");
+			desc.writeTo(new FileOutputStream(descFile));
+		} else {
+			doc.writeTo(System.out);
+		}
+	}
+
+	/**
+	 * @throws ParserConfigurationException
+	 * @throws IOException
+	 * @throws DOMException
+	 * @throws InterruptedException
+	 */
+	public SvgDocument create() throws ParserConfigurationException, IOException,
+			DOMException, InterruptedException {
 		String legendTitle = translate("legend") + ": " + title;
 
 		doc = new SvgDocument(title, size, margin[1]);
@@ -175,22 +333,8 @@ public class SvgPlot {
 		createReferenceLines();
 		createPlots();
 		createLegend(legendPos);
-
-		if (output != null) {
-			doc.writeTo(new FileOutputStream(output));
-			String parent = output.getParent() == null ? "" : output
-					.getParent() + "\\";
-			String legendFile = parent
-					+ output.getName()
-							.replaceFirst("(\\.[^.]*)?$", "_legend$0");
-			legend.writeTo(new FileOutputStream(legendFile));
-			String descFile = parent
-					+ output.getName().replaceFirst("(\\.[^.]*)?$",
-							"_desc.html");
-			desc.writeTo(new FileOutputStream(descFile));
-		} else {
-			doc.writeTo(System.out);
-		}
+		
+		return doc;
 	}
 
 	/**
