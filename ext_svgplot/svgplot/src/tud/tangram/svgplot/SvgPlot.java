@@ -192,11 +192,19 @@ public class SvgPlot {
 		this.pts = pts;
 	}
 	
+	/**
+	 * interpreted List of list of points parsed from the 'pts' property
+	 */
 	private PointListList points;
+	/**
+	 * interpreted List of list of points parsed from the 'pts' property
+	 */
 	public PointListList getPoints() {
 		return points;
 	}
-
+	/**
+	 * interpreted List of list of points parsed from the 'pts' property
+	 */
 	public void setPoints(PointListList points) {
 		this.points = points;
 	}
@@ -211,13 +219,6 @@ public class SvgPlot {
 	}
 
 	private Element viewbox;
-	public Element getViewbox() {
-		return viewbox;
-	}
-
-	public void setViewbox(Element viewbox) {
-		this.viewbox = viewbox;
-	}
 
 	private SvgDocument legend;
 	/**
