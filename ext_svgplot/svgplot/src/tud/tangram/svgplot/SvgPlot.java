@@ -135,7 +135,7 @@ public class SvgPlot {
 	}
 
 	@Parameter(names = { "--title", "-t" }, descriptionKey = "param.title")
-	private String title = null;
+	private String title = "";
 	public String getTitle() {
 		return title;
 	}
@@ -273,6 +273,9 @@ public class SvgPlot {
 		create();
 
 		if (output != null) {
+			
+			doc.writeTo(outputStream)
+			
 			doc.writeTo(new FileOutputStream(output));
 			String parent = output.getParent() == null ? "" : output
 					.getParent() + "\\";
