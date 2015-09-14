@@ -273,9 +273,6 @@ public class SvgPlot {
 		create();
 
 		if (output != null) {
-			
-			doc.writeTo(outputStream)
-			
 			doc.writeTo(new FileOutputStream(output));
 			String parent = output.getParent() == null ? "" : output
 					.getParent() + "\\";
