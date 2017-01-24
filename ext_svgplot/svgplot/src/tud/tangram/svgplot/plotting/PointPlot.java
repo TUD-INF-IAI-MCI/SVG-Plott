@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.w3c.dom.Element;
 
+import tud.tangram.svgplot.Constants;
 import tud.tangram.svgplot.SvgPlot;
 import tud.tangram.svgplot.coordinatesystem.Point;
 import tud.tangram.svgplot.xml.SvgDocument;
@@ -13,7 +14,7 @@ import tud.tangram.svgplot.xml.SvgDocument;
  * 
  * @author Gregor Harlan, Jens Bornschein
  * Idea and supervising by Jens Bornschein jens.bornschein@tu-dresden.de
- * Copyright by Technische Universität Dresden / MCI 2014
+ * Copyright by Technische Universitï¿½t Dresden / MCI 2014
  *
  */
 public class PointPlot {
@@ -166,7 +167,7 @@ public class PointPlot {
 	/**
 	 * The css class for the underlying part of a POI Symbol, should result i a kind of outline. 
 	 */
-	public final static String POI_SYMBOL_SPACER_CLASS = SvgPlot.spacerCssClass;
+	public final static String POI_SYMBOL_SPACER_CLASS = Constants.spacerCssClass;
 
 	/**
 	 * Creates a cross Symbol with the id 'poi_cross'

@@ -2,14 +2,16 @@ package tud.tangram.svgplot.coordinatesystem;
 
 import java.text.DecimalFormat;
 import java.util.Locale;
+
 /**
  * 
- * @author Gregor Harlan, Jens Bornschein
- * Idea and supervising by Jens Bornschein jens.bornschein@tu-dresden.de
- * Copyright by Technische Universität Dresden / MCI 2014
+ * @author Gregor Harlan, Jens Bornschein Idea and supervising by Jens
+ *         Bornschein jens.bornschein@tu-dresden.de Copyright by Technische
+ *         Universitï¿½t Dresden / MCI 2014
  *
  */
 public class Axis {
+	/** The minimal distance of grid lines in mm */
 	final private static int minGridDistance = 10;
 
 	final public double ticInterval;
@@ -22,8 +24,9 @@ public class Axis {
 
 	final private DecimalFormat decimalFormat = (DecimalFormat) DecimalFormat.getInstance(Locale.getDefault());
 	// FIXME: use this for publications
-	//final private DecimalFormat decimalFormat = (DecimalFormat) DecimalFormat.getInstance(Locale.US);
-		
+	// final private DecimalFormat decimalFormat = (DecimalFormat)
+	// DecimalFormat.getInstance(Locale.US);
+
 	public Axis(Range axisRange, double size) {
 		boolean finished = false;
 		double interval = 0;
@@ -32,7 +35,12 @@ public class Axis {
 		double dimension;
 		double factor;
 		do {
+			/*
+			 * Calculate how many tics there can maximally be without violating
+			 * the minimal distance of grid lines constraint.
+			 */
 			int maxTics = (int) (size / minGridDistance);
+			// Calculate which interval (virtual) the tics must minimally have.
 			interval = axisRange.distance() / maxTics;
 			dimensionExp = 0;
 			int direction = interval < 1 ? -1 : 1;
@@ -68,7 +76,8 @@ public class Axis {
 		gridInterval = interval;
 
 		ticInterval = 2 * interval;
-		ticRange = new Range(((int) (range.from / ticInterval)) * ticInterval, ((int) (range.to / ticInterval)) * ticInterval);
+		ticRange = new Range(((int) (range.from / ticInterval)) * ticInterval,
+				((int) (range.to / ticInterval)) * ticInterval);
 
 		decimalFormat.setMaximumFractionDigits(Math.max(0, -dimensionExp + 2));
 

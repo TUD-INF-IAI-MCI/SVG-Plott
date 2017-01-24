@@ -9,11 +9,12 @@ import org.w3c.dom.Node;
 
 import tud.tangram.svgplot.SvgPlot;
 import tud.tangram.svgplot.coordinatesystem.Point;
+import tud.tangram.svgplot.svgcreator.SvgGraphCreator;
 /**
  * 
  * @author Gregor Harlan
  * Idea and supervising by Jens Bornschein jens.bornschein@tu-dresden.de
- * Copyright by Technische Universität Dresden / MCI 2014
+ * Copyright by Technische Universitï¿½t Dresden / MCI 2014
  *
  */
 public class SvgDocument extends Document {
@@ -29,8 +30,8 @@ public class SvgDocument extends Document {
 		root.setAttribute("xmlns", "http://www.w3.org/2000/svg");
 		root.setAttribute("version", "1.1");
 		root.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
-		root.setAttribute("width", SvgPlot.format2svg(size.x) + "mm");
-		root.setAttribute("height", SvgPlot.format2svg(size.y) + "mm");
+		root.setAttribute("width", SvgGraphCreator.format2svg(size.x) + "mm");
+		root.setAttribute("height", SvgGraphCreator.format2svg(size.y) + "mm");
 
 		defs = root.appendChild(doc.createElement("defs"));
 
@@ -77,7 +78,7 @@ public class SvgDocument extends Document {
 		Element circle = createElement("circle");
 		circle.setAttribute("cx", center.x());
 		circle.setAttribute("cy", center.y());
-		circle.setAttribute("r", SvgPlot.format2svg(radius));
+		circle.setAttribute("r", SvgGraphCreator.format2svg(radius));
 		return circle;
 	}
 	
@@ -85,8 +86,8 @@ public class SvgDocument extends Document {
 		Element rect = createElement("rect");
 		rect.setAttribute("x", start.x());
 		rect.setAttribute("y", start.y());
-		rect.setAttribute("width", SvgPlot.format2svg(width));
-		rect.setAttribute("height", SvgPlot.format2svg(height));
+		rect.setAttribute("width", SvgGraphCreator.format2svg(width));
+		rect.setAttribute("height", SvgGraphCreator.format2svg(height));
 		return rect;
 	}
 	
