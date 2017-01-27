@@ -1,28 +1,23 @@
 package tud.tangram.svgplot.svgcreator;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.text.MessageFormat;
 import java.util.List;
-import java.util.ResourceBundle;
 
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
 
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 import tud.tangram.svgplot.Constants;
-import tud.tangram.svgplot.SvgGraphOptions;
 import tud.tangram.svgplot.coordinatesystem.CoordinateSystem;
 import tud.tangram.svgplot.coordinatesystem.Point;
 import tud.tangram.svgplot.coordinatesystem.PointListList.PointList;
+import tud.tangram.svgplot.options.SvgGraphOptions;
 import tud.tangram.svgplot.plotting.Function;
 import tud.tangram.svgplot.plotting.Gnuplot;
 import tud.tangram.svgplot.plotting.IntegralPlot;
@@ -34,7 +29,7 @@ import tud.tangram.svgplot.plotting.PointPlot;
 import tud.tangram.svgplot.xml.HtmlDocument;
 import tud.tangram.svgplot.xml.SvgDocument;
 
-public class SvgGraphCreator implements SvgCreator {
+public class SvgGraphCreator extends SvgCreator {
 	private SvgGraphOptions options;
 
 	private Element viewbox;
@@ -45,79 +40,8 @@ public class SvgGraphCreator implements SvgCreator {
 		return cs;
 	}
 
-	final private static ResourceBundle bundle = ResourceBundle.getBundle("Bundle");
-
-	private static DecimalFormat decimalFormat = null;
-
-	/** Final function graph svg */
-	private SvgDocument doc;
-
-	/**
-	 * Final function graph svg
-	 * 
-	 * @return
-	 */
-	public SvgDocument getDoc() {
-		return doc;
-	}
-
-	/** key to the graphic */
-	private SvgDocument legend;
-
-	/**
-	 * key to the graphic
-	 * 
-	 * @return
-	 */
-	public SvgDocument getLegend() {
-		return legend;
-	}
-
-	/** description of the plotted functions in html format */
-	private HtmlDocument desc;
-
-	/**
-	 * description of the plotted functions in html format
-	 * 
-	 * @return
-	 */
-	public HtmlDocument getDesc() {
-		return desc;
-	}
-
-	public void setDesc(HtmlDocument desc) {
-		this.desc = desc;
-	}
-
 	public SvgGraphCreator(SvgGraphOptions options) {
 		this.options = options;
-	}
-
-	/**
-	 * Main function. Combine all the elements and create all the output files.
-	 * 
-	 * @throws ParserConfigurationException
-	 * @throws IOException
-	 * @throws InterruptedException
-	 * @throws TransformerException
-	 */
-	public void run() throws ParserConfigurationException, IOException, InterruptedException, TransformerException {
-		if (options.title == null && options.output != null) {
-			options.title = options.output.getName();
-		}
-
-		create();
-
-		if (options.output != null) {
-			doc.writeTo(new FileOutputStream(options.output));
-			String parent = options.output.getParent() == null ? "" : options.output.getParent() + "\\";
-			String legendFile = parent + options.output.getName().replaceFirst("(\\.[^.]*)?$", "_legend$0");
-			legend.writeTo(new FileOutputStream(legendFile));
-			String descFile = parent + options.output.getName().replaceFirst("(\\.[^.]*)?$", "_desc.html");
-			desc.writeTo(new FileOutputStream(descFile));
-		} else {
-			doc.writeTo(System.out);
-		}
 	}
 
 	/**
@@ -130,32 +54,13 @@ public class SvgGraphCreator implements SvgCreator {
 	 * @throws InterruptedException
 	 */
 	public SvgDocument create() throws ParserConfigurationException, IOException, DOMException, InterruptedException {
-		String legendTitle = translate("legend") + ": " + options.title;
-
-		doc = new SvgDocument(options.title, options.size, Constants.margin[1]);
-		legend = new SvgDocument(legendTitle, options.size, Constants.margin[1]);
-		legend.setAttribute("id", "legend");
-		desc = new HtmlDocument(translate("desc") + ": " + options.title);
-
-		createCss(doc);
-		createCss(legend);
-
-		Element bg = doc.createRectangle(new Point(0, 0), "100%", "100%");
-		bg.setAttribute("id", "background");
-		doc.appendChild(bg);
-		Element bgL = legend.createRectangle(new Point(0, 0), "100%", "100%");
-		bgL.setAttribute("id", "background");
-		legend.appendChild(bgL);
-
-		Point pos = createTitle(doc, options.title);
-		Point legendPos = createTitle(legend, legendTitle);
 
 		options.xRange.from = Math.min(0, options.xRange.from);
 		options.xRange.to = Math.max(0, options.xRange.to);
 		options.yRange.from = Math.min(0, options.yRange.from);
 		options.yRange.to = Math.max(0, options.yRange.to);
 		int[] margin = Constants.margin.clone();
-		margin[0] = (int) pos.y + 17;
+		margin[0] = (int) diagramTitleLowerEnd.y + 17;
 		margin[1] += 20;
 		margin[3] += 10;
 		cs = new CoordinateSystem(options.xRange, options.yRange, options.size, margin);
@@ -166,7 +71,7 @@ public class SvgGraphCreator implements SvgCreator {
 
 		createReferenceLines();
 		createPlots();
-		createLegend(legendPos);
+		createLegend(legendTitleLowerEnd);
 
 		return doc;
 	}
@@ -180,7 +85,7 @@ public class SvgGraphCreator implements SvgCreator {
 	 *             if the set up css file is not readable or does not exist
 	 *             anymore.
 	 */
-	private void createCss(SvgDocument doc) throws IOException {
+	protected void createCss(SvgDocument doc) throws IOException {
 		String css = "/* default */\n";
 		css += "svg { fill: none; stroke: #000000; stroke-width: " + Constants.strokeWidth + "; }\n";
 		css += "text { font-family: serif; font-size: 36pt; fill: black; stroke: none; }\n";
@@ -205,14 +110,7 @@ public class SvgGraphCreator implements SvgCreator {
 		css += "text { font-family: 'Braille DE Computer'; font-size: 36pt; fill: black; stroke: none; }\n";
 		css += " }\n";
 
-		if (options.css != null) {
-			css += "\n\n/* custom */\n";
-			if (new File(options.css).isFile()) {
-				options.css = new String(Files.readAllBytes(Paths.get(options.css)));
-			}
-			css += options.css;
-		}
-		doc.appendCss(css);
+		appendOptionsCss(css);
 	}
 
 	/**
@@ -320,23 +218,6 @@ public class SvgGraphCreator implements SvgCreator {
 		axes.insertBefore(axesClone, xAxisLine);
 
 		return axes;
-	}
-
-	/**
-	 * Adds the textual readable title to the svg document at a predefined
-	 * position in the left top corner of the sheet.
-	 * 
-	 * @param doc
-	 *            | the svg document where the header text should be insert
-	 * @param text
-	 *            | the textual value
-	 * @return the position of the added title node
-	 */
-	private Point createTitle(SvgDocument doc, String text) {
-		Point pos = new Point(Constants.margin[3], Constants.margin[0] + 10);
-		Element title = (Element) doc.appendChild(doc.createText(pos, text));
-		title.setAttribute("id", "title");
-		return pos;
 	}
 
 	private void createViewbox() {
@@ -869,7 +750,7 @@ public class SvgGraphCreator implements SvgCreator {
 								formatName(cs.yAxis.range.name)),
 						translate("legend.ytic", formatY(cs.yAxis.ticInterval))));
 	}
-
+	
 	/**
 	 * Formats the x value of a point with respect to if Pi is set.
 	 * 
@@ -888,7 +769,7 @@ public class SvgGraphCreator implements SvgCreator {
 	public String formatY(double y) {
 		return cs.yAxis.format(y);
 	}
-
+	
 	/**
 	 * Formats a Point that it is optimized for speech output. E.g. (x / y)
 	 * 
@@ -901,7 +782,7 @@ public class SvgGraphCreator implements SvgCreator {
 		return ((point.name != null && !point.name.isEmpty()) ? point.name + " " : "") + formatX(point.x) + " / "
 				+ formatY(point.y);
 	}
-
+	
 	/**
 	 * Formats a Point that it is optimized for textual output and packed into
 	 * the caption with brackets. E.g. E(x | y)
@@ -922,69 +803,9 @@ public class SvgGraphCreator implements SvgCreator {
 	}
 
 	/**
-	 * Formats a additional Name of an object. Checks if the name is set. If
-	 * name is set the name is packed into brackets and prepend with an
-	 * whitespace
-	 * 
-	 * @param name
-	 *            | optional name of an object or NULL
-	 * @return empty string or the name of the object packed into brackets and
-	 *         prepend with a whitespace e.g. ' (optional name)'
-	 */
-	public static String formatName(String name) {
-		return (name == null || name.isEmpty()) ? "" : " (" + name + ")";
-	}
-
-	/**
-	 * Try to translate a key in the localized version defined in the
-	 * PropertyResourceBundle file.
-	 * 
-	 * @param key
-	 *            | PropertyResourceBundle key
-	 * @param arguments
-	 *            | arguments that should fill the placeholder in the returned
-	 *            PropertyResourceBundle value
-	 * @return a localized string for the given PropertyResourceBundle key,
-	 *         filled with the set arguments
-	 */
-	public static String translate(String key, Object... arguments) {
-		return MessageFormat.format(bundle.getString(key), arguments);
-	}
-
-	/**
-	 * Try to translate a key in the localized version defined in the
-	 * PropertyResourceBundle file. This function is optimized for differing
-	 * sentences depending on the amount of results.
-	 * 
-	 * @param key
-	 *            | PropertyResourceBundle key
-	 * @param arguments
-	 *            | arguments that should fill the placeholder in the returned
-	 *            PropertyResourceBundle value. The last argument gives the
-	 *            count and decide which value will be returned.
-	 * @return a localized string for the given amount depending
-	 *         PropertyResourceBundle key, filled with the set arguments
-	 */
-	public static String translateN(String key, Object... arguments) {
-		int last = (int) arguments[arguments.length - 1];
-		String suffix = last == 0 ? "_0" : last == 1 ? "_1" : "_n";
-		return translate(key + suffix, arguments);
-	}
-
-	public static String format2svg(double value) {
-		if (decimalFormat == null) {
-			decimalFormat = new DecimalFormat("0.###");
-			DecimalFormatSymbols dfs = new DecimalFormatSymbols();
-			dfs.setDecimalSeparator('.');
-			decimalFormat.setDecimalFormatSymbols(dfs);
-		}
-		return decimalFormat.format(value);
-	}
-
-	/**
-	 * Try to translate the function index into an continuous literal starting
+	 * Try to translate the function index into a continuous literal starting
 	 * with the char 'f'. If the given index is not valid it returns the name as
-	 * an combination of 'f' + the given number.
+	 * a combination of 'f' + the given number.
 	 * 
 	 * @param f
 	 *            | the index if the function

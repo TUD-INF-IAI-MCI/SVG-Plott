@@ -10,6 +10,8 @@ import com.beust.jcommander.IDefaultProvider;
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameters;
 
+import tud.tangram.svgplot.options.SvgGraphOptions;
+import tud.tangram.svgplot.options.SvgPlotOptions;
 import tud.tangram.svgplot.svgcreator.SvgGraphCreator;
 
 /**

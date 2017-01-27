@@ -1,4 +1,4 @@
-package tud.tangram.svgplot;
+package tud.tangram.svgplot.options;
 
 import java.io.File;
 import java.util.ArrayList;
