@@ -33,6 +33,9 @@ public abstract class SvgCreator {
 	
 	protected Point diagramTitleLowerEnd;
 	protected Point legendTitleLowerEnd;
+	
+	/** Margin for the content, which is below the title */
+	protected int[] diagramContentMargin;
 
 	/** Final diagram svg */
 	protected SvgDocument doc;
@@ -138,6 +141,12 @@ public abstract class SvgCreator {
 		// Create the titles and update the top positions
 		diagramTitleLowerEnd = createTitle(doc, options.title);
 		legendTitleLowerEnd = createTitle(legend, legendTitle);
+		
+		// Set the new margins according to the titles
+		diagramContentMargin = Constants.margin.clone();
+		diagramContentMargin[0] = (int) diagramTitleLowerEnd.y + 17;
+		diagramContentMargin[1] += 20;
+		diagramContentMargin[3] += 10;
 	}
 	
 	/**

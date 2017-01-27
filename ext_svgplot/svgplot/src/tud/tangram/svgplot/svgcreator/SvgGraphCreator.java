@@ -1,10 +1,6 @@
 package tud.tangram.svgplot.svgcreator;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.text.MessageFormat;
 import java.util.List;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -26,7 +22,6 @@ import tud.tangram.svgplot.plotting.PlotList;
 import tud.tangram.svgplot.plotting.PlotList.Overlay;
 import tud.tangram.svgplot.plotting.PlotList.OverlayList;
 import tud.tangram.svgplot.plotting.PointPlot;
-import tud.tangram.svgplot.xml.HtmlDocument;
 import tud.tangram.svgplot.xml.SvgDocument;
 
 public class SvgGraphCreator extends SvgCreator {
@@ -59,11 +54,8 @@ public class SvgGraphCreator extends SvgCreator {
 		options.xRange.to = Math.max(0, options.xRange.to);
 		options.yRange.from = Math.min(0, options.yRange.from);
 		options.yRange.to = Math.max(0, options.yRange.to);
-		int[] margin = Constants.margin.clone();
-		margin[0] = (int) diagramTitleLowerEnd.y + 17;
-		margin[1] += 20;
-		margin[3] += 10;
-		cs = new CoordinateSystem(options.xRange, options.yRange, options.size, margin);
+
+		cs = new CoordinateSystem(options.xRange, options.yRange, options.size, diagramContentMargin);
 
 		createViewbox();
 		createGrid();
