@@ -7,14 +7,13 @@ import javax.xml.transform.Transformer;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
-import tud.tangram.svgplot.SvgPlot;
 import tud.tangram.svgplot.coordinatesystem.Point;
 import tud.tangram.svgplot.svgcreator.SvgGraphCreator;
 /**
  * 
  * @author Gregor Harlan
  * Idea and supervising by Jens Bornschein jens.bornschein@tu-dresden.de
- * Copyright by Technische Universit�t Dresden / MCI 2014
+ * Copyright by Technische Universität Dresden / MCI 2014
  *
  */
 public class SvgDocument extends Document {

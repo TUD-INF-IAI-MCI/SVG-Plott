@@ -15,4 +15,6 @@ public class Constants {
 			"N", "O", "P", "Q", "R", "T" };
 	final public static String spacerCssClass = "poi_symbol_bg";
 	final public static DecimalFormat decimalFormat = new DecimalFormat("0.###", new DecimalFormatSymbols(locale));
+	/** The minimal distance of grid lines in mm */
+	final public static int minGridDistance = 10;
 }

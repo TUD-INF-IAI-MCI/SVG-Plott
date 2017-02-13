@@ -17,7 +17,7 @@ import tud.tangram.svgplot.coordinatesystem.Range;
  * 
  * @author Gregor Harlan
  * Idea and supervising by Jens Bornschein jens.bornschein@tu-dresden.de
- * Copyright by Technische Universität Dresden / MCI 2014
+ * Copyright by Technische UniversitÃ¤t Dresden / MCI 2014
  *
  */
 public class Gnuplot {
@@ -71,11 +71,11 @@ public class Gnuplot {
 		boolean nextNewList = true;
 		
 		/*
-		 * When table mode is enabled, ‘plot‘ and ‘splot‘ commands print out a multicolumn 
+		 * When table mode is enabled, ï¿½plotï¿½ and ï¿½splotï¿½ commands print out a multicolumn 
 		 * ASCII table of X Y {Z} R values rather than creating an actual plot on the current 
 		 * terminal. The character R takes on one of three values: "i" if the point is in the 
 		 * active range, "o" if it is out-of-range, or "u" if it is undefined. The data 
-		 * format is determined by the format of the axis labels (see ‘set format‘), and the 
+		 * format is determined by the format of the axis labels (see ï¿½set formatï¿½), and the 
 		 * columns are separated by single spaces.
 		 */
 		

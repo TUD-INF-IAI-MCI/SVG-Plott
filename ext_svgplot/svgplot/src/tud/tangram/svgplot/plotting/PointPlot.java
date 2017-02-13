@@ -14,7 +14,7 @@ import tud.tangram.svgplot.xml.SvgDocument;
  * 
  * @author Gregor Harlan, Jens Bornschein
  * Idea and supervising by Jens Bornschein jens.bornschein@tu-dresden.de
- * Copyright by Technische Universit�t Dresden / MCI 2014
+ * Copyright by Technische Universität Dresden / MCI 2014
  *
  */
 public class PointPlot {
@@ -54,7 +54,7 @@ public class PointPlot {
 	 * 
 	 * @param doc		|	the svg document
 	 * @param p			|	the point to place the symbol
-	 * @param symbol	|	the svg Symbol to use for the point
+	 * @param symbolId	|	the svg Symbol id to use for the point
 	 * @param parent	|	the parent svg element where the used symbol should be added as a child. 
 	 * @return the svg 'use' element that visually represents the point
 	 */

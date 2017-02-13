@@ -20,7 +20,7 @@ import org.w3c.dom.Text;
  * 
  * @author Gregor Harlan, Jens Bornschein Idea and supervising by Jens
  *         Bornschein jens.bornschein@tu-dresden.de Copyright by Technische
- *         Universit‰t Dresden / MCI 2014
+ *         Universit√§t Dresden / MCI 2014
  * 
  */
 public class Document {

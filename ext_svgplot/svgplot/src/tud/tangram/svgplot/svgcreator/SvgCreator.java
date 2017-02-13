@@ -30,10 +30,10 @@ import tud.tangram.svgplot.xml.SvgDocument;
 public abstract class SvgCreator {
 	protected SvgOptions options;
 	final public static ResourceBundle bundle = ResourceBundle.getBundle("Bundle");
-	
+
 	protected Point diagramTitleLowerEnd;
 	protected Point legendTitleLowerEnd;
-	
+
 	/** Margin for the content, which is below the title */
 	protected int[] diagramContentMargin;
 
@@ -54,17 +54,19 @@ public abstract class SvgCreator {
 
 	/**
 	 * key to the diagram
+	 * 
 	 * @return
 	 */
 	public SvgDocument getLegend() {
 		return legend;
 	}
-	
+
 	/** description of the diagram in html format */
 	protected HtmlDocument desc;
 
 	/**
 	 * description of the diagram in html format
+	 * 
 	 * @return
 	 */
 	public HtmlDocument getDesc() {
@@ -73,12 +75,13 @@ public abstract class SvgCreator {
 
 	/**
 	 * Set the description of the diagram
+	 * 
 	 * @param desc
 	 */
 	public void setDesc(HtmlDocument desc) {
 		this.desc = desc;
 	}
-	
+
 	/**
 	 * Main function. Combine all the elements and create all the output files.
 	 * 
@@ -97,6 +100,7 @@ public abstract class SvgCreator {
 		createCss(doc);
 		createCss(legend);
 		create();
+		createLegend();
 
 		if (options.output != null) {
 			doc.writeTo(new FileOutputStream(options.output));
@@ -110,24 +114,33 @@ public abstract class SvgCreator {
 			doc.writeTo(System.out);
 		}
 	}
-	
+
 	/**
 	 * Creates the whole diagram SVG file, legend SVG file and description HTML
 	 * file.
+	 * 
 	 * @return
 	 * @throws ParserConfigurationException
 	 * @throws IOException
 	 * @throws DOMException
 	 * @throws InterruptedException
 	 */
-	public abstract SvgDocument create() throws ParserConfigurationException, IOException, DOMException, InterruptedException;
+	public abstract SvgDocument create()
+			throws ParserConfigurationException, IOException, DOMException, InterruptedException;
 
+	/**
+	 * Format a number for svg usage according to the constant decimalFormat
+	 * 
+	 * @param value
+	 * @return
+	 */
 	public static String format2svg(double value) {
 		return Constants.decimalFormat.format(value);
 	}
-	
+
 	/**
 	 * Create the titles for the legend and diagram svg files.
+	 * 
 	 * @throws ParserConfigurationException
 	 */
 	public void createTitles() throws ParserConfigurationException {
@@ -137,18 +150,18 @@ public abstract class SvgCreator {
 		legend = new SvgDocument(legendTitle, options.size, Constants.margin[1]);
 		legend.setAttribute("id", "legend");
 		desc = new HtmlDocument(translate("desc") + ": " + options.title);
-		
+
 		// Create the titles and update the top positions
 		diagramTitleLowerEnd = createTitle(doc, options.title);
 		legendTitleLowerEnd = createTitle(legend, legendTitle);
-		
+
 		// Set the new margins according to the titles
 		diagramContentMargin = Constants.margin.clone();
 		diagramContentMargin[0] = (int) diagramTitleLowerEnd.y + 17;
 		diagramContentMargin[1] += 20;
 		diagramContentMargin[3] += 10;
 	}
-	
+
 	/**
 	 * Adds the textual readable title to the svg document at a predefined
 	 * position in the left top corner of the sheet.
@@ -165,7 +178,7 @@ public abstract class SvgCreator {
 		title.setAttribute("id", "title");
 		return pos;
 	}
-	
+
 	public void createBackground() {
 		Element bg = doc.createRectangle(new Point(0, 0), "100%", "100%");
 		bg.setAttribute("id", "background");
@@ -186,7 +199,7 @@ public abstract class SvgCreator {
 	 *             anymore.
 	 */
 	protected abstract void createCss(SvgDocument doc) throws IOException;
-	
+
 	protected void appendOptionsCss(String css) throws IOException {
 		if (options.css != null) {
 			css += "\n\n/* custom */\n";
@@ -197,10 +210,12 @@ public abstract class SvgCreator {
 		}
 		doc.appendCss(css);
 	}
-	
+
+	protected abstract void createLegend();
+
 	/**
-	 * Formats a additional Name of an object. Checks if the name is set. If
-	 * name is set the name is packed into brackets and prepend with an
+	 * Formats an additional Name of an object. Checks if the name is set. If
+	 * name is set, the name is packed into brackets and prepend with an
 	 * whitespace
 	 * 
 	 * @param name

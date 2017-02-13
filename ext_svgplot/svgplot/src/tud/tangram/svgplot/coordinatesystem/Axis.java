@@ -1,19 +1,16 @@
 package tud.tangram.svgplot.coordinatesystem;
 
 import java.text.DecimalFormat;
-import java.util.Locale;
+import tud.tangram.svgplot.Constants;
 
 /**
  * 
  * @author Gregor Harlan, Jens Bornschein Idea and supervising by Jens
  *         Bornschein jens.bornschein@tu-dresden.de Copyright by Technische
- *         Universit�t Dresden / MCI 2014
+ *         Universität Dresden / MCI 2014
  *
  */
 public class Axis {
-	/** The minimal distance of grid lines in mm */
-	final private static int minGridDistance = 10;
-
 	final public double ticInterval;
 	final public Range ticRange;
 	final public double gridInterval;
@@ -22,10 +19,11 @@ public class Axis {
 	final public int atomCount;
 	final public double[] intervalSteps;
 
-	final private DecimalFormat decimalFormat = (DecimalFormat) DecimalFormat.getInstance(Locale.getDefault());
+	final private DecimalFormat decimalFormat = (DecimalFormat) DecimalFormat.getInstance(Constants.locale);
 	// FIXME: use this for publications
 	// final private DecimalFormat decimalFormat = (DecimalFormat)
 	// DecimalFormat.getInstance(Locale.US);
+	// Now changed to use the locale specified in Constants. Kept for reference.
 
 	public Axis(Range axisRange, double size) {
 		boolean finished = false;
@@ -39,7 +37,7 @@ public class Axis {
 			 * Calculate how many tics there can maximally be without violating
 			 * the minimal distance of grid lines constraint.
 			 */
-			int maxTics = (int) (size / minGridDistance);
+			int maxTics = (int) (size / Constants.minGridDistance);
 			// Calculate which interval (virtual) the tics must minimally have.
 			interval = axisRange.distance() / maxTics;
 			dimensionExp = 0;

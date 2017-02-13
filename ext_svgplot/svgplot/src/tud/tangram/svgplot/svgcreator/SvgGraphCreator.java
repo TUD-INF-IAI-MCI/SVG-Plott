@@ -24,7 +24,7 @@ import tud.tangram.svgplot.plotting.PlotList.OverlayList;
 import tud.tangram.svgplot.plotting.PointPlot;
 import tud.tangram.svgplot.xml.SvgDocument;
 
-public class SvgGraphCreator extends SvgCreator {
+public class SvgGraphCreator extends SvgGridCreator {
 	private SvgGraphOptions options;
 
 	private Element viewbox;
@@ -63,7 +63,6 @@ public class SvgGraphCreator extends SvgCreator {
 
 		createReferenceLines();
 		createPlots();
-		createLegend(legendTitleLowerEnd);
 
 		return doc;
 	}
@@ -376,7 +375,7 @@ public class SvgGraphCreator extends SvgCreator {
 						Element symbol = PointPlot.getPointSymbolForIndex(j, doc);
 						Element ps = PointPlot.paintPoint(doc, cs.convert(p), symbol,
 								plGroup != null ? plGroup : viewbox);
-						ps.appendChild(doc.createTitle(format(p)));
+						ps.appendChild(doc.createTitle(formatForSpeech(p)));
 						if (pl.name != null && !pl.name.isEmpty())
 							ps.appendChild(doc.createDesc(pl.name)); // TODO:
 																		// maybe
@@ -418,7 +417,7 @@ public class SvgGraphCreator extends SvgCreator {
 	 */
 	private Element createOverlay(Overlay overlay) {
 		Element circle = doc.createCircle(cs.convert(overlay), Overlay.RADIUS);
-		circle.appendChild(doc.createTitle(format(overlay)));
+		circle.appendChild(doc.createTitle(formatForSpeech(overlay)));
 		if (overlay.getFunction() != null) {
 			circle.appendChild(doc.createDesc(overlay.getFunction().toString()));
 		}
@@ -579,7 +578,7 @@ public class SvgGraphCreator extends SvgCreator {
 			if (cap != null && !cap.isEmpty()) {
 				list.appendChild(desc.createTextElement("li", formatForText(point, cap + "_" + ++i)));
 			} else {
-				list.appendChild(desc.createTextElement("li", format(point)));
+				list.appendChild(desc.createTextElement("li", formatForSpeech(point)));
 			}
 		}
 		return list;
@@ -638,13 +637,12 @@ public class SvgGraphCreator extends SvgCreator {
 	// TODO: generate textual braille key
 	/**
 	 * Paint the key as an svg file.
-	 * 
-	 * @param pos
-	 *            | ??? //TODO: find out what this means TODO: paging
 	 */
-	private void createLegend(Point pos) {
+	protected void createLegend() {
+		Point currentPosition = legendTitleLowerEnd.clone();
+		
 		int distance = 7;
-		pos.y += 2 * distance;
+		currentPosition.y += 2 * distance;
 
 		Element viewbox = (Element) legend.appendChild(legend.createElement("svg"));
 		viewbox.setAttribute("viewBox", "0 0 " + format2svg(options.size.x) + " " + format2svg(options.size.y));
@@ -653,22 +651,22 @@ public class SvgGraphCreator extends SvgCreator {
 		int i = 0;
 		for (Function function : options.functions) {
 			Node plot = plots.appendChild(legend.createGroup("plot-" + (i + 1)));
-			plot.appendChild(legend.createLine(new Point(pos.x, pos.y - 5), new Point(pos.x + 26, pos.y - 5)));
+			plot.appendChild(legend.createLine(new Point(currentPosition.x, currentPosition.y - 5), new Point(currentPosition.x + 26, currentPosition.y - 5)));
 
-			pos.translate(35, 0);
+			currentPosition.translate(35, 0);
 			if (function.hasTitle()) {
-				legend.appendChild(legend.createText(pos, getFunctionName(i) + "(x) = " + function.getTitle() + ":",
+				legend.appendChild(legend.createText(currentPosition, getFunctionName(i) + "(x) = " + function.getTitle() + ":",
 						function.getFunction()));
 			} else {
-				legend.appendChild(legend.createText(pos, getFunctionName(i) + "(x) = " + function.getFunction()));
+				legend.appendChild(legend.createText(currentPosition, getFunctionName(i) + "(x) = " + function.getFunction()));
 			}
-			pos.translate(-35, distance);
+			currentPosition.translate(-35, distance);
 			i++;
 		}
 
 		// points
 		if (options.points != null && options.points.size() > 0) {
-			pos.translate(0, -10);
+			currentPosition.translate(0, -10);
 			if (options.points != null && options.points.size() > 0) {
 				int j = 0;
 				Element poiGroup = legend.createElement("g", "points");
@@ -678,19 +676,19 @@ public class SvgGraphCreator extends SvgCreator {
 						Element plGroup = legend.createElement("g", "points_" + j);
 						poiGroup.appendChild(plGroup);
 
-						pos.translate(5, 3);
+						currentPosition.translate(5, 3);
 
 						Element symbol = PointPlot.getPointSymbolForIndex(j, legend);
-						PointPlot.paintPoint(legend, pos, symbol, plGroup != null ? plGroup : viewbox);
+						PointPlot.paintPoint(legend, currentPosition, symbol, plGroup != null ? plGroup : viewbox);
 
-						pos.translate(-5, -3);
+						currentPosition.translate(-5, -3);
 
 						String text = pl.name.isEmpty() ? translateN("legend.poi", getPointName(j), pl.size())
 								: pl.name;
-						pos.translate(20, distance);
-						legend.appendChild(legend.createText(pos, text));
+						currentPosition.translate(20, distance);
+						legend.appendChild(legend.createText(currentPosition, text));
 
-						pos.translate(-20, 0);
+						currentPosition.translate(-20, 0);
 					}
 					j++;
 				}
@@ -699,7 +697,7 @@ public class SvgGraphCreator extends SvgCreator {
 
 		// integrals
 		if (options.integral != null && options.integral.function1 >= 0) {
-			pos.translate(0, -10);
+			currentPosition.translate(0, -10);
 			Node integrals = viewbox.appendChild(legend.createGroup("integral"));
 			Node integralGroup = integrals.appendChild(legend.createGroup("integral-0"));
 
@@ -708,7 +706,7 @@ public class SvgGraphCreator extends SvgCreator {
 				legend.defs.appendChild(IntegralPlot.getFillPattern(legend));
 			}
 
-			Node iBox = integralGroup.appendChild(legend.createRectangle(pos, 30, 15));
+			Node iBox = integralGroup.appendChild(legend.createRectangle(currentPosition, 30, 15));
 			((Element) iBox).setAttribute("class", "integral-1 box");
 
 			String text = "";
@@ -721,23 +719,23 @@ public class SvgGraphCreator extends SvgCreator {
 						Math.min(cs.xAxis.range.to, options.integral.xRange.to),
 						getFunctionName(options.integral.function1));
 
-			pos.translate(35, distance + 5);
-			legend.appendChild(legend.createText(pos, text));
+			currentPosition.translate(35, distance + 5);
+			legend.appendChild(legend.createText(currentPosition, text));
 
-			pos.translate(-35, distance);
+			currentPosition.translate(-35, distance);
 		}
 
 		// footnote
-		pos.translate(0, distance);
+		currentPosition.translate(0, distance);
 		legend.appendChild(
-				legend.createText(pos,
+				legend.createText(currentPosition,
 						translate("legend.xrange", formatX(cs.xAxis.range.from), formatX(cs.xAxis.range.to),
 								formatName(cs.xAxis.range.name)),
 						translate("legend.xtic", formatX(cs.xAxis.ticInterval))));
 
-		pos.translate(0, distance);
+		currentPosition.translate(0, distance);
 		legend.appendChild(
-				legend.createText(pos,
+				legend.createText(currentPosition,
 						translate("legend.yrange", formatY(cs.yAxis.range.from), formatY(cs.yAxis.range.to),
 								formatName(cs.yAxis.range.name)),
 						translate("legend.ytic", formatY(cs.yAxis.ticInterval))));
@@ -770,7 +768,7 @@ public class SvgGraphCreator extends SvgCreator {
 	 *            representation
 	 * @return formated string for the point with '/' as delimiter
 	 */
-	public String format(Point point) {
+	public String formatForSpeech(Point point) {
 		return ((point.name != null && !point.name.isEmpty()) ? point.name + " " : "") + formatX(point.x) + " / "
 				+ formatY(point.y);
 	}

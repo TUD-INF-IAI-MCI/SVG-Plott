@@ -9,7 +9,7 @@ import com.beust.jcommander.IStringConverter;
  * 
  * @author Gregor Harlan, Jens Bornschein
  * Idea and supervising by Jens Bornschein jens.bornschein@tu-dresden.de
- * Copyright by Technische Universit‰t Dresden / MCI 2014
+ * Copyright by Technische Universit√§t Dresden / MCI 2014
  *
  */
 public class PointListList extends ArrayList<PointListList.PointList>{

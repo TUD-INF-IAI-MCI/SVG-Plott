@@ -3,7 +3,7 @@ package tud.tangram.svgplot.coordinatesystem;
  * 
  * @author Gregor Harlan, Jens Bornschein
  * Idea and supervising by Jens Bornschein jens.bornschein@tu-dresden.de
- * Copyright by Technische Universit�t Dresden / MCI 2014
+ * Copyright by Technische Universität Dresden / MCI 2014
  *
  */
 public class CoordinateSystem {

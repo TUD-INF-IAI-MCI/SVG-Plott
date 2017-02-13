@@ -18,7 +18,7 @@ import tud.tangram.svgplot.svgcreator.SvgGraphCreator;
  * 
  * @author Gregor Harlan, Jens Bornschein Idea and supervising by Jens
  *         Bornschein jens.bornschein@tu-dresden.de Copyright by Technische
- *         Universit�t Dresden / MCI 2014
+ *         Universität Dresden / MCI 2014
  * 
  */
 @Parameters(separators = "=", resourceBundle = "Bundle")
