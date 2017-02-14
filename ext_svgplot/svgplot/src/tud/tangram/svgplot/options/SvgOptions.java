@@ -10,7 +10,11 @@ public abstract class SvgOptions {
 	public String title;
 	public Point size;
 
-	public void createFromSvgPlotOptions(SvgPlotOptions options) {
+	public SvgOptions(SvgPlotOptions options) {
+		createFromSvgPlotOptions(options);
+	}
+	
+	private void createFromSvgPlotOptions(SvgPlotOptions options) {
 		this.css = options.getCss();
 		this.output = options.getOutput();
 		this.title = options.getTitle();

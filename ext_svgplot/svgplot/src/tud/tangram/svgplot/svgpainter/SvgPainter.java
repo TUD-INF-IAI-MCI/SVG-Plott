@@ -33,7 +33,7 @@ public abstract class SvgPainter {
 	 *            | The device, for which the CSS shall be selected.
 	 * @return Complete CSS string including comments
 	 */
-	protected String composeDeviceSpecificCss(OutputDevice outputDevice) {
+	public String composeDeviceSpecificCss(OutputDevice outputDevice) {
 		StringBuilder deviceCssString = new StringBuilder();
 		if (deviceCss.containsKey(OutputDevice.Default)) {
 			deviceCssString.append(System.lineSeparator());

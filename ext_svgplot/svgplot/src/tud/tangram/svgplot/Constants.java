@@ -3,9 +3,11 @@ package tud.tangram.svgplot;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
+import java.util.ResourceBundle;
 
 public class Constants {
 	final public static Locale locale = new Locale("de");
+	final public static ResourceBundle bundle = ResourceBundle.getBundle("Bundle");
 	final public static double strokeWidth = 0.5;
 	final public static int[] margin = { 20, 10, 20, 10 };
 	/** List of letters for function naming */

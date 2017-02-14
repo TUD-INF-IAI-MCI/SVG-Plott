@@ -7,10 +7,8 @@ import tud.tangram.svgplot.coordinatesystem.Range;
 import tud.tangram.svgplot.plotting.Function;
 import tud.tangram.svgplot.plotting.IntegralPlotSettings;
 
-public class SvgGraphOptions extends SvgOptions {
+public class SvgGraphOptions extends SvgGridOptions {
 	public List<Function> functions;
-	public Range xRange;
-	public Range yRange;
 	public boolean pi;
 	public String xLines;
 	public String yLines;
@@ -20,14 +18,12 @@ public class SvgGraphOptions extends SvgOptions {
 	public PointListList points;
 	
 	public SvgGraphOptions(SvgPlotOptions options) {
+		super(options);
 		createFromSvgPlotOptions(options);
 	}
 	
-	public void createFromSvgPlotOptions(SvgPlotOptions options) {
-		super.createFromSvgPlotOptions(options);
+	private void createFromSvgPlotOptions(SvgPlotOptions options) {
 		this.functions = options.getFunctions();
-		this.xRange = options.getxRange();
-		this.yRange = options.getyRange();
 		this.pi = options.isPi();
 		this.xLines = options.getxLines();
 		this.yLines = options.getyLines();

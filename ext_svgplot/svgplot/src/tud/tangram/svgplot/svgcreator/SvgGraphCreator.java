@@ -25,17 +25,10 @@ import tud.tangram.svgplot.plotting.PointPlot;
 import tud.tangram.svgplot.xml.SvgDocument;
 
 public class SvgGraphCreator extends SvgGridCreator {
-	private SvgGraphOptions options;
-
-	private Element viewbox;
-
-	private CoordinateSystem cs;
-
-	public CoordinateSystem getCs() {
-		return cs;
-	}
+	protected final SvgGraphOptions options;
 
 	public SvgGraphCreator(SvgGraphOptions options) {
+		super(options);
 		this.options = options;
 	}
 
@@ -49,17 +42,7 @@ public class SvgGraphCreator extends SvgGridCreator {
 	 * @throws InterruptedException
 	 */
 	public SvgDocument create() throws ParserConfigurationException, IOException, DOMException, InterruptedException {
-
-		options.xRange.from = Math.min(0, options.xRange.from);
-		options.xRange.to = Math.max(0, options.xRange.to);
-		options.yRange.from = Math.min(0, options.yRange.from);
-		options.yRange.to = Math.max(0, options.yRange.to);
-
-		cs = new CoordinateSystem(options.xRange, options.yRange, options.size, diagramContentMargin);
-
-		createViewbox();
-		createGrid();
-		createAxes();
+		super.create();
 
 		createReferenceLines();
 		createPlots();
@@ -102,154 +85,6 @@ public class SvgGraphCreator extends SvgGridCreator {
 		css += " }\n";
 
 		appendOptionsCss(css);
-	}
-
-	/**
-	 * Paint the grid to the svg file.
-	 */
-	private Node createGrid() {
-		Node grid = viewbox.appendChild(doc.createGroup("grid"));
-
-		Element xGrid = (Element) grid.appendChild(doc.createGroup("x-grid"));
-		double dotDistance = cs.convertYDistance(cs.yAxis.gridInterval);
-		int factor = (int) (dotDistance / 2.3);
-		dotDistance = (dotDistance - factor * Constants.strokeWidth) / factor;
-		xGrid.setAttribute("stroke-dasharray", Constants.strokeWidth + ", " + format2svg(dotDistance));
-		for (double pos : cs.xAxis.gridLines()) {
-			Point from = cs.convert(pos, cs.yAxis.range.to, 0, -Constants.strokeWidth / 2);
-			Point to = cs.convert(pos, cs.yAxis.range.from, 0, Constants.strokeWidth / 2);
-			xGrid.appendChild(doc.createLine(from, to));
-		}
-
-		Element yGrid = (Element) grid.appendChild(doc.createGroup("y-grid"));
-		dotDistance = cs.convertXDistance(cs.xAxis.gridInterval);
-		factor = (int) (dotDistance / 2.3);
-		dotDistance = (dotDistance - factor * Constants.strokeWidth) / factor;
-		yGrid.setAttribute("stroke-dasharray", Constants.strokeWidth + ", " + format2svg(dotDistance));
-		for (double pos : cs.yAxis.gridLines()) {
-			Point from = cs.convert(cs.xAxis.range.from, pos, -Constants.strokeWidth / 2, 0);
-			Point to = cs.convert(cs.xAxis.range.to, pos, Constants.strokeWidth / 2, 0);
-			yGrid.appendChild(doc.createLine(from, to));
-		}
-		return grid;
-	}
-
-	/**
-	 * Paint the axes to the svg file.
-	 */
-	private Node createAxes() {
-		Node axes = viewbox.appendChild(doc.createGroup("axes"));
-		Point from, to;
-		String points;
-
-		from = cs.convert(options.xRange.from, 0, -15, 0);
-		to = cs.convert(options.xRange.to, 0, 10, 0);
-		Element xAxisLine = doc.createLine(from, to);
-		axes.appendChild(xAxisLine);
-		xAxisLine.setAttribute("id", "x-axis");
-		Element xAxisArrow = doc.createElement("polyline", "x-axis-arrow");
-		axes.appendChild(xAxisArrow);
-		to.translate(0, -3);
-		points = to.toString();
-		to.translate(5.2, 3);
-		points += " " + to;
-		to.translate(-5.2, 3);
-		points += " " + to;
-		xAxisArrow.setAttribute("points", points);
-		xAxisArrow.appendChild(doc.createTitle(translate("xaxis")));
-
-		// create x-label
-		Point pos2 = to;
-		pos2.translate(0, 13);
-		doc.appendChild(createLabel("x", pos2, "x_label", "label"));
-
-		from = cs.convert(0, options.yRange.from, 0, 15);
-		to = cs.convert(0, options.yRange.to, 0, -10);
-		Element yAxisLine = doc.createLine(from, to);
-		axes.appendChild(yAxisLine);
-		yAxisLine.setAttribute("id", "y-axis");
-		Element yAxisArrow = doc.createElement("polyline", "y-axis-arrow");
-		axes.appendChild(yAxisArrow);
-		to.translate(-3, 0);
-		points = to.toString();
-		to.translate(3, -5.2);
-		points += " " + to;
-		to.translate(3, 5.2);
-		points += " " + to;
-		yAxisArrow.setAttribute("points", points);
-		yAxisArrow.appendChild(doc.createTitle(translate("yaxis")));
-
-		// create y-label
-		Point pos3 = to;
-		pos3.translate(-15, 0);
-		doc.appendChild(createLabel("y", pos3, "y_label", "label"));
-
-		Node xTics = axes.appendChild(doc.createGroup("x-tics"));
-		for (double pos : cs.xAxis.ticLines()) {
-			from = cs.convert(pos, 0, 0, -6);
-			to = from.clone();
-			to.translate(0, 12);
-			xTics.appendChild(doc.createLine(from, to));
-		}
-
-		Node yTics = axes.appendChild(doc.createGroup("y-tics"));
-		for (double pos : cs.yAxis.ticLines()) {
-			from = cs.convert(0, pos, -6, 0);
-			to = from.clone();
-			to.translate(12, 0);
-			yTics.appendChild(doc.createLine(from, to));
-		}
-
-		// Duplicate axes and append them as spacers
-		Element axesClone = (Element) axes.cloneNode(true);
-		axesClone.setAttribute("id", "axes_spacer");
-		axesClone.setAttribute("class", axesClone.hasAttribute("class")
-				? axesClone.getAttribute("class") + " " + Constants.spacerCssClass : Constants.spacerCssClass);
-
-		axes.insertBefore(axesClone, xAxisLine);
-
-		return axes;
-	}
-
-	private void createViewbox() {
-		viewbox = (Element) doc.appendChild(doc.createElement("svg"));
-		viewbox.setAttribute("viewBox", "0 0 " + format2svg(options.size.x) + " " + format2svg(options.size.y));
-
-		Node defs = viewbox.appendChild(doc.createElement("defs"));
-
-		Node clipPath = defs.appendChild(doc.createElement("clipPath", "plot-area"));
-		Element rect = (Element) clipPath.appendChild(doc.createElement("rect"));
-		Point topLeft = cs.convert(cs.xAxis.range.from, cs.yAxis.range.to);
-		Point bottomRight = cs.convert(cs.xAxis.range.to, cs.yAxis.range.from);
-		rect.setAttribute("x", topLeft.x());
-		rect.setAttribute("y", topLeft.y());
-		rect.setAttribute("width", format2svg(bottomRight.x - topLeft.x));
-		rect.setAttribute("height", format2svg(bottomRight.y - topLeft.y));
-	}
-
-	/**
-	 * Creates a textual label and place it in the svg document previous the
-	 * viewbox.
-	 * 
-	 * @param text
-	 *            | the textual value that should be diplayed
-	 * @param pos
-	 *            | pixel position in the svg file where the text should start
-	 * @param id
-	 *            | XML id of the node
-	 * @param cssClass
-	 *            | css class for this node
-	 * @return an textual Element already placed in the svg file with given text
-	 *         at given position.
-	 */
-	private Element createLabel(String text, Point pos, String id, String cssClass) {
-		Element label = doc.createText(pos, text);
-		if (id != null && !id.isEmpty())
-			label.setAttribute("id", id);
-		if (cssClass != null && !cssClass.isEmpty())
-			label.setAttribute("class", cssClass);
-		// TODO: add underlying background
-		return label;
 	}
 
 	/**
@@ -439,10 +274,10 @@ public class SvgGraphCreator extends SvgGridCreator {
 
 		// general description
 		Node div = desc.appendBodyChild(desc.createDiv("functions"));
-		div.appendChild(desc.createP(translateN("desc.intro", formatX(cs.xAxis.range.from), formatX(cs.xAxis.range.to),
-				formatX(cs.xAxis.ticInterval), formatY(cs.yAxis.range.from), formatY(cs.yAxis.range.to),
-				formatY(cs.yAxis.ticInterval), formatName(cs.xAxis.range.name), formatName(cs.yAxis.range.name),
-				options.functions.size())));
+		div.appendChild(desc.createP(SvgTools.translateN("desc.intro", formatX(cs.xAxis.range.from),
+				formatX(cs.xAxis.range.to), formatX(cs.xAxis.ticInterval), formatY(cs.yAxis.range.from),
+				formatY(cs.yAxis.range.to), formatY(cs.yAxis.ticInterval), SvgTools.formatName(cs.xAxis.range.name),
+				SvgTools.formatName(cs.yAxis.range.name), options.functions.size())));
 
 		// functions
 		if (!options.functions.isEmpty()) {
@@ -468,7 +303,7 @@ public class SvgGraphCreator extends SvgGridCreator {
 						List<Point> intersections = plotList.get(i).getIntersections(plotList.get(k));
 						if (!intersections.isEmpty()) {
 							hasIntersections = true;
-							div.appendChild(desc.createP(translateN("desc.intersections", getFunctionName(i),
+							div.appendChild(desc.createP(SvgTools.translateN("desc.intersections", getFunctionName(i),
 									getFunctionName(k), intersections.size())));
 							div.appendChild(createPointList(intersections, "S", s));
 							s += intersections.size();
@@ -476,7 +311,7 @@ public class SvgGraphCreator extends SvgGridCreator {
 					}
 				}
 				if (!hasIntersections) {
-					div.appendChild(desc.createP(translate("desc.intersections_0")));
+					div.appendChild(desc.createP(SvgTools.translate("desc.intersections_0")));
 				}
 			}
 		}
@@ -486,13 +321,13 @@ public class SvgGraphCreator extends SvgGridCreator {
 			div = desc.appendBodyChild(desc.createDiv("function-" + getFunctionName(i)));
 			List<Point> extrema = plotList.get(i).getExtrema();
 			String f = plotList.size() == 1 ? "" : " " + getFunctionName(i);
-			div.appendChild(desc.createP(translateN("desc.extrema", f, extrema.size())));
+			div.appendChild(desc.createP(SvgTools.translateN("desc.extrema", f, extrema.size())));
 			if (!extrema.isEmpty()) {
 				div.appendChild(createPointList(extrema, "E", e));
 				e += extrema.size();
 			}
 			List<Point> roots = plotList.get(i).getRoots();
-			div.appendChild(desc.createP(translateN("desc.roots", roots.size())));
+			div.appendChild(desc.createP(SvgTools.translateN("desc.roots", roots.size())));
 			if (!roots.isEmpty()) {
 				div.appendChild(createXPointList(roots, r));
 				r += roots.size();
@@ -501,13 +336,13 @@ public class SvgGraphCreator extends SvgGridCreator {
 
 		if (options.points != null && options.points.size() > 0) {
 			div = desc.appendBodyChild(desc.createDiv("points"));
-			div.appendChild(desc.createP(translateN("legend.poi.intro", options.points.size())));
+			div.appendChild(desc.createP(SvgTools.translateN("legend.poi.intro", options.points.size())));
 
 			int j = 0;
 			for (PointList pts : options.points) {
 				if (pts != null && pts.size() > 0) {
 					String text = pts.name.isEmpty() ? getPointName(j) : pts.name;
-					div.appendChild(desc.createP(translateN("legend.poi.list", text, pts.size())));
+					div.appendChild(desc.createP(SvgTools.translateN("legend.poi.list", text, pts.size())));
 
 					div.appendChild(createPointList(pts, getPointName(j), 0));
 					j++;
@@ -519,18 +354,18 @@ public class SvgGraphCreator extends SvgGridCreator {
 		if (options.integral != null && options.integral.function1 >= 0) {
 			div = desc.appendBodyChild(desc.createDiv("integral-"));
 			if (options.integral.function2 >= 0)
-				div.appendChild(desc.createP(translate("desc.integral_1",
+				div.appendChild(desc.createP(SvgTools.translate("desc.integral_1",
 						Math.max(cs.xAxis.range.from, options.integral.xRange.from),
 						Math.min(cs.xAxis.range.to, options.integral.xRange.to),
 						getFunctionName(options.integral.function1), getFunctionName(options.integral.function2))));
 			else
-				div.appendChild(desc.createP(
-						translate("desc.integral_0", Math.max(cs.xAxis.range.from, options.integral.xRange.from),
-								Math.min(cs.xAxis.range.to, options.integral.xRange.to),
-								getFunctionName(options.integral.function1))));
+				div.appendChild(desc.createP(SvgTools.translate("desc.integral_0",
+						Math.max(cs.xAxis.range.from, options.integral.xRange.from),
+						Math.min(cs.xAxis.range.to, options.integral.xRange.to),
+						getFunctionName(options.integral.function1))));
 		}
 
-		desc.appendBodyChild(desc.createP(translate("desc.note")));
+		desc.appendBodyChild(desc.createP(SvgTools.translate("desc.note")));
 	}
 
 	/**
@@ -640,25 +475,28 @@ public class SvgGraphCreator extends SvgGridCreator {
 	 */
 	protected void createLegend() {
 		Point currentPosition = legendTitleLowerEnd.clone();
-		
+
 		int distance = 7;
 		currentPosition.y += 2 * distance;
 
 		Element viewbox = (Element) legend.appendChild(legend.createElement("svg"));
-		viewbox.setAttribute("viewBox", "0 0 " + format2svg(options.size.x) + " " + format2svg(options.size.y));
+		viewbox.setAttribute("viewBox",
+				"0 0 " + SvgTools.format2svg(options.size.x) + " " + SvgTools.format2svg(options.size.y));
 
 		Node plots = viewbox.appendChild(legend.createGroup("plots"));
 		int i = 0;
 		for (Function function : options.functions) {
 			Node plot = plots.appendChild(legend.createGroup("plot-" + (i + 1)));
-			plot.appendChild(legend.createLine(new Point(currentPosition.x, currentPosition.y - 5), new Point(currentPosition.x + 26, currentPosition.y - 5)));
+			plot.appendChild(legend.createLine(new Point(currentPosition.x, currentPosition.y - 5),
+					new Point(currentPosition.x + 26, currentPosition.y - 5)));
 
 			currentPosition.translate(35, 0);
 			if (function.hasTitle()) {
-				legend.appendChild(legend.createText(currentPosition, getFunctionName(i) + "(x) = " + function.getTitle() + ":",
-						function.getFunction()));
+				legend.appendChild(legend.createText(currentPosition,
+						getFunctionName(i) + "(x) = " + function.getTitle() + ":", function.getFunction()));
 			} else {
-				legend.appendChild(legend.createText(currentPosition, getFunctionName(i) + "(x) = " + function.getFunction()));
+				legend.appendChild(
+						legend.createText(currentPosition, getFunctionName(i) + "(x) = " + function.getFunction()));
 			}
 			currentPosition.translate(-35, distance);
 			i++;
@@ -683,7 +521,7 @@ public class SvgGraphCreator extends SvgGridCreator {
 
 						currentPosition.translate(-5, -3);
 
-						String text = pl.name.isEmpty() ? translateN("legend.poi", getPointName(j), pl.size())
+						String text = pl.name.isEmpty() ? SvgTools.translateN("legend.poi", getPointName(j), pl.size())
 								: pl.name;
 						currentPosition.translate(20, distance);
 						legend.appendChild(legend.createText(currentPosition, text));
@@ -711,11 +549,13 @@ public class SvgGraphCreator extends SvgGridCreator {
 
 			String text = "";
 			if (options.integral.function2 >= 0)
-				text = translate("legend.integral_1", Math.max(cs.xAxis.range.from, options.integral.xRange.from),
+				text = SvgTools.translate("legend.integral_1",
+						Math.max(cs.xAxis.range.from, options.integral.xRange.from),
 						Math.min(cs.xAxis.range.to, options.integral.xRange.to),
 						getFunctionName(options.integral.function1), getFunctionName(options.integral.function2));
 			else
-				text = translate("legend.integral_0", Math.max(cs.xAxis.range.from, options.integral.xRange.from),
+				text = SvgTools.translate("legend.integral_0",
+						Math.max(cs.xAxis.range.from, options.integral.xRange.from),
 						Math.min(cs.xAxis.range.to, options.integral.xRange.to),
 						getFunctionName(options.integral.function1));
 
@@ -727,20 +567,18 @@ public class SvgGraphCreator extends SvgGridCreator {
 
 		// footnote
 		currentPosition.translate(0, distance);
-		legend.appendChild(
-				legend.createText(currentPosition,
-						translate("legend.xrange", formatX(cs.xAxis.range.from), formatX(cs.xAxis.range.to),
-								formatName(cs.xAxis.range.name)),
-						translate("legend.xtic", formatX(cs.xAxis.ticInterval))));
+		legend.appendChild(legend.createText(currentPosition,
+				SvgTools.translate("legend.xrange", formatX(cs.xAxis.range.from), formatX(cs.xAxis.range.to),
+						SvgTools.formatName(cs.xAxis.range.name)),
+				SvgTools.translate("legend.xtic", formatX(cs.xAxis.ticInterval))));
 
 		currentPosition.translate(0, distance);
-		legend.appendChild(
-				legend.createText(currentPosition,
-						translate("legend.yrange", formatY(cs.yAxis.range.from), formatY(cs.yAxis.range.to),
-								formatName(cs.yAxis.range.name)),
-						translate("legend.ytic", formatY(cs.yAxis.ticInterval))));
+		legend.appendChild(legend.createText(currentPosition,
+				SvgTools.translate("legend.yrange", formatY(cs.yAxis.range.from), formatY(cs.yAxis.range.to),
+						SvgTools.formatName(cs.yAxis.range.name)),
+				SvgTools.translate("legend.ytic", formatY(cs.yAxis.ticInterval))));
 	}
-	
+
 	/**
 	 * Formats the x value of a point with respect to if Pi is set.
 	 * 
@@ -759,7 +597,7 @@ public class SvgGraphCreator extends SvgGridCreator {
 	public String formatY(double y) {
 		return cs.yAxis.format(y);
 	}
-	
+
 	/**
 	 * Formats a Point that it is optimized for speech output. E.g. (x / y)
 	 * 
@@ -772,7 +610,7 @@ public class SvgGraphCreator extends SvgGridCreator {
 		return ((point.name != null && !point.name.isEmpty()) ? point.name + " " : "") + formatX(point.x) + " / "
 				+ formatY(point.y);
 	}
-	
+
 	/**
 	 * Formats a Point that it is optimized for textual output and packed into
 	 * the caption with brackets. E.g. E(x | y)

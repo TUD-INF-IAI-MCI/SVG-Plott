@@ -12,6 +12,7 @@ import tud.tangram.svgplot.SvgPlot;
 import tud.tangram.svgplot.coordinatesystem.CoordinateSystem;
 import tud.tangram.svgplot.coordinatesystem.Point;
 import tud.tangram.svgplot.svgcreator.SvgGraphCreator;
+import tud.tangram.svgplot.svgcreator.SvgTools;
 import tud.tangram.svgplot.xml.SvgDocument;
 
 public class IntegralPlot {
@@ -45,9 +46,9 @@ public class IntegralPlot {
 //						.getTitle() : "");
 		
 		if(intersectionPlot != null){
-			title = SvgGraphCreator.translate("legend.integral_1", from, to, plot.Name, intersectionPlot.Name);
+			title = SvgTools.translate("legend.integral_1", from, to, plot.Name, intersectionPlot.Name);
 		}else{
-			title = SvgGraphCreator.translate("legend.integral_0", from, to, plot.Name);
+			title = SvgTools.translate("legend.integral_0", from, to, plot.Name);
 		}
 		
 		

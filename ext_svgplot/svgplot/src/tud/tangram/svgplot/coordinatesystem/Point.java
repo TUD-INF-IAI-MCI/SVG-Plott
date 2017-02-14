@@ -4,6 +4,7 @@ import org.w3c.dom.Element;
 
 import tud.tangram.svgplot.SvgPlot;
 import tud.tangram.svgplot.svgcreator.SvgGraphCreator;
+import tud.tangram.svgplot.svgcreator.SvgTools;
 
 import com.beust.jcommander.IStringConverter;
 
@@ -99,7 +100,7 @@ public class Point implements Comparable<Point> {
 	 * @return
 	 */
 	public String x() {
-		return SvgGraphCreator.format2svg(x);
+		return SvgTools.format2svg(x);
 	}
 
 	/**
@@ -108,7 +109,7 @@ public class Point implements Comparable<Point> {
 	 * @return
 	 */
 	public String y() {
-		return SvgGraphCreator.format2svg(y);
+		return SvgTools.format2svg(y);
 	}
 
 	@Override

@@ -8,8 +8,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.text.MessageFormat;
-import java.util.ResourceBundle;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -28,8 +26,7 @@ import tud.tangram.svgplot.xml.SvgDocument;
  *
  */
 public abstract class SvgCreator {
-	protected SvgOptions options;
-	final public static ResourceBundle bundle = ResourceBundle.getBundle("Bundle");
+	protected final SvgOptions options;
 
 	protected Point diagramTitleLowerEnd;
 	protected Point legendTitleLowerEnd;
@@ -82,6 +79,10 @@ public abstract class SvgCreator {
 		this.desc = desc;
 	}
 
+	public SvgCreator(SvgOptions options){
+		this.options = options;
+	}
+	
 	/**
 	 * Main function. Combine all the elements and create all the output files.
 	 * 
@@ -129,27 +130,17 @@ public abstract class SvgCreator {
 			throws ParserConfigurationException, IOException, DOMException, InterruptedException;
 
 	/**
-	 * Format a number for svg usage according to the constant decimalFormat
-	 * 
-	 * @param value
-	 * @return
-	 */
-	public static String format2svg(double value) {
-		return Constants.decimalFormat.format(value);
-	}
-
-	/**
 	 * Create the titles for the legend and diagram svg files.
 	 * 
 	 * @throws ParserConfigurationException
 	 */
 	public void createTitles() throws ParserConfigurationException {
-		String legendTitle = translate("legend") + ": " + options.title;
+		String legendTitle = SvgTools.translate("legend") + ": " + options.title;
 
 		doc = new SvgDocument(options.title, options.size, Constants.margin[1]);
 		legend = new SvgDocument(legendTitle, options.size, Constants.margin[1]);
 		legend.setAttribute("id", "legend");
-		desc = new HtmlDocument(translate("desc") + ": " + options.title);
+		desc = new HtmlDocument(SvgTools.translate("desc") + ": " + options.title);
 
 		// Create the titles and update the top positions
 		diagramTitleLowerEnd = createTitle(doc, options.title);
@@ -179,6 +170,9 @@ public abstract class SvgCreator {
 		return pos;
 	}
 
+	/**
+	 * Creates the background SVG object and  adds it to the document.
+	 */
 	public void createBackground() {
 		Element bg = doc.createRectangle(new Point(0, 0), "100%", "100%");
 		bg.setAttribute("id", "background");
@@ -212,54 +206,4 @@ public abstract class SvgCreator {
 	}
 
 	protected abstract void createLegend();
-
-	/**
-	 * Formats an additional Name of an object. Checks if the name is set. If
-	 * name is set, the name is packed into brackets and prepend with an
-	 * whitespace
-	 * 
-	 * @param name
-	 *            | optional name of an object or NULL
-	 * @return empty string or the name of the object packed into brackets and
-	 *         prepend with a whitespace e.g. ' (optional name)'
-	 */
-	public static String formatName(String name) {
-		return (name == null || name.isEmpty()) ? "" : " (" + name + ")";
-	}
-
-	/**
-	 * Try to translate a key in the localized version defined in the
-	 * PropertyResourceBundle file.
-	 * 
-	 * @param key
-	 *            | PropertyResourceBundle key
-	 * @param arguments
-	 *            | arguments that should fill the placeholder in the returned
-	 *            PropertyResourceBundle value
-	 * @return a localized string for the given PropertyResourceBundle key,
-	 *         filled with the set arguments
-	 */
-	public static String translate(String key, Object... arguments) {
-		return MessageFormat.format(bundle.getString(key), arguments);
-	}
-
-	/**
-	 * Try to translate a key in the localized version defined in the
-	 * PropertyResourceBundle file. This function is optimized for differing
-	 * sentences depending on the amount of results.
-	 * 
-	 * @param key
-	 *            | PropertyResourceBundle key
-	 * @param arguments
-	 *            | arguments that should fill the placeholder in the returned
-	 *            PropertyResourceBundle value. The last argument gives the
-	 *            count and decide which value will be returned.
-	 * @return a localized string for the given amount depending
-	 *         PropertyResourceBundle key, filled with the set arguments
-	 */
-	public static String translateN(String key, Object... arguments) {
-		int last = (int) arguments[arguments.length - 1];
-		String suffix = last == 0 ? "_0" : last == 1 ? "_1" : "_n";
-		return translate(key + suffix, arguments);
-	}
 }

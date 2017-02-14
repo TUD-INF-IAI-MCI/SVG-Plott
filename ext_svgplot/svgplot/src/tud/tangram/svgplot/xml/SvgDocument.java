@@ -9,6 +9,7 @@ import org.w3c.dom.Node;
 
 import tud.tangram.svgplot.coordinatesystem.Point;
 import tud.tangram.svgplot.svgcreator.SvgGraphCreator;
+import tud.tangram.svgplot.svgcreator.SvgTools;
 /**
  * 
  * @author Gregor Harlan
@@ -29,8 +30,8 @@ public class SvgDocument extends Document {
 		root.setAttribute("xmlns", "http://www.w3.org/2000/svg");
 		root.setAttribute("version", "1.1");
 		root.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
-		root.setAttribute("width", SvgGraphCreator.format2svg(size.x) + "mm");
-		root.setAttribute("height", SvgGraphCreator.format2svg(size.y) + "mm");
+		root.setAttribute("width", SvgTools.format2svg(size.x) + "mm");
+		root.setAttribute("height", SvgTools.format2svg(size.y) + "mm");
 
 		defs = root.appendChild(doc.createElement("defs"));
 
@@ -77,7 +78,7 @@ public class SvgDocument extends Document {
 		Element circle = createElement("circle");
 		circle.setAttribute("cx", center.x());
 		circle.setAttribute("cy", center.y());
-		circle.setAttribute("r", SvgGraphCreator.format2svg(radius));
+		circle.setAttribute("r", SvgTools.format2svg(radius));
 		return circle;
 	}
 	
@@ -85,8 +86,8 @@ public class SvgDocument extends Document {
 		Element rect = createElement("rect");
 		rect.setAttribute("x", start.x());
 		rect.setAttribute("y", start.y());
-		rect.setAttribute("width", SvgGraphCreator.format2svg(width));
-		rect.setAttribute("height", SvgGraphCreator.format2svg(height));
+		rect.setAttribute("width", SvgTools.format2svg(width));
+		rect.setAttribute("height", SvgTools.format2svg(height));
 		return rect;
 	}
 	
@@ -151,6 +152,31 @@ public class SvgDocument extends Document {
 			}
 		}
 		return text;
+	}
+	
+	/**
+	 * Creates a textual label and place it in the svg document previous the
+	 * viewbox.
+	 * 
+	 * @param text
+	 *            | the textual value that should be diplayed
+	 * @param pos
+	 *            | pixel position in the svg file where the text should start
+	 * @param id
+	 *            | XML id of the node
+	 * @param cssClass
+	 *            | css class for this node
+	 * @return an textual Element already placed in the svg file with given text
+	 *         at given position.
+	 */
+	public Element createLabel(String text, Point pos, String id, String cssClass) {
+		Element label = createText(pos, text);
+		if (id != null && !id.isEmpty())
+			label.setAttribute("id", id);
+		if (cssClass != null && !cssClass.isEmpty())
+			label.setAttribute("class", cssClass);
+		// TODO: add underlying background
+		return label;
 	}
 
 	@Override
