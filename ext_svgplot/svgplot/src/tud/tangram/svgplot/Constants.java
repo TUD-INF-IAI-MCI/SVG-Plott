@@ -16,7 +16,15 @@ public class Constants {
 	final public static String[] pnList = new String[] { "A", "B", "C", "D", "F", "G", "H", "I", "J", "K", "L", "M",
 			"N", "O", "P", "Q", "R", "T" };
 	final public static String spacerCssClass = "poi_symbol_bg";
-	final public static DecimalFormat decimalFormat = new DecimalFormat("0.###", new DecimalFormatSymbols(locale));
+	final public static DecimalFormat decimalFormat = getSvgDecimalFormat();
 	/** The minimal distance of grid lines in mm */
 	final public static int minGridDistance = 10;
+
+	final private static DecimalFormat getSvgDecimalFormat() {
+		DecimalFormat decimalFormat = new DecimalFormat("0.###");
+		DecimalFormatSymbols dfs = new DecimalFormatSymbols();
+		dfs.setDecimalSeparator('.');
+		decimalFormat.setDecimalFormatSymbols(dfs);
+		return decimalFormat;
+	}
 }

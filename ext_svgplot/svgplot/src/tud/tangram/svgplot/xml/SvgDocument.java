@@ -8,7 +8,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 import tud.tangram.svgplot.coordinatesystem.Point;
-import tud.tangram.svgplot.svgcreator.SvgGraphCreator;
 import tud.tangram.svgplot.svgcreator.SvgTools;
 /**
  * 

@@ -2,8 +2,6 @@ package tud.tangram.svgplot.coordinatesystem;
 
 import org.w3c.dom.Element;
 
-import tud.tangram.svgplot.SvgPlot;
-import tud.tangram.svgplot.svgcreator.SvgGraphCreator;
 import tud.tangram.svgplot.svgcreator.SvgTools;
 
 import com.beust.jcommander.IStringConverter;

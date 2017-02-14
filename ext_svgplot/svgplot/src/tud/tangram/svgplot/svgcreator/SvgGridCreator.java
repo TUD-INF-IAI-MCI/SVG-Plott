@@ -10,7 +10,6 @@ import org.w3c.dom.Node;
 
 import tud.tangram.svgplot.coordinatesystem.CoordinateSystem;
 import tud.tangram.svgplot.coordinatesystem.Point;
-import tud.tangram.svgplot.options.SvgGraphOptions;
 import tud.tangram.svgplot.options.SvgGridOptions;
 import tud.tangram.svgplot.svgpainter.SvgGridPainter;
 import tud.tangram.svgplot.xml.SvgDocument;

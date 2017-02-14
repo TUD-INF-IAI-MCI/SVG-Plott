@@ -3,7 +3,6 @@ package tud.tangram.svgplot.options;
 import java.util.List;
 
 import tud.tangram.svgplot.coordinatesystem.PointListList;
-import tud.tangram.svgplot.coordinatesystem.Range;
 import tud.tangram.svgplot.plotting.Function;
 import tud.tangram.svgplot.plotting.IntegralPlotSettings;
 

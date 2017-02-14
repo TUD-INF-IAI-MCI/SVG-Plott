@@ -6,7 +6,6 @@ import java.util.List;
 import org.w3c.dom.Element;
 
 import tud.tangram.svgplot.Constants;
-import tud.tangram.svgplot.SvgPlot;
 import tud.tangram.svgplot.coordinatesystem.Point;
 import tud.tangram.svgplot.xml.SvgDocument;
 

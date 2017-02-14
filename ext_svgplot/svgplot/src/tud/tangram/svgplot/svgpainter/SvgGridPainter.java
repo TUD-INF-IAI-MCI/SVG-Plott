@@ -2,8 +2,6 @@ package tud.tangram.svgplot.svgpainter;
 
 import java.util.HashMap;
 
-import javax.swing.text.Document;
-
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
@@ -14,7 +12,6 @@ import tud.tangram.svgplot.coordinatesystem.Range;
 import tud.tangram.svgplot.options.OutputDevice;
 import tud.tangram.svgplot.styles.AxisStyle;
 import tud.tangram.svgplot.styles.GridStyle;
-import tud.tangram.svgplot.svgcreator.SvgCreator;
 import tud.tangram.svgplot.svgcreator.SvgTools;
 import tud.tangram.svgplot.xml.SvgDocument;
 

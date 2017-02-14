@@ -96,8 +96,13 @@ public abstract class SvgCreator {
 			options.title = options.output.getName();
 		}
 
-		createTitles();
+		doc = new SvgDocument(options.title, options.size, Constants.margin[1]);
+		legend = new SvgDocument(options.legendTitle, options.size, Constants.margin[1]);
+		legend.setAttribute("id", "legend");
+		desc = new HtmlDocument(options.descTitle);
+		
 		createBackground();
+		createTitles();
 		createCss(doc);
 		createCss(legend);
 		create();
@@ -135,16 +140,10 @@ public abstract class SvgCreator {
 	 * @throws ParserConfigurationException
 	 */
 	public void createTitles() throws ParserConfigurationException {
-		String legendTitle = SvgTools.translate("legend") + ": " + options.title;
-
-		doc = new SvgDocument(options.title, options.size, Constants.margin[1]);
-		legend = new SvgDocument(legendTitle, options.size, Constants.margin[1]);
-		legend.setAttribute("id", "legend");
-		desc = new HtmlDocument(SvgTools.translate("desc") + ": " + options.title);
 
 		// Create the titles and update the top positions
 		diagramTitleLowerEnd = createTitle(doc, options.title);
-		legendTitleLowerEnd = createTitle(legend, legendTitle);
+		legendTitleLowerEnd = createTitle(legend, options.legendTitle);
 
 		// Set the new margins according to the titles
 		diagramContentMargin = Constants.margin.clone();
