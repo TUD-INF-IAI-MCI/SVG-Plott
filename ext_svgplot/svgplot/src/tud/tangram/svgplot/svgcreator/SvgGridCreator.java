@@ -37,7 +37,7 @@ public class SvgGridCreator extends SvgCreator {
 		overlays = new OverlayList(cs);
 		
 		SvgViewboxPainter svgViewboxPainter = new SvgViewboxPainter(cs, options.size);
-		svgViewboxPainter.paintToSvgDocument(doc, viewbox, options.outputDevice);
+		svgViewboxPainter.paintToSvgDocument(doc, null, options.outputDevice);
 		viewbox = svgViewboxPainter.getViewbox();
 	}
 

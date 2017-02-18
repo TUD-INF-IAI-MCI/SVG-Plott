@@ -39,7 +39,7 @@ public class SvgViewboxPainter extends SvgPainter {
 	@Override
 	public void paintToSvgDocument(SvgDocument doc, Element viewbox, OutputDevice device) {
 		super.paintToSvgDocument(doc, viewbox, device);
-		viewbox = createViewbox(doc);
+		this.viewbox = createViewbox(doc);
 	}
 
 	private Element createViewbox(SvgDocument doc) {
