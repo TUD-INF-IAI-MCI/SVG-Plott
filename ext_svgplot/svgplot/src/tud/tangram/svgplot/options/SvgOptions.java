@@ -12,6 +12,7 @@ public abstract class SvgOptions {
 	public String legendTitle;
 	public String descTitle;
 	public Point size;
+	public OutputDevice outputDevice;
 
 	public SvgOptions(SvgPlotOptions options) {
 		createFromSvgPlotOptions(options);
@@ -24,5 +25,6 @@ public abstract class SvgOptions {
 		this.legendTitle = SvgTools.translate("legend") + ": " + options.getTitle();
 		this.descTitle = SvgTools.translate("desc") + ": " + options.getTitle();
 		this.size = options.getSize();
+		this.outputDevice = options.getOutputDevice();
 	};
 }

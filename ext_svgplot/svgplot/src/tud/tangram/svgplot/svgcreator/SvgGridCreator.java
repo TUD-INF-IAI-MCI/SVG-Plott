@@ -1,22 +1,18 @@
 package tud.tangram.svgplot.svgcreator;
 
-import java.io.IOException;
-
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.w3c.dom.DOMException;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 import tud.tangram.svgplot.coordinatesystem.CoordinateSystem;
 import tud.tangram.svgplot.coordinatesystem.Point;
 import tud.tangram.svgplot.options.SvgGridOptions;
+import tud.tangram.svgplot.plotting.OverlayList;
 import tud.tangram.svgplot.svgpainter.SvgGridPainter;
-import tud.tangram.svgplot.xml.SvgDocument;
+import tud.tangram.svgplot.svgpainter.SvgOverlayPainter;
 
-public abstract class SvgGridCreator extends SvgCreator {
+public class SvgGridCreator extends SvgCreator {
 	protected final SvgGridOptions options;
-	protected SvgGridPainter svgGridPainter;
+	//protected SvgGridPainter svgGridPainter;
 	
 	protected Element viewbox;
 	
@@ -26,40 +22,42 @@ public abstract class SvgGridCreator extends SvgCreator {
 		return cs;
 	}
 	
+	protected OverlayList overlays;
+	
 	public SvgGridCreator(SvgGridOptions options) {
 		super(options);
 		this.options = options;
 	}
-	
-	protected void trySetupGridPainter() {
-		if(svgGridPainter == null) {
-			svgGridPainter = new SvgGridPainter(cs, options.xRange, options.yRange, null, null, null);
-		}
-	}
-	
+		
 	@Override
-	public SvgDocument create() throws ParserConfigurationException, IOException, DOMException, InterruptedException {
-
-		options.xRange.from = Math.min(0, options.xRange.from);
-		options.xRange.to = Math.max(0, options.xRange.to);
-		options.yRange.from = Math.min(0, options.yRange.from);
-		options.yRange.to = Math.max(0, options.yRange.to);
-
-		cs = new CoordinateSystem(options.xRange, options.yRange, options.size, diagramContentMargin);
+	protected void beforeCreate() {
+		super.beforeCreate();
+		cs = new CoordinateSystem(options.xRange, options.yRange, options.size, diagramContentMargin, options.pi);
+		overlays = new OverlayList(cs);
 		
 		createViewbox();
-		
-		trySetupGridPainter();
-		svgGridPainter.paintToSvgDocument(doc, viewbox);
-		
-		return doc;
 	}
 
 	@Override
-	protected void createCss(SvgDocument doc) throws IOException {
-		trySetupGridPainter();
+	protected void create() {
+		super.create();
+		
+		SvgGridPainter svgGridPainter = new SvgGridPainter(cs, options.xRange, options.yRange, null, null, null);
+		
+		svgGridPainter.paintToSvgDocument(doc, viewbox, options.outputDevice);
+		svgGridPainter.paintToSvgLegend(legend, options.outputDevice);
+		
+		svgGridPainter.addOverlaysToList(overlays);
 	}
 	
+	@Override
+	protected void afterCreate() {
+		super.afterCreate();
+		
+		SvgOverlayPainter svgOverlayPainter = new SvgOverlayPainter(cs, overlays);
+		svgOverlayPainter.paintToSvgDocument(doc, viewbox, options.outputDevice);
+	}
+
 	private void createViewbox() {
 		viewbox = (Element) doc.appendChild(doc.createElement("svg"));
 		viewbox.setAttribute("viewBox",

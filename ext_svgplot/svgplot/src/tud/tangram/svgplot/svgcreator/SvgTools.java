@@ -1,8 +1,12 @@
 package tud.tangram.svgplot.svgcreator;
 
 import java.text.MessageFormat;
+import java.util.EnumSet;
 
 import tud.tangram.svgplot.Constants;
+import tud.tangram.svgplot.coordinatesystem.CoordinateSystem;
+import tud.tangram.svgplot.coordinatesystem.Point;
+import tud.tangram.svgplot.options.OutputDevice;
 
 public class SvgTools {
 	/**
@@ -14,7 +18,7 @@ public class SvgTools {
 	public static String format2svg(double value) {
 		return Constants.decimalFormat.format(value);
 	}
-	
+
 	/**
 	 * Formats an additional Name of an object. Checks if the name is set. If
 	 * name is set, the name is packed into brackets and prepend with an
@@ -63,5 +67,74 @@ public class SvgTools {
 		int last = (int) arguments[arguments.length - 1];
 		String suffix = last == 0 ? "_0" : last == 1 ? "_1" : "_n";
 		return translate(key + suffix, arguments);
+	}
+
+	/**
+	 * Formats the x value of a point with respect to if Pi is set in the
+	 * coordinate system.
+	 * 
+	 * @param cs
+	 *            the coordinate system
+	 * @param x
+	 *            x-value
+	 * @return formated string for the point
+	 */
+	public static String formatX(CoordinateSystem cs, double x) {
+		String str = cs.xAxis.format(x);
+		if (cs.pi && !"0".equals(str)) {
+			str += " pi";
+		}
+		return str;
+	}
+
+	/**
+	 * Formats the y value of a point.
+	 * 
+	 * @param cs
+	 *            the coordinate system
+	 * @param y
+	 *            y-value
+	 * @return formated string for the point
+	 */
+	public static String formatY(CoordinateSystem cs, double y) {
+		return cs.yAxis.format(y);
+	}
+
+	/**
+	 * Formats a Point that it is optimized for speech output. E.g. (x / y)
+	 * 
+	 * @param cs
+	 *            the coordinate system
+	 * @param point
+	 *            The point that should be transformed into a textual
+	 *            representation
+	 * @param pi
+	 *            whether to use a pi based axis
+	 * @return formated string for the point with '/' as delimiter
+	 */
+	public static String formatForSpeech(CoordinateSystem cs, Point point) {
+		return ((point.name != null && !point.name.isEmpty()) ? point.name + " " : "") + formatX(cs, point.x)
+				+ " / " + formatY(cs, point.y);
+	}
+
+	/**
+	 * Formats a Point that it is optimized for textual output and packed into
+	 * the caption with brackets. E.g. E(x | y)
+	 * 
+	 * @param cs
+	 *            the coordinate system
+	 * @param point
+	 *            The point that should be transformed into a textual
+	 *            representation
+	 * @param cap
+	 *            The caption sting without brackets
+	 * @return formated string for the point with '/' as delimiter if now
+	 *         caption is set, otherwise packed in the caption with brackets and
+	 *         the '|' as delimiter
+	 */
+	public static String formatForText(CoordinateSystem cs, Point point, String cap) {
+		String p = formatX(cs, point.x) + " | " + formatY(cs, point.y);
+		cap = cap.trim();
+		return (cap != null && !cap.isEmpty()) ? cap + "(" + p + ")" : p;
 	}
 }

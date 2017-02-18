@@ -4,8 +4,10 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 
+import org.w3c.dom.CDATASection;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import tud.tangram.svgplot.coordinatesystem.Point;
 import tud.tangram.svgplot.svgcreator.SvgTools;
@@ -48,12 +50,25 @@ public class SvgDocument extends Document {
 	}
 
 	public Node appendCss(String css) {
-		Element style = (Element) defs.appendChild(doc.createElement("style"));
-		style.setAttribute("type", "text/css");
+		NodeList styleElements = doc.getElementsByTagName("style");
+		
+		// TODO make it less messy
 		String indent = "            ";
 		css = "\n" + indent + css.replace("\n", "\n" + indent) + "\n        ";
-		style.appendChild(doc.createCDATASection(css));
-		return style;
+		
+		if(styleElements.getLength() == 0) {		
+			Element style = (Element) defs.appendChild(doc.createElement("style"));
+			style.setAttribute("type", "text/css");
+			style.appendChild(doc.createCDATASection(css));
+			return style;
+		}
+		else {
+			Element style = (Element) styleElements.item(0);
+			CDATASection styleData = (CDATASection) style.getFirstChild();
+			String completeCss = styleData.getData() + css;
+			styleData.setData(completeCss);
+			return style;
+		}
 	}
 
 	public Element createGroup() {

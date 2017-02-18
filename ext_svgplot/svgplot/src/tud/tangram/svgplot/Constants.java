@@ -5,6 +5,8 @@ import java.text.DecimalFormatSymbols;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+import tud.tangram.svgplot.options.OutputDevice;
+
 public class Constants {
 	final public static Locale locale = new Locale("de");
 	final public static ResourceBundle bundle = ResourceBundle.getBundle("Bundle");

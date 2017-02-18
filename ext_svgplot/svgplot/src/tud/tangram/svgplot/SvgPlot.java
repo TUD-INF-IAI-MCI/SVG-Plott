@@ -21,7 +21,6 @@ import tud.tangram.svgplot.svgcreator.SvgGraphCreator;
  *         Universität Dresden / MCI 2014
  * 
  */
-@Parameters(separators = "=", resourceBundle = "Bundle")
 public class SvgPlot {
 	/**
 	 * @param args
@@ -66,6 +65,9 @@ public class SvgPlot {
 		SvgGraphOptions graphOptions = new SvgGraphOptions(options);
 		
 		SvgGraphCreator creator = new SvgGraphCreator(graphOptions);
+		
+		//SvgGridOptions gridOptions = new SvgGridOptions(options);
+		//SvgGridCreator creator = new SvgGridCreator(gridOptions);
 		
 		try {
 			creator.run();

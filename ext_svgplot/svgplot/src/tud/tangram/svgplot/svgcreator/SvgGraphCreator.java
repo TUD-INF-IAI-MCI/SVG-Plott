@@ -3,9 +3,6 @@ package tud.tangram.svgplot.svgcreator;
 import java.io.IOException;
 import java.util.List;
 
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.w3c.dom.DOMException;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
@@ -16,11 +13,12 @@ import tud.tangram.svgplot.options.SvgGraphOptions;
 import tud.tangram.svgplot.plotting.Function;
 import tud.tangram.svgplot.plotting.Gnuplot;
 import tud.tangram.svgplot.plotting.IntegralPlot;
+import tud.tangram.svgplot.plotting.Overlay;
+import tud.tangram.svgplot.plotting.OverlayList;
 import tud.tangram.svgplot.plotting.Plot;
 import tud.tangram.svgplot.plotting.PlotList;
-import tud.tangram.svgplot.plotting.PlotList.Overlay;
-import tud.tangram.svgplot.plotting.PlotList.OverlayList;
 import tud.tangram.svgplot.plotting.PointPlot;
+import tud.tangram.svgplot.svgpainter.SvgPointsPainter;
 import tud.tangram.svgplot.xml.SvgDocument;
 
 public class SvgGraphCreator extends SvgGridCreator {
@@ -34,22 +32,22 @@ public class SvgGraphCreator extends SvgGridCreator {
 	/**
 	 * Creates the whole diagram SVG file, legend SVG file and description HTML
 	 * file.
-	 * 
-	 * @throws ParserConfigurationException
-	 * @throws IOException
-	 * @throws DOMException
-	 * @throws InterruptedException
 	 */
-	public SvgDocument create() throws ParserConfigurationException, IOException, DOMException, InterruptedException {
+	public void create() {
 		super.create();
 
 		createReferenceLines();
-		createPlots();
-
-		return doc;
+		try {
+			createPlots();
+		} catch (Exception e) {
+			System.out.println("Could not create the plots.");
+			System.out.println(e);
+		}
 	}
 
 	/**
+	 * TODO remove and add to an SvgPainter
+	 * 
 	 * Generates the basic css optimized for tactile output on a tiger embosser.
 	 * 
 	 * @param doc
@@ -60,10 +58,6 @@ public class SvgGraphCreator extends SvgGridCreator {
 	 */
 	protected void createCss(SvgDocument doc) throws IOException {
 		String css = "/* default */\n";
-		css += "svg { fill: none; stroke: #000000; stroke-width: " + Constants.strokeWidth + "; }\n";
-		css += "text { font-family: serif; font-size: 36pt; fill: black; stroke: none; }\n";
-		css += "#grid { stroke: #777777; }\n";
-		css += "#axes, #reference-lines, .box { stroke: #111111; fill: transparent; }\n";
 		double width = 2 * Constants.strokeWidth;
 		css += "#plots { stroke-width: " + width + "; stroke-dasharray: " + width * 5 + ", " + width * 5 + "; }\n";
 		css += "#plot-1 { stroke-dasharray: none; }\n";
@@ -83,7 +77,7 @@ public class SvgGraphCreator extends SvgGridCreator {
 		css += "text { font-family: 'Braille DE Computer'; font-size: 36pt; fill: black; stroke: none; }\n";
 		css += " }\n";
 
-		appendOptionsCss(css);
+		// doc.appendCss(css);
 	}
 
 	/**
@@ -193,69 +187,24 @@ public class SvgGraphCreator extends SvgGridCreator {
 		// overlays for audio tactile output
 		OverlayList overlays = plotList.overlays();
 
-		// TODO: add scatter plot
-		// points or scatter plots
-		if (options.points != null && options.points.size() > 0) {
-			int j = 0;
-			Element poiGroup = doc.createElement("g", "points");
-			viewbox.appendChild(poiGroup);
-			for (PointList pl : options.points) {
-				if (pl != null && pl.size() > 0) {
+		SvgPointsPainter svgPointsPainter = new SvgPointsPainter(cs, options.points);
+		svgPointsPainter.paintToSvgDocument(doc, viewbox, options.outputDevice);
+		svgPointsPainter.addOverlaysToList(overlays);
+		
+		this.overlays.addAll(overlays, true);
 
-					Element plGroup = doc.createElement("g", "points_" + j);
-					poiGroup.appendChild(plGroup);
-
-					for (Point p : pl) {
-						Element symbol = PointPlot.getPointSymbolForIndex(j, doc);
-						Element ps = PointPlot.paintPoint(doc, cs.convert(p), symbol,
-								plGroup != null ? plGroup : viewbox);
-						ps.appendChild(doc.createTitle(formatForSpeech(p)));
-						if (pl.name != null && !pl.name.isEmpty())
-							ps.appendChild(doc.createDesc(pl.name)); // TODO:
-																		// maybe
-																		// fine
-																		// this
-						// add on top of overlays and avoid collision testing
-						overlays.add(overlays.size(), new Overlay(p));
-					}
-				}
-				j++;
-			}
-		}
-
-		// overlays for audio tactile output
-		Node overlaysElement = viewbox.appendChild(doc.createGroup("overlays"));
-		for (Function function : options.functions) {
-			for (Overlay overlay : overlays) {
-				if (function.equals(overlay.getFunction())) {
-					overlaysElement.appendChild(createOverlay(overlay));
-				}
-			}
-		}
-		for (Overlay overlay : overlays) {
-			if (overlay.getFunction() == null) {
-				overlaysElement.appendChild(createOverlay(overlay));
-			}
-		}
+		// TODO commented out -- overlays for audio tactile output, used to be ordered by function
+		/*
+		 * Node overlaysElement =
+		 * viewbox.appendChild(doc.createGroup("overlays")); for (Function
+		 * function : options.functions) { for (Overlay overlay : overlays) { if
+		 * (function.equals(overlay.getFunction())) {
+		 * overlaysElement.appendChild(createOverlay(doc, overlay)); } } } for
+		 * (Overlay overlay : overlays) { if (overlay.getFunction() == null) {
+		 * overlaysElement.appendChild(createOverlay(doc, overlay)); } }
+		 */
 
 		createDesc(plotList);
-	}
-
-	/**
-	 * Paints an overlay in the svg file
-	 * 
-	 * @param overlay
-	 *            | the overlay that should be insert, containing position and
-	 *            additional informations about the point underneath it.
-	 * @return a DOM Element representing the already inserted overlay node.
-	 */
-	private Element createOverlay(Overlay overlay) {
-		Element circle = doc.createCircle(cs.convert(overlay), Overlay.RADIUS);
-		circle.appendChild(doc.createTitle(formatForSpeech(overlay)));
-		if (overlay.getFunction() != null) {
-			circle.appendChild(doc.createDesc(overlay.getFunction().toString()));
-		}
-		return circle;
 	}
 
 	/**
@@ -273,9 +222,10 @@ public class SvgGraphCreator extends SvgGridCreator {
 
 		// general description
 		Node div = desc.appendBodyChild(desc.createDiv("functions"));
-		div.appendChild(desc.createP(SvgTools.translateN("desc.intro", formatX(cs.xAxis.range.from),
-				formatX(cs.xAxis.range.to), formatX(cs.xAxis.ticInterval), formatY(cs.yAxis.range.from),
-				formatY(cs.yAxis.range.to), formatY(cs.yAxis.ticInterval), SvgTools.formatName(cs.xAxis.range.name),
+		div.appendChild(desc.createP(SvgTools.translateN("desc.intro", SvgTools.formatX(cs, cs.xAxis.range.from),
+				SvgTools.formatX(cs, cs.xAxis.range.to), SvgTools.formatX(cs, cs.xAxis.ticInterval),
+				SvgTools.formatY(cs, cs.yAxis.range.from), SvgTools.formatY(cs, cs.yAxis.range.to),
+				SvgTools.formatY(cs, cs.yAxis.ticInterval), SvgTools.formatName(cs.xAxis.range.name),
 				SvgTools.formatName(cs.yAxis.range.name), options.functions.size())));
 
 		// functions
@@ -410,9 +360,9 @@ public class SvgGraphCreator extends SvgGridCreator {
 		int i = offset;
 		for (Point point : points) {
 			if (cap != null && !cap.isEmpty()) {
-				list.appendChild(desc.createTextElement("li", formatForText(point, cap + "_" + ++i)));
+				list.appendChild(desc.createTextElement("li", SvgTools.formatForText(cs, point, cap + "_" + ++i)));
 			} else {
-				list.appendChild(desc.createTextElement("li", formatForSpeech(point)));
+				list.appendChild(desc.createTextElement("li", SvgTools.formatForSpeech(cs, point)));
 			}
 		}
 		return list;
@@ -460,9 +410,9 @@ public class SvgGraphCreator extends SvgGridCreator {
 		int i = offset;
 		for (Point point : points) {
 			if (cap != null && !cap.isEmpty()) {
-				list.appendChild(desc.createTextElement("li", cap + "_" + ++i + " = " + formatX(point.x)));
+				list.appendChild(desc.createTextElement("li", cap + "_" + ++i + " = " + SvgTools.formatX(cs, point.x)));
 			} else {
-				list.appendChild(desc.createTextElement("li", formatX(point.x)));
+				list.appendChild(desc.createTextElement("li", SvgTools.formatX(cs, point.x)));
 			}
 		}
 		return list;
@@ -567,66 +517,15 @@ public class SvgGraphCreator extends SvgGridCreator {
 		// footnote
 		currentPosition.translate(0, distance);
 		legend.appendChild(legend.createText(currentPosition,
-				SvgTools.translate("legend.xrange", formatX(cs.xAxis.range.from), formatX(cs.xAxis.range.to),
-						SvgTools.formatName(cs.xAxis.range.name)),
-				SvgTools.translate("legend.xtic", formatX(cs.xAxis.ticInterval))));
+				SvgTools.translate("legend.xrange", SvgTools.formatX(cs, cs.xAxis.range.from),
+						SvgTools.formatX(cs, cs.xAxis.range.to), SvgTools.formatName(cs.xAxis.range.name)),
+				SvgTools.translate("legend.xtic", SvgTools.formatX(cs, cs.xAxis.ticInterval))));
 
 		currentPosition.translate(0, distance);
 		legend.appendChild(legend.createText(currentPosition,
-				SvgTools.translate("legend.yrange", formatY(cs.yAxis.range.from), formatY(cs.yAxis.range.to),
-						SvgTools.formatName(cs.yAxis.range.name)),
-				SvgTools.translate("legend.ytic", formatY(cs.yAxis.ticInterval))));
-	}
-
-	/**
-	 * Formats the x value of a point with respect to if Pi is set.
-	 * 
-	 * @param x
-	 *            | x-value
-	 * @return formated string for the point
-	 */
-	public String formatX(double x) {
-		String str = cs.xAxis.format(x);
-		if (options.pi && !"0".equals(str)) {
-			str += " pi";
-		}
-		return str;
-	}
-
-	public String formatY(double y) {
-		return cs.yAxis.format(y);
-	}
-
-	/**
-	 * Formats a Point that it is optimized for speech output. E.g. (x / y)
-	 * 
-	 * @param point
-	 *            | The point that should be transformed into a textual
-	 *            representation
-	 * @return formated string for the point with '/' as delimiter
-	 */
-	public String formatForSpeech(Point point) {
-		return ((point.name != null && !point.name.isEmpty()) ? point.name + " " : "") + formatX(point.x) + " / "
-				+ formatY(point.y);
-	}
-
-	/**
-	 * Formats a Point that it is optimized for textual output and packed into
-	 * the caption with brackets. E.g. E(x | y)
-	 * 
-	 * @param point
-	 *            | The point that should be transformed into a textual
-	 *            representation
-	 * @param cap
-	 *            | The caption sting without brackets
-	 * @return formated string for the point with '/' as delimiter if now
-	 *         caption is set, otherwise packed in the caption with brackets and
-	 *         the '|' as delimiter
-	 */
-	public String formatForText(Point point, String cap) {
-		String p = formatX(point.x) + " | " + formatY(point.y);
-		cap = cap.trim();
-		return (cap != null && !cap.isEmpty()) ? cap + "(" + p + ")" : p;
+				SvgTools.translate("legend.yrange", SvgTools.formatY(cs, cs.yAxis.range.from),
+						SvgTools.formatY(cs, cs.yAxis.range.to), SvgTools.formatName(cs.yAxis.range.name)),
+				SvgTools.translate("legend.ytic", SvgTools.formatY(cs, cs.yAxis.ticInterval))));
 	}
 
 	/**
@@ -650,4 +549,5 @@ public class SvgGraphCreator extends SvgGridCreator {
 			return "P" + String.valueOf(p);
 		return Constants.pnList[p];
 	}
+
 }

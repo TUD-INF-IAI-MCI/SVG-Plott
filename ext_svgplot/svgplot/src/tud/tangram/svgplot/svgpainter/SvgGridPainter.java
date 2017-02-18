@@ -1,7 +1,5 @@
 package tud.tangram.svgplot.svgpainter;
 
-import java.util.HashMap;
-
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
@@ -10,11 +8,16 @@ import tud.tangram.svgplot.coordinatesystem.CoordinateSystem;
 import tud.tangram.svgplot.coordinatesystem.Point;
 import tud.tangram.svgplot.coordinatesystem.Range;
 import tud.tangram.svgplot.options.OutputDevice;
+import tud.tangram.svgplot.plotting.Overlay;
+import tud.tangram.svgplot.plotting.OverlayList;
 import tud.tangram.svgplot.styles.AxisStyle;
 import tud.tangram.svgplot.styles.GridStyle;
 import tud.tangram.svgplot.svgcreator.SvgTools;
 import tud.tangram.svgplot.xml.SvgDocument;
 
+/**
+ * Paints a grid and axes to the SVG Document. Leaves the legend untouched.
+ */
 public class SvgGridPainter extends SvgPainter {
 
 	private Range xRange, yRange;
@@ -23,6 +26,11 @@ public class SvgGridPainter extends SvgPainter {
 	private AxisStyle yAxisStyle;
 	private GridStyle gridStyle;
 
+	@Override
+	protected String getPainterName() {
+		return "Grid Painter";
+	}
+
 	/**
 	 * Input all needed parameters. The {@link AxisStyle} and {@link GridStyle}
 	 * params may be <code>null</code> leading to display everything.
@@ -30,9 +38,12 @@ public class SvgGridPainter extends SvgPainter {
 	 * @param cs
 	 * @param xRange
 	 * @param yRange
-	 * @param xAxisStyle | may be <code>null</code>
-	 * @param yAxisStyle | may be <code>null</code>
-	 * @param gridStyle | may be <code>null</code>
+	 * @param xAxisStyle
+	 *            may be <code>null</code>
+	 * @param yAxisStyle
+	 *            may be <code>null</code>
+	 * @param gridStyle
+	 *            may be <code>null</code>
 	 */
 	public SvgGridPainter(CoordinateSystem cs, Range xRange, Range yRange, AxisStyle xAxisStyle, AxisStyle yAxisStyle,
 			GridStyle gridStyle) {
@@ -49,24 +60,35 @@ public class SvgGridPainter extends SvgPainter {
 	 * Paint the grid and the axes to the doc.
 	 */
 	@Override
-	public void paintToSvgDocument(SvgDocument doc, Element viewbox) {
+	public void paintToSvgDocument(SvgDocument doc, Element viewbox, OutputDevice device) {
+		super.paintToSvgDocument(doc, viewbox, device);
 		createGrid(doc, viewbox);
 		createAxes(doc, viewbox);
 	}
 
 	@Override
-	public void paintToSvgLegend(SvgDocument legend) {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
 	public void setupDeviceCss() {
-		deviceCss = new HashMap<>();
 		StringBuilder defaultOptions = new StringBuilder();
 		defaultOptions.append("#grid { stroke: #777777; }").append(System.lineSeparator());
 		defaultOptions.append("#axes, #reference-lines, .box { stroke: #111111; fill: transparent; }")
 				.append(System.lineSeparator());
 		deviceCss.put(OutputDevice.Default, defaultOptions.toString());
+	}
+
+	/**
+	 * Adds the grid overlays to the specified list.
+	 * 
+	 * @param overlays
+	 *            list where the overlays shall be added to
+	 */
+	public void addOverlaysToList(OverlayList overlays) {
+		overlays.add(new Overlay(0, 0));
+		for (double tic : cs.xAxis.ticLines()) {
+			overlays.add(new Overlay(tic, 0));
+		}
+		for (double tic : cs.yAxis.ticLines()) {
+			overlays.add(new Overlay(0, tic));
+		}
 	}
 
 	/**

@@ -7,6 +7,7 @@ import java.util.List;
 import com.beust.jcommander.IStringConverter;
 import com.beust.jcommander.IStringConverterFactory;
 import com.beust.jcommander.Parameter;
+import com.beust.jcommander.Parameters;
 
 import tud.tangram.svgplot.coordinatesystem.Point;
 import tud.tangram.svgplot.coordinatesystem.PointListList;
@@ -14,7 +15,19 @@ import tud.tangram.svgplot.coordinatesystem.Range;
 import tud.tangram.svgplot.plotting.Function;
 import tud.tangram.svgplot.plotting.IntegralPlotSettings;
 
+@Parameters(separators = "=", resourceBundle = "Bundle")
 public class SvgPlotOptions {
+
+	@Parameter(names = {"--device", "-d"})
+	private OutputDevice outputDevice = OutputDevice.Default;
+	
+	public OutputDevice getOutputDevice() {
+		return outputDevice;
+	}
+
+	public void setOutputDevice(OutputDevice outputDevice) {
+		this.outputDevice = outputDevice;
+	}
 
 	@Parameter(description = "functions")
 	private List<Function> functions = new ArrayList<>();

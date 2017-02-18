@@ -9,6 +9,7 @@ import tud.tangram.svgplot.xml.SvgDocument;
 
 public abstract class SvgPainter {
 	public SvgPainter() {
+		deviceCss = new HashMap<>();
 		setupDeviceCss();
 	}
 	
@@ -22,9 +23,10 @@ public abstract class SvgPainter {
 
 	/**
 	 * The name of the painter. For example: "Scatter plot painter"
+	 * @return the painter name
 	 */
-	protected String painterName;
-
+	protected abstract String getPainterName();
+	
 	/**
 	 * Output the default CSS joint with the device CSS. Also inserts basic
 	 * comments.
@@ -36,15 +38,13 @@ public abstract class SvgPainter {
 	public String composeDeviceSpecificCss(OutputDevice outputDevice) {
 		StringBuilder deviceCssString = new StringBuilder();
 		if (deviceCss.containsKey(OutputDevice.Default)) {
-			deviceCssString.append(System.lineSeparator());
-			deviceCssString.append("// Default CSS for " + painterName);
+			deviceCssString.append("/* Default CSS for " + getPainterName() + " */");
 			deviceCssString.append(System.lineSeparator());
 			deviceCssString.append(deviceCss.get(OutputDevice.Default));
 			deviceCssString.append(System.lineSeparator());
 		}
-		if (deviceCss.containsKey(outputDevice)) {
-			deviceCssString.append(System.lineSeparator());
-			deviceCssString.append("// Device specific CSS (" + outputDevice.toString() + ")  for " + painterName);
+		if (outputDevice != OutputDevice.Default && deviceCss.containsKey(outputDevice)) {
+			deviceCssString.append("/* Device specific CSS (" + outputDevice.toString() + ")  for " + getPainterName() + " */");
 			deviceCssString.append(System.lineSeparator());
 			deviceCssString.append(deviceCss.get(outputDevice));
 			deviceCssString.append(System.lineSeparator());
@@ -57,7 +57,24 @@ public abstract class SvgPainter {
 	 */
 	protected abstract void setupDeviceCss();
 	
-	protected abstract void paintToSvgDocument(SvgDocument doc, Element viewbox);
+	/**
+	 * Paint to the SVG document.
+	 * @param doc
+	 * @param viewbox
+	 * @param device
+	 */
+	public void paintToSvgDocument(SvgDocument doc, Element viewbox, OutputDevice device){
+		String deviceCss = composeDeviceSpecificCss(device);
+		doc.appendCss(deviceCss);
+	}
 	
-	protected abstract void paintToSvgLegend(SvgDocument legend);
+	/**
+	 * Paint to the SVG legend.
+	 * @param legend
+	 * @param device
+	 */
+	public void paintToSvgLegend(SvgDocument legend, OutputDevice device) {
+		String deviceCss = composeDeviceSpecificCss(device);
+		legend.appendCss(deviceCss);
+	}
 }

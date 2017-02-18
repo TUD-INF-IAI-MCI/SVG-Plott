@@ -15,8 +15,14 @@ public class CoordinateSystem {
 	
 	final public Axis xAxis;
 	final public Axis yAxis;
+	
+	final public boolean pi;
 
 	public CoordinateSystem(Range xRange, Range yRange, Point size, int[] margin) {
+		this(xRange, yRange, size, margin, false);
+	}
+	
+	public CoordinateSystem(Range xRange, Range yRange, Point size, int[] margin, boolean pi) {
 		origin = new Point(margin[3], margin[0]);
 
 		this.size = size.clone();
@@ -27,6 +33,8 @@ public class CoordinateSystem {
 
 		xAxis = new Axis(xRange, this.size.x);
 		yAxis = new Axis(yRange, this.size.y);
+		
+		this.pi = pi;
 	}
 
 	/**

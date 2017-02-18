@@ -8,7 +8,6 @@ import tud.tangram.svgplot.plotting.IntegralPlotSettings;
 
 public class SvgGraphOptions extends SvgGridOptions {
 	public List<Function> functions;
-	public boolean pi;
 	public String xLines;
 	public String yLines;
 	public String gnuplot;
@@ -23,7 +22,6 @@ public class SvgGraphOptions extends SvgGridOptions {
 	
 	private void createFromSvgPlotOptions(SvgPlotOptions options) {
 		this.functions = options.getFunctions();
-		this.pi = options.isPi();
 		this.xLines = options.getxLines();
 		this.yLines = options.getyLines();
 		this.gnuplot = options.getGnuplot();

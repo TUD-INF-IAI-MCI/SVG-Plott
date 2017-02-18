@@ -3,21 +3,16 @@
  */
 package tud.tangram.svgplot.svgcreator;
 
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
-import org.w3c.dom.DOMException;
-import org.w3c.dom.Element;
-
 import tud.tangram.svgplot.Constants;
 import tud.tangram.svgplot.coordinatesystem.Point;
 import tud.tangram.svgplot.options.SvgOptions;
+import tud.tangram.svgplot.svgpainter.SvgTitlePainter;
 import tud.tangram.svgplot.xml.HtmlDocument;
 import tud.tangram.svgplot.xml.SvgDocument;
 
@@ -79,10 +74,10 @@ public abstract class SvgCreator {
 		this.desc = desc;
 	}
 
-	public SvgCreator(SvgOptions options){
+	public SvgCreator(SvgOptions options) {
 		this.options = options;
 	}
-	
+
 	/**
 	 * Main function. Combine all the elements and create all the output files.
 	 * 
@@ -100,13 +95,10 @@ public abstract class SvgCreator {
 		legend = new SvgDocument(options.legendTitle, options.size, Constants.margin[1]);
 		legend.setAttribute("id", "legend");
 		desc = new HtmlDocument(options.descTitle);
-		
-		createBackground();
-		createTitles();
-		createCss(doc);
-		createCss(legend);
+
+		beforeCreate();
 		create();
-		createLegend();
+		afterCreate();
 
 		if (options.output != null) {
 			doc.writeTo(new FileOutputStream(options.output));
@@ -122,87 +114,46 @@ public abstract class SvgCreator {
 	}
 
 	/**
-	 * Creates the whole diagram SVG file, legend SVG file and description HTML
-	 * file.
-	 * 
-	 * @return
-	 * @throws ParserConfigurationException
-	 * @throws IOException
-	 * @throws DOMException
-	 * @throws InterruptedException
+	 * Sets up the diagram SVG title and legend SVG title. Computes margins for
+	 * the rest of the document. Should be used for further setup tasks before
+	 * anything is printed.
 	 */
-	public abstract SvgDocument create()
-			throws ParserConfigurationException, IOException, DOMException, InterruptedException;
+	protected void beforeCreate() {
+		SvgTitlePainter svgTitlePainter = new SvgTitlePainter(options.title, options.legendTitle);
 
-	/**
-	 * Create the titles for the legend and diagram svg files.
-	 * 
-	 * @throws ParserConfigurationException
-	 */
-	public void createTitles() throws ParserConfigurationException {
+		svgTitlePainter.paintToSvgDocument(doc, null, options.outputDevice);
+		svgTitlePainter.paintToSvgLegend(legend, options.outputDevice);
 
-		// Create the titles and update the top positions
-		diagramTitleLowerEnd = createTitle(doc, options.title);
-		legendTitleLowerEnd = createTitle(legend, options.legendTitle);
-
-		// Set the new margins according to the titles
-		diagramContentMargin = Constants.margin.clone();
-		diagramContentMargin[0] = (int) diagramTitleLowerEnd.y + 17;
-		diagramContentMargin[1] += 20;
-		diagramContentMargin[3] += 10;
+		diagramContentMargin = svgTitlePainter.getDiagramContentMargin();
+		diagramTitleLowerEnd = svgTitlePainter.getDiagramTitleLowerEnd();
+		legendTitleLowerEnd = svgTitlePainter.getLegendTitleLowerEnd();
 	}
 
 	/**
-	 * Adds the textual readable title to the svg document at a predefined
-	 * position in the left top corner of the sheet.
-	 * 
-	 * @param doc
-	 *            | the svg document where the header text should be insert
-	 * @param text
-	 *            | the textual value
-	 * @return the position of the added title node
+	 * Inputs all the main content into the diagram and legend SVG files.
 	 */
-	private Point createTitle(SvgDocument doc, String text) {
-		Point pos = new Point(Constants.margin[3], Constants.margin[0] + 10);
-		Element title = (Element) doc.appendChild(doc.createText(pos, text));
-		title.setAttribute("id", "title");
-		return pos;
+	protected void create() {
+
 	}
 
 	/**
-	 * Creates the background SVG object and  adds it to the document.
+	 * Gives final touches to the diagram and legend SVG files. Can be used for
+	 * adding accumulated information like overlays.
 	 */
-	public void createBackground() {
-		Element bg = doc.createRectangle(new Point(0, 0), "100%", "100%");
-		bg.setAttribute("id", "background");
-		doc.appendChild(bg);
-		Element bgL = legend.createRectangle(new Point(0, 0), "100%", "100%");
-		bgL.setAttribute("id", "background");
-		legend.appendChild(bgL);
+	protected void afterCreate() {
+
 	}
 
-	/**
-	 * Generates the basic css optimized for tactile output on a tiger embosser.
-	 * Should call appendOptionsCss.
-	 * 
-	 * @param doc
-	 *            | the svg document in with this css should been added
-	 * @throws IOException
-	 *             if the set up css file is not readable or does not exist
-	 *             anymore.
-	 */
-	protected abstract void createCss(SvgDocument doc) throws IOException;
-
-	protected void appendOptionsCss(String css) throws IOException {
-		if (options.css != null) {
-			css += "\n\n/* custom */\n";
-			if (new File(options.css).isFile()) {
-				options.css = new String(Files.readAllBytes(Paths.get(options.css)));
-			}
-			css += options.css;
-		}
-		doc.appendCss(css);
-	}
-
-	protected abstract void createLegend();
+	// TODO readd option to append external css
+	//protected void appendOptionsCss(SvgDocument doc, String css) throws IOException {
+	//	if (options.css != null) {
+	//		css += "\n\n/* custom */\n";
+	//		if (new File(options.css).isFile()) {
+	//			options.css = new String(Files.readAllBytes(Paths.get(options.css)));
+	//		}
+	//		css += options.css;
+	//	}
+	//	doc.appendCss(css);
+	//}
+	
 }
