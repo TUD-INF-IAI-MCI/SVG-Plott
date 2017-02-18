@@ -9,8 +9,7 @@ import tud.tangram.svgplot.xml.SvgDocument;
 
 public abstract class SvgPainter {
 	public SvgPainter() {
-		deviceCss = new HashMap<>();
-		setupDeviceCss();
+		deviceCss = getDeviceCss();
 	}
 	
 	/**
@@ -55,7 +54,7 @@ public abstract class SvgPainter {
 	/**
 	 * Setup the device specific CSS. Should populate {@link SvgPainter#deviceCss}.
 	 */
-	protected abstract void setupDeviceCss();
+	protected abstract HashMap<OutputDevice, String> getDeviceCss();
 	
 	/**
 	 * Paint to the SVG document.

@@ -1,5 +1,7 @@
 package tud.tangram.svgplot.svgpainter;
 
+import java.util.HashMap;
+
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
@@ -67,12 +69,16 @@ public class SvgGridPainter extends SvgPainter {
 	}
 
 	@Override
-	public void setupDeviceCss() {
+	protected HashMap<OutputDevice, String> getDeviceCss() {
+		HashMap<OutputDevice, String> deviceCss = new HashMap<>();
+		
 		StringBuilder defaultOptions = new StringBuilder();
 		defaultOptions.append("#grid { stroke: #777777; }").append(System.lineSeparator());
 		defaultOptions.append("#axes, #reference-lines, .box { stroke: #111111; fill: transparent; }")
 				.append(System.lineSeparator());
 		deviceCss.put(OutputDevice.Default, defaultOptions.toString());
+		
+		return deviceCss;
 	}
 
 	/**

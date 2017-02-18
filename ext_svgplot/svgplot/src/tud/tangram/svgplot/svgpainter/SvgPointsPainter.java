@@ -1,5 +1,7 @@
 package tud.tangram.svgplot.svgpainter;
 
+import java.util.HashMap;
+
 import org.w3c.dom.Element;
 
 import tud.tangram.svgplot.Constants;
@@ -35,7 +37,9 @@ public class SvgPointsPainter extends SvgPainter {
 	}
 
 	@Override
-	protected void setupDeviceCss() {
+	protected HashMap<OutputDevice, String> getDeviceCss() {
+		HashMap<OutputDevice, String> deviceCss = new HashMap<>();
+		
 		StringBuilder defaultOptions = new StringBuilder();
 
 		defaultOptions.append(".poi_symbol { stroke: black; stroke-dasharray: none; stroke-width:"
@@ -46,6 +50,8 @@ public class SvgPointsPainter extends SvgPainter {
 				.append(System.lineSeparator());
 
 		deviceCss.put(OutputDevice.Default, defaultOptions.toString());
+		
+		return deviceCss;
 	}
 
 	@Override

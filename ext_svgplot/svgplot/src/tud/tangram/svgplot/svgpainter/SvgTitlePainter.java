@@ -1,5 +1,7 @@
 package tud.tangram.svgplot.svgpainter;
 
+import java.util.HashMap;
+
 import org.w3c.dom.Element;
 
 import tud.tangram.svgplot.Constants;
@@ -41,7 +43,9 @@ public class SvgTitlePainter extends SvgPainter {
 	}
 
 	@Override
-	protected void setupDeviceCss() {
+	protected HashMap<OutputDevice, String> getDeviceCss() {
+		HashMap<OutputDevice, String> deviceCss = new HashMap<>();
+		
 		StringBuilder defaultOptions = new StringBuilder();
 
 		// Set the background style
@@ -60,6 +64,8 @@ public class SvgTitlePainter extends SvgPainter {
 		defaultOptions.append("}").append(System.lineSeparator());
 
 		deviceCss.put(OutputDevice.Default, defaultOptions.toString());
+		
+		return deviceCss;
 	}
 
 	@Override

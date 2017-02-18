@@ -1,5 +1,7 @@
 package tud.tangram.svgplot.svgpainter;
 
+import java.util.HashMap;
+
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
@@ -30,12 +32,16 @@ public class SvgOverlayPainter extends SvgPainter {
 	}
 
 	@Override
-	protected void setupDeviceCss() {
+	protected HashMap<OutputDevice, String> getDeviceCss() {
+		HashMap<OutputDevice, String> deviceCss = new HashMap<>();
+		
 		StringBuilder defaultOptions = new StringBuilder();
 		defaultOptions.append("#overlays { stroke: none; stroke-dasharray: none; fill: transparent; }")
 				.append(System.lineSeparator());
 
 		deviceCss.put(OutputDevice.Default, defaultOptions.toString());
+		
+		return deviceCss;
 	}
 
 	@Override
