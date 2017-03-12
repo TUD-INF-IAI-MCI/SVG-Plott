@@ -6,7 +6,6 @@ import java.util.List;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
-import tud.tangram.svgplot.Constants;
 import tud.tangram.svgplot.data.Point;
 import tud.tangram.svgplot.data.PointListList.PointList;
 import tud.tangram.svgplot.options.SvgGraphOptions;
@@ -21,6 +20,8 @@ import tud.tangram.svgplot.plotting.ReferenceLine.Direction;
 import tud.tangram.svgplot.svgpainter.SvgPlotPainter;
 import tud.tangram.svgplot.svgpainter.SvgPointsPainter;
 import tud.tangram.svgplot.svgpainter.SvgReferenceLinesPainter;
+import tud.tangram.svgplot.utils.Constants;
+import tud.tangram.svgplot.utils.SvgTools;
 
 public class SvgGraphCreator extends SvgGridCreator {
 	protected final SvgGraphOptions options;

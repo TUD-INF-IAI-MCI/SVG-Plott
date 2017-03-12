@@ -10,7 +10,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import tud.tangram.svgplot.data.Point;
-import tud.tangram.svgplot.svgcreator.SvgTools;
+import tud.tangram.svgplot.utils.SvgTools;
 
 /**
  * 

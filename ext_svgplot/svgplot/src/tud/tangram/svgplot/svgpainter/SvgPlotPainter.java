@@ -6,7 +6,6 @@ import java.util.List;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
-import tud.tangram.svgplot.Constants;
 import tud.tangram.svgplot.coordinatesystem.CoordinateSystem;
 import tud.tangram.svgplot.data.Point;
 import tud.tangram.svgplot.legend.LegendFunctionLineItem;
@@ -19,7 +18,8 @@ import tud.tangram.svgplot.plotting.IntegralPlot;
 import tud.tangram.svgplot.plotting.IntegralPlotSettings;
 import tud.tangram.svgplot.plotting.Plot;
 import tud.tangram.svgplot.plotting.PlotList;
-import tud.tangram.svgplot.svgcreator.SvgTools;
+import tud.tangram.svgplot.utils.Constants;
+import tud.tangram.svgplot.utils.SvgTools;
 import tud.tangram.svgplot.xml.SvgDocument;
 
 public class SvgPlotPainter extends SvgPainter {

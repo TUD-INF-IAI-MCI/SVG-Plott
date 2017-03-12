@@ -5,7 +5,7 @@ import java.util.PriorityQueue;
 import org.w3c.dom.Element;
 
 import tud.tangram.svgplot.data.Point;
-import tud.tangram.svgplot.svgcreator.SvgTools;
+import tud.tangram.svgplot.utils.SvgTools;
 import tud.tangram.svgplot.xml.SvgDocument;
 
 public class LegendRenderer extends PriorityQueue<LegendItem> {

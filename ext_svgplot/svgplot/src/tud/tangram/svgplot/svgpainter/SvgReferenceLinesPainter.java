@@ -5,12 +5,12 @@ import java.util.HashMap;
 
 import org.w3c.dom.Element;
 
-import tud.tangram.svgplot.Constants;
 import tud.tangram.svgplot.coordinatesystem.CoordinateSystem;
 import tud.tangram.svgplot.data.Point;
 import tud.tangram.svgplot.options.OutputDevice;
 import tud.tangram.svgplot.plotting.ReferenceLine;
 import tud.tangram.svgplot.plotting.ReferenceLine.Direction;
+import tud.tangram.svgplot.utils.Constants;
 import tud.tangram.svgplot.xml.SvgDocument;
 
 public class SvgReferenceLinesPainter extends SvgPainter {

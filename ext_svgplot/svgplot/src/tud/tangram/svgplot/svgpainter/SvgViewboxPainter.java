@@ -8,7 +8,7 @@ import org.w3c.dom.Node;
 import tud.tangram.svgplot.coordinatesystem.CoordinateSystem;
 import tud.tangram.svgplot.data.Point;
 import tud.tangram.svgplot.options.OutputDevice;
-import tud.tangram.svgplot.svgcreator.SvgTools;
+import tud.tangram.svgplot.utils.SvgTools;
 import tud.tangram.svgplot.xml.SvgDocument;
 
 public class SvgViewboxPainter extends SvgPainter {

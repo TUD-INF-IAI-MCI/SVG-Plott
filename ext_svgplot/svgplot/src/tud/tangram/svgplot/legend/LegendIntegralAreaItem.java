@@ -7,7 +7,7 @@ import tud.tangram.svgplot.coordinatesystem.CoordinateSystem;
 import tud.tangram.svgplot.data.Point;
 import tud.tangram.svgplot.plotting.IntegralPlot;
 import tud.tangram.svgplot.plotting.IntegralPlotSettings;
-import tud.tangram.svgplot.svgcreator.SvgTools;
+import tud.tangram.svgplot.utils.SvgTools;
 import tud.tangram.svgplot.xml.SvgDocument;
 
 public class LegendIntegralAreaItem extends LegendItem {

@@ -1,8 +1,7 @@
-package tud.tangram.svgplot.svgcreator;
+package tud.tangram.svgplot.utils;
 
 import java.text.MessageFormat;
 
-import tud.tangram.svgplot.Constants;
 import tud.tangram.svgplot.coordinatesystem.CoordinateSystem;
 import tud.tangram.svgplot.data.Point;
 

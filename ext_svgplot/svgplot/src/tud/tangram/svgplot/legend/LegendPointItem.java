@@ -5,7 +5,7 @@ import org.w3c.dom.Element;
 import tud.tangram.svgplot.data.Point;
 import tud.tangram.svgplot.data.PointListList.PointList;
 import tud.tangram.svgplot.plotting.PointPlot;
-import tud.tangram.svgplot.svgcreator.SvgTools;
+import tud.tangram.svgplot.utils.SvgTools;
 import tud.tangram.svgplot.xml.SvgDocument;
 
 public class LegendPointItem extends LegendItem {

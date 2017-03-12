@@ -2,9 +2,9 @@ package tud.tangram.svgplot.data;
 
 import org.w3c.dom.Element;
 
-import tud.tangram.svgplot.svgcreator.SvgTools;
-
 import com.beust.jcommander.IStringConverter;
+
+import tud.tangram.svgplot.utils.SvgTools;
 
 /**
  * 

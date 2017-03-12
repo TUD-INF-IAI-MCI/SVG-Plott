@@ -1,4 +1,4 @@
-package tud.tangram.svgplot;
+package tud.tangram.svgplot.utils;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;

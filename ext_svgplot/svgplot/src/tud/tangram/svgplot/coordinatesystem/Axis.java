@@ -1,7 +1,8 @@
 package tud.tangram.svgplot.coordinatesystem;
 
 import java.text.DecimalFormat;
-import tud.tangram.svgplot.Constants;
+
+import tud.tangram.svgplot.utils.Constants;
 
 /**
  * 

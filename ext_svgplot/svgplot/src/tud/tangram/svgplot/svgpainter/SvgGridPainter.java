@@ -5,7 +5,6 @@ import java.util.HashMap;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
-import tud.tangram.svgplot.Constants;
 import tud.tangram.svgplot.coordinatesystem.CoordinateSystem;
 import tud.tangram.svgplot.coordinatesystem.Range;
 import tud.tangram.svgplot.data.Point;
@@ -16,7 +15,8 @@ import tud.tangram.svgplot.plotting.Overlay;
 import tud.tangram.svgplot.plotting.OverlayList;
 import tud.tangram.svgplot.styles.AxisStyle;
 import tud.tangram.svgplot.styles.GridStyle;
-import tud.tangram.svgplot.svgcreator.SvgTools;
+import tud.tangram.svgplot.utils.Constants;
+import tud.tangram.svgplot.utils.SvgTools;
 import tud.tangram.svgplot.xml.SvgDocument;
 
 /**
