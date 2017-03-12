@@ -1,6 +1,5 @@
 package tud.tangram.svgplot.svgpainter;
 
-import java.sql.PreparedStatement;
 import java.util.HashMap;
 
 import org.w3c.dom.Element;
@@ -88,7 +87,7 @@ public abstract class SvgPainter {
 	 * and not {@link #prepareLegendRenderer(LegendRenderer, OutputDevice)},
 	 * calling the parent function.
 	 * 
-	 * @param legend
+	 * @param renderer
 	 * @param device
 	 * @param priority
 	 */

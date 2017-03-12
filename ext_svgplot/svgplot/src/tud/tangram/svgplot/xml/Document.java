@@ -2,7 +2,6 @@ package tud.tangram.svgplot.xml;
 
 import java.io.OutputStream;
 
-import javax.swing.text.AsyncBoxView.ChildLocator;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;

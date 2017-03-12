@@ -105,8 +105,6 @@ public class SvgTools {
 	 * @param point
 	 *            The point that should be transformed into a textual
 	 *            representation
-	 * @param pi
-	 *            whether to use a pi based axis
 	 * @return formated string for the point with '/' as delimiter
 	 */
 	public static String formatForSpeech(CoordinateSystem cs, Point point) {

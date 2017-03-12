@@ -11,16 +11,13 @@ import tud.tangram.svgplot.data.PointListList.PointList;
 import tud.tangram.svgplot.options.SvgGraphOptions;
 import tud.tangram.svgplot.plotting.Function;
 import tud.tangram.svgplot.plotting.Gnuplot;
-import tud.tangram.svgplot.plotting.IntegralPlot;
 import tud.tangram.svgplot.plotting.OverlayList;
 import tud.tangram.svgplot.plotting.PlotList;
-import tud.tangram.svgplot.plotting.PointPlot;
 import tud.tangram.svgplot.plotting.ReferenceLine;
 import tud.tangram.svgplot.plotting.ReferenceLine.Direction;
 import tud.tangram.svgplot.svgpainter.SvgPlotPainter;
 import tud.tangram.svgplot.svgpainter.SvgPointsPainter;
 import tud.tangram.svgplot.svgpainter.SvgReferenceLinesPainter;
-import tud.tangram.svgplot.utils.Constants;
 import tud.tangram.svgplot.utils.SvgTools;
 
 public class SvgGraphCreator extends SvgGridCreator {

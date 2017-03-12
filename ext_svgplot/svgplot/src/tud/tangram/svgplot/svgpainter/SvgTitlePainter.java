@@ -22,7 +22,6 @@ public class SvgTitlePainter extends SvgPainter {
 	private String legendTitle;
 	private int[] diagramContentMargin;
 	private Point diagramTitleLowerEnd;
-	private Point legendTitleLowerEnd;
 
 	@Override
 	protected String getPainterName() {
@@ -110,16 +109,6 @@ public class SvgTitlePainter extends SvgPainter {
 	 */
 	public Point getDiagramTitleLowerEnd() {
 		return diagramTitleLowerEnd;
-	}
-
-	/**
-	 * Get the lower end of the legend title. Call after
-	 * {@link #prepareLegendRenderer(SvgDocument, OutputDevice) paintToSvgLegend}.
-	 * 
-	 * @return
-	 */
-	public Point getLegendTitleLowerEnd() {
-		return legendTitleLowerEnd;
 	}
 
 	/**
