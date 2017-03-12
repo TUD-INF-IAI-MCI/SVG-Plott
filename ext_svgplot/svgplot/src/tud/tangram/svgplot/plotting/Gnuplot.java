@@ -10,8 +10,8 @@ import java.util.Locale;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 
-import tud.tangram.svgplot.coordinatesystem.Point;
 import tud.tangram.svgplot.coordinatesystem.Range;
+import tud.tangram.svgplot.data.Point;
 
 /**
  * 
@@ -71,11 +71,11 @@ public class Gnuplot {
 		boolean nextNewList = true;
 		
 		/*
-		 * When table mode is enabled, �plot� and �splot� commands print out a multicolumn 
+		 * When table mode is enabled, "plot" and "splot" commands print out a multicolumn 
 		 * ASCII table of X Y {Z} R values rather than creating an actual plot on the current 
 		 * terminal. The character R takes on one of three values: "i" if the point is in the 
 		 * active range, "o" if it is out-of-range, or "u" if it is undefined. The data 
-		 * format is determined by the format of the axis labels (see �set format�), and the 
+		 * format is determined by the format of the axis labels (see "set format"), and the 
 		 * columns are separated by single spaces.
 		 */
 		

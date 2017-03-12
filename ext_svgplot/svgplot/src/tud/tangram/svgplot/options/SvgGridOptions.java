@@ -7,6 +7,9 @@ public class SvgGridOptions extends SvgOptions {
 	public Range yRange;
 	public boolean pi;
 	
+	public String xLines;
+	public String yLines;
+	
 	public SvgGridOptions(SvgPlotOptions options) {
 		super(options);
 		createFromSvgPlotOptions(options);
@@ -22,6 +25,9 @@ public class SvgGridOptions extends SvgOptions {
 		this.yRange.to = Math.max(0, this.yRange.to);
 		
 		this.pi = options.isPi();
+		
+		this.xLines = options.getxLines();
+		this.yLines = options.getyLines();
 	}
 	
 }

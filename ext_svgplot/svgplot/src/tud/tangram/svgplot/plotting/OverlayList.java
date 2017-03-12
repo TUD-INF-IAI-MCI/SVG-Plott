@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import tud.tangram.svgplot.coordinatesystem.CoordinateSystem;
-import tud.tangram.svgplot.coordinatesystem.Point;
+import tud.tangram.svgplot.data.Point;
 
 public class OverlayList extends ArrayList<Overlay> {
 

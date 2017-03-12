@@ -9,19 +9,21 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import tud.tangram.svgplot.coordinatesystem.Point;
+import tud.tangram.svgplot.data.Point;
 import tud.tangram.svgplot.svgcreator.SvgTools;
+
 /**
  * 
- * @author Gregor Harlan
- * Idea and supervising by Jens Bornschein jens.bornschein@tu-dresden.de
- * Copyright by Technische Universität Dresden / MCI 2014
+ * @author Gregor Harlan Idea and supervising by Jens Bornschein
+ *         jens.bornschein@tu-dresden.de Copyright by Technische Universität
+ *         Dresden / MCI 2014
  *
  */
 public class SvgDocument extends Document {
 
 	final public Node defs;
 	final protected double textEnd;
+	final protected Node titleNode;
 
 	final protected static int LINE_HEIGHT = 13;
 
@@ -36,7 +38,7 @@ public class SvgDocument extends Document {
 
 		defs = root.appendChild(doc.createElement("defs"));
 
-		root.appendChild(createTitle(title));
+		titleNode = root.appendChild(createTitle(title));
 
 		textEnd = size.x - marginRight;
 	}
@@ -49,22 +51,49 @@ public class SvgDocument extends Document {
 		return defs.appendChild(child);
 	}
 
+	/**
+	 * Gets or create a child group (g tag) of the given parent with a given id.
+	 * If an element with this id exists and is no group, return null.
+	 * 
+	 * @param parent
+	 *            parent element
+	 * @param id
+	 *            child id
+	 * @return new or existing group, null if the element is found but is no
+	 *         group
+	 */
+	public Element getOrCreateChildGroupById(Element parent, String id) {
+		Element result = getChildElementById(parent, id);
+
+		if (result == null) {
+			result = (Element) parent.appendChild(createGroup(id));
+		}
+
+		if (result.getTagName() != "g") {
+			return null;
+		}
+
+		return result;
+	}
+
 	public Node appendCss(String css) {
 		NodeList styleElements = doc.getElementsByTagName("style");
-		
+
 		// TODO make it less messy
 		String indent = "            ";
 		css = "\n" + indent + css.replace("\n", "\n" + indent) + "\n        ";
-		
-		if(styleElements.getLength() == 0) {		
+
+		if (styleElements.getLength() == 0) {
 			Element style = (Element) defs.appendChild(doc.createElement("style"));
 			style.setAttribute("type", "text/css");
 			style.appendChild(doc.createCDATASection(css));
 			return style;
-		}
-		else {
+		} else {
 			Element style = (Element) styleElements.item(0);
 			CDATASection styleData = (CDATASection) style.getFirstChild();
+			// Do not add css sections twice
+			if (styleData.getData().contains(css))
+				return style;
 			String completeCss = styleData.getData() + css;
 			styleData.setData(completeCss);
 			return style;
@@ -95,7 +124,7 @@ public class SvgDocument extends Document {
 		circle.setAttribute("r", SvgTools.format2svg(radius));
 		return circle;
 	}
-	
+
 	public Element createRectangle(Point start, double width, double height) {
 		Element rect = createElement("rect");
 		rect.setAttribute("x", start.x());
@@ -104,7 +133,7 @@ public class SvgDocument extends Document {
 		rect.setAttribute("height", SvgTools.format2svg(height));
 		return rect;
 	}
-	
+
 	public Element createRectangle(Point start, String width, String height) {
 		Element rect = createElement("rect");
 		rect.setAttribute("x", start.x());
@@ -113,10 +142,37 @@ public class SvgDocument extends Document {
 		rect.setAttribute("height", height);
 		return rect;
 	}
-	
 
-	public Element createTitle(String title) {
-		return createTextElement("title", title);
+	/**
+	 * Creates the SVG title {@link Element}
+	 * 
+	 * @param titleText
+	 *            title text
+	 * @return the title {@link Element}
+	 */
+	public Element createTitle(String titleText) {
+		return createTextElement("title", titleText);
+	}
+
+	/**
+	 * Creates the title text {@link Element}.
+	 * @param titleText the text for the title
+	 * @return the lower end of the title {@link Element}
+	 */
+	public Point createTitleText(String titleText, Point startingPosition) {
+		Point position = startingPosition.clone();
+		Element title = (Element) insertAfter(createText(position, titleText), titleNode);
+		title.setAttribute("id", "title");
+		return position;
+	}
+	
+	/**
+	 * Creates the background SVG object and adds it to the document.
+	 */
+	public void paintBackground() {
+		Element bg = createRectangle(new Point(0, 0), "100%", "100%");
+		bg.setAttribute("id", "background");
+		appendChild(bg);
 	}
 
 	public Element createDesc(String desc) {
@@ -151,7 +207,8 @@ public class SvgDocument extends Document {
 				int charCount = 0;
 				int lastSpace = 0;
 				while (charCount < charLimit) {
-					if (chars[charCount + start] == ' ' || chars[charCount + start] == '-' || chars[charCount + start] == '+') {
+					if (chars[charCount + start] == ' ' || chars[charCount + start] == '-'
+							|| chars[charCount + start] == '+') {
 						lastSpace = charCount;
 					}
 					charCount++;
@@ -167,7 +224,7 @@ public class SvgDocument extends Document {
 		}
 		return text;
 	}
-	
+
 	/**
 	 * Creates a textual label and place it in the svg document previous the
 	 * viewbox.
@@ -196,6 +253,7 @@ public class SvgDocument extends Document {
 	@Override
 	protected void setTransformerProperties(Transformer transformer) {
 		transformer.setOutputProperty(OutputKeys.DOCTYPE_PUBLIC, "-//W3C//DTD SVG 1.0//EN");
-		transformer.setOutputProperty(OutputKeys.DOCTYPE_SYSTEM, "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd");
+		transformer.setOutputProperty(OutputKeys.DOCTYPE_SYSTEM,
+				"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd");
 	}
 }

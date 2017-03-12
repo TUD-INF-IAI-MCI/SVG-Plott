@@ -7,8 +7,10 @@ import org.w3c.dom.Node;
 
 import tud.tangram.svgplot.Constants;
 import tud.tangram.svgplot.coordinatesystem.CoordinateSystem;
-import tud.tangram.svgplot.coordinatesystem.Point;
 import tud.tangram.svgplot.coordinatesystem.Range;
+import tud.tangram.svgplot.data.Point;
+import tud.tangram.svgplot.legend.LegendRenderer;
+import tud.tangram.svgplot.legend.LegendTextItem;
 import tud.tangram.svgplot.options.OutputDevice;
 import tud.tangram.svgplot.plotting.Overlay;
 import tud.tangram.svgplot.plotting.OverlayList;
@@ -71,13 +73,18 @@ public class SvgGridPainter extends SvgPainter {
 	@Override
 	protected HashMap<OutputDevice, String> getDeviceCss() {
 		HashMap<OutputDevice, String> deviceCss = new HashMap<>();
-		
+
 		StringBuilder defaultOptions = new StringBuilder();
 		defaultOptions.append("#grid { stroke: #777777; }").append(System.lineSeparator());
 		defaultOptions.append("#axes, #reference-lines, .box { stroke: #111111; fill: transparent; }")
 				.append(System.lineSeparator());
 		deviceCss.put(OutputDevice.Default, defaultOptions.toString());
-		
+
+		StringBuilder screenHighContrastOptions = new StringBuilder();
+		screenHighContrastOptions.append("#axes, #reference-lines, .box { stroke: white; }")
+				.append(System.lineSeparator());
+		deviceCss.put(OutputDevice.ScreenHighContrast, screenHighContrastOptions.toString());
+
 		return deviceCss;
 	}
 
@@ -235,6 +242,21 @@ public class SvgGridPainter extends SvgPainter {
 		axes.insertBefore(axesClone, axes.getFirstChild());
 
 		return axes;
+	}
+
+	@Override
+	public void prepareLegendRenderer(LegendRenderer renderer, OutputDevice device, int priority) {
+		super.prepareLegendRenderer(renderer, device, priority);
+
+		renderer.add(new LegendTextItem(priority,
+				SvgTools.translate("legend.xrange", SvgTools.formatX(cs, cs.xAxis.range.from),
+						SvgTools.formatX(cs, cs.xAxis.range.to), SvgTools.formatName(cs.xAxis.range.name)),
+				SvgTools.translate("legend.xtic", SvgTools.formatX(cs, cs.xAxis.ticInterval))));
+
+		renderer.add(new LegendTextItem(priority,
+				SvgTools.translate("legend.yrange", SvgTools.formatY(cs, cs.yAxis.range.from),
+						SvgTools.formatY(cs, cs.yAxis.range.to), SvgTools.formatName(cs.yAxis.range.name)),
+				SvgTools.translate("legend.ytic", SvgTools.formatY(cs, cs.yAxis.ticInterval))));
 	}
 
 }

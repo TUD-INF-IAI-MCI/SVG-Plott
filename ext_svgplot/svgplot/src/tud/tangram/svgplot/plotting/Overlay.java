@@ -1,6 +1,6 @@
 package tud.tangram.svgplot.plotting;
 
-import tud.tangram.svgplot.coordinatesystem.Point;
+import tud.tangram.svgplot.data.Point;
 
 public class Overlay extends Point {
 	final public static double RADIUS = 2.9;

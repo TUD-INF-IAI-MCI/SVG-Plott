@@ -1,4 +1,4 @@
-package tud.tangram.svgplot.coordinatesystem;
+package tud.tangram.svgplot.data;
 
 import java.util.ArrayList;
 import java.util.List;

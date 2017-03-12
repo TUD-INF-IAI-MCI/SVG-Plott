@@ -2,6 +2,7 @@ package tud.tangram.svgplot.xml;
 
 import java.io.OutputStream;
 
+import javax.swing.text.AsyncBoxView.ChildLocator;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
@@ -91,6 +92,22 @@ public class Document {
 
 	public Node appendChild(Node child) {
 		return root.appendChild(child);
+	}
+	
+	/**
+	 * Inserts newChild after refChild, if refChild is a child of the document. Else there might be unexpected behaviour.
+	 * @param newChild
+	 * @param refChild
+	 * @return the child
+	 */
+	public Node insertAfter(Node newChild, Node refChild) {
+		Node nextSibling = refChild.getNextSibling();
+		if(nextSibling == null) {
+			return refChild.getParentNode().appendChild(newChild);
+		}
+		else {
+			return root.insertBefore(newChild, nextSibling);
+		}
 	}
 
 	public void writeTo(OutputStream outputStream) throws TransformerException {

@@ -8,7 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import tud.tangram.svgplot.coordinatesystem.Point;
+import tud.tangram.svgplot.data.Point;
 /**
  * 
  * @author Gregor Harlan

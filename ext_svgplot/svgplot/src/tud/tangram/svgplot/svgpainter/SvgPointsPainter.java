@@ -6,9 +6,11 @@ import org.w3c.dom.Element;
 
 import tud.tangram.svgplot.Constants;
 import tud.tangram.svgplot.coordinatesystem.CoordinateSystem;
-import tud.tangram.svgplot.coordinatesystem.Point;
-import tud.tangram.svgplot.coordinatesystem.PointListList;
-import tud.tangram.svgplot.coordinatesystem.PointListList.PointList;
+import tud.tangram.svgplot.data.Point;
+import tud.tangram.svgplot.data.PointListList;
+import tud.tangram.svgplot.data.PointListList.PointList;
+import tud.tangram.svgplot.legend.LegendPointItem;
+import tud.tangram.svgplot.legend.LegendRenderer;
 import tud.tangram.svgplot.options.OutputDevice;
 import tud.tangram.svgplot.plotting.Overlay;
 import tud.tangram.svgplot.plotting.OverlayList;
@@ -17,8 +19,8 @@ import tud.tangram.svgplot.svgcreator.SvgTools;
 import tud.tangram.svgplot.xml.SvgDocument;
 
 /**
- * Paint points to the SVG document and document them in the legend (TODO).
- * TODO add more styles
+ * Paint points to the SVG document and document them in the legend (TODO). TODO
+ * add more styles
  */
 public class SvgPointsPainter extends SvgPainter {
 
@@ -39,7 +41,7 @@ public class SvgPointsPainter extends SvgPainter {
 	@Override
 	protected HashMap<OutputDevice, String> getDeviceCss() {
 		HashMap<OutputDevice, String> deviceCss = new HashMap<>();
-		
+
 		StringBuilder defaultOptions = new StringBuilder();
 
 		defaultOptions.append(".poi_symbol { stroke: black; stroke-dasharray: none; stroke-width:"
@@ -50,6 +52,14 @@ public class SvgPointsPainter extends SvgPainter {
 				.append(System.lineSeparator());
 
 		deviceCss.put(OutputDevice.Default, defaultOptions.toString());
+
+		StringBuilder screenHighContrastOptions = new StringBuilder();
+		screenHighContrastOptions
+				.append(".poi_symbol { stroke: white; stroke-dasharray: none; stroke-width:0.75;  fill: white; }")
+				.append(System.lineSeparator());
+		screenHighContrastOptions.append(".poi_symbol_bg { stroke: black; stroke-dasharray: none; stroke-width:3.0;  fill: transparent; }").append(System.lineSeparator());
+		
+		deviceCss.put(OutputDevice.ScreenHighContrast, screenHighContrastOptions.toString());
 		
 		return deviceCss;
 	}
@@ -57,9 +67,9 @@ public class SvgPointsPainter extends SvgPainter {
 	@Override
 	public void paintToSvgDocument(SvgDocument doc, Element viewbox, OutputDevice device) {
 		super.paintToSvgDocument(doc, viewbox, device);
-		
+
 		overlays = new OverlayList(cs);
-		
+
 		// TODO: add scatter plot
 		// points or scatter plots
 		if (points != null && points.size() > 0) {
@@ -102,9 +112,15 @@ public class SvgPointsPainter extends SvgPainter {
 	}
 
 	@Override
-	public void paintToSvgLegend(SvgDocument legend, OutputDevice device) {
-		// TODO Auto-generated method stub
-		super.paintToSvgLegend(legend, device);
+	public void prepareLegendRenderer(LegendRenderer renderer, OutputDevice device, int priority) {
+		super.prepareLegendRenderer(renderer, device, priority);
+		int pointSymbolIndex = 0;
+		for (PointList pl : points) {
+			if (pl != null && pl.size() > 0) {
+				renderer.offer(new LegendPointItem(pl, pointSymbolIndex, priority));
+			}
+			pointSymbolIndex++;
+		}
 	}
 
 }

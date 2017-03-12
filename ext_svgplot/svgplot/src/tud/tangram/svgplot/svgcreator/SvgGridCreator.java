@@ -1,19 +1,21 @@
 package tud.tangram.svgplot.svgcreator;
 
+import java.util.ArrayList;
+
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 
 import tud.tangram.svgplot.coordinatesystem.CoordinateSystem;
-import tud.tangram.svgplot.coordinatesystem.Point;
 import tud.tangram.svgplot.options.SvgGridOptions;
 import tud.tangram.svgplot.plotting.OverlayList;
+import tud.tangram.svgplot.plotting.ReferenceLine;
+import tud.tangram.svgplot.plotting.ReferenceLine.Direction;
 import tud.tangram.svgplot.svgpainter.SvgGridPainter;
 import tud.tangram.svgplot.svgpainter.SvgOverlayPainter;
+import tud.tangram.svgplot.svgpainter.SvgReferenceLinesPainter;
 import tud.tangram.svgplot.svgpainter.SvgViewboxPainter;
 
 public class SvgGridCreator extends SvgCreator {
 	protected final SvgGridOptions options;
-	//protected SvgGridPainter svgGridPainter;
 	
 	protected Element viewbox;
 	
@@ -33,6 +35,7 @@ public class SvgGridCreator extends SvgCreator {
 	@Override
 	protected void beforeCreate() {
 		super.beforeCreate();
+		
 		cs = new CoordinateSystem(options.xRange, options.yRange, options.size, diagramContentMargin, options.pi);
 		overlays = new OverlayList(cs);
 		
@@ -48,9 +51,17 @@ public class SvgGridCreator extends SvgCreator {
 		SvgGridPainter svgGridPainter = new SvgGridPainter(cs, options.xRange, options.yRange, null, null, null);
 		
 		svgGridPainter.paintToSvgDocument(doc, viewbox, options.outputDevice);
-		svgGridPainter.paintToSvgLegend(legend, options.outputDevice);
+		svgGridPainter.prepareLegendRenderer(legendRenderer, options.outputDevice, Integer.MAX_VALUE);
 		
 		svgGridPainter.addOverlaysToList(overlays);
+		
+		if(options.xLines != null || options.yLines != null) {
+			ArrayList<ReferenceLine> lines = ReferenceLine.fromString(Direction.X_LINE, options.xLines);
+			lines.addAll(ReferenceLine.fromString(Direction.Y_LINE, options.yLines));
+			
+			SvgReferenceLinesPainter svgReferenceLinesPainter = new SvgReferenceLinesPainter(cs, lines);
+			svgReferenceLinesPainter.paintToSvgDocument(doc, viewbox, options.outputDevice);
+		}
 	}
 	
 	@Override

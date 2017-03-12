@@ -1,4 +1,7 @@
 package tud.tangram.svgplot.coordinatesystem;
+
+import tud.tangram.svgplot.data.Point;
+
 /**
  * 
  * @author Gregor Harlan, Jens Bornschein

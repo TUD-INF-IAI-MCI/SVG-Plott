@@ -5,7 +5,7 @@ import java.text.DecimalFormatSymbols;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-import tud.tangram.svgplot.options.OutputDevice;
+import tud.tangram.svgplot.data.Point;
 
 public class Constants {
 	final public static Locale locale = new Locale("de");
@@ -29,4 +29,6 @@ public class Constants {
 		decimalFormat.setDecimalFormatSymbols(dfs);
 		return decimalFormat;
 	}
+	
+	final public static Point titlePosition = new Point(Constants.margin[3], Constants.margin[0] + 10);
 }

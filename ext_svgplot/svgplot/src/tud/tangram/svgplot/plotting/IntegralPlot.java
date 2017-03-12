@@ -9,7 +9,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 import tud.tangram.svgplot.coordinatesystem.CoordinateSystem;
-import tud.tangram.svgplot.coordinatesystem.Point;
+import tud.tangram.svgplot.data.Point;
 import tud.tangram.svgplot.svgcreator.SvgTools;
 import tud.tangram.svgplot.xml.SvgDocument;
 
@@ -23,10 +23,10 @@ public class IntegralPlot {
 
 	public void handlePlotIntergral(Plot plot, SvgDocument doc, Element parent,
 			double from, double to) {
-		handlePlotIntergral(plot, doc, parent, from, to, null);
+		handlePlotIntegral(plot, doc, parent, from, to, null);
 	}
 
-	public void handlePlotIntergral(Plot plot, SvgDocument doc, Element parent,
+	public void handlePlotIntegral(Plot plot, SvgDocument doc, Element parent,
 			double from, double to, Plot intersectionPlot) {
 
 		Element integralContainer = doc.createGroup("integrals");

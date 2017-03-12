@@ -2,7 +2,7 @@ package tud.tangram.svgplot.options;
 
 import java.io.File;
 
-import tud.tangram.svgplot.coordinatesystem.Point;
+import tud.tangram.svgplot.data.Point;
 import tud.tangram.svgplot.svgcreator.SvgTools;
 
 public abstract class SvgOptions {

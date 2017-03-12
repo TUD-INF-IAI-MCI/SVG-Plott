@@ -1,12 +1,10 @@
 package tud.tangram.svgplot.svgcreator;
 
 import java.text.MessageFormat;
-import java.util.EnumSet;
 
 import tud.tangram.svgplot.Constants;
 import tud.tangram.svgplot.coordinatesystem.CoordinateSystem;
-import tud.tangram.svgplot.coordinatesystem.Point;
-import tud.tangram.svgplot.options.OutputDevice;
+import tud.tangram.svgplot.data.Point;
 
 public class SvgTools {
 	/**
@@ -136,5 +134,27 @@ public class SvgTools {
 		String p = formatX(cs, point.x) + " | " + formatY(cs, point.y);
 		cap = cap.trim();
 		return (cap != null && !cap.isEmpty()) ? cap + "(" + p + ")" : p;
+	}
+	
+	/**
+	 * Try to translate the function index into a continuous literal starting
+	 * with the char 'f'. If the given index is not valid it returns the name as
+	 * a combination of 'f' + the given number.
+	 * 
+	 * @param f
+	 *            | the index if the function
+	 * @return a literal representation to the given function index e.g. 'f',
+	 *         'g', 'h' or 'f1000'.
+	 */
+	public static String getFunctionName(int f) {
+		if (f < 0 || f > (Constants.fnList.length - 1))
+			return "f" + String.valueOf(f);
+		return Constants.fnList[f];
+	}
+
+	public static String getPointName(int p) {
+		if (p < 0 || p > (Constants.pnList.length - 1))
+			return "P" + String.valueOf(p);
+		return Constants.pnList[p];
 	}
 }

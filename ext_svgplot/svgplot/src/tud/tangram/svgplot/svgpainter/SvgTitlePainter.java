@@ -5,7 +5,9 @@ import java.util.HashMap;
 import org.w3c.dom.Element;
 
 import tud.tangram.svgplot.Constants;
-import tud.tangram.svgplot.coordinatesystem.Point;
+import tud.tangram.svgplot.data.Point;
+import tud.tangram.svgplot.legend.LegendRenderer;
+import tud.tangram.svgplot.legend.LegendTitleItem;
 import tud.tangram.svgplot.options.OutputDevice;
 import tud.tangram.svgplot.xml.SvgDocument;
 
@@ -15,15 +17,13 @@ import tud.tangram.svgplot.xml.SvgDocument;
  * files.
  */
 public class SvgTitlePainter extends SvgPainter {
-	
+
 	private String title;
 	private String legendTitle;
 	private int[] diagramContentMargin;
 	private Point diagramTitleLowerEnd;
 	private Point legendTitleLowerEnd;
 
-	
-	
 	@Override
 	protected String getPainterName() {
 		return "Title Painter";
@@ -45,7 +45,7 @@ public class SvgTitlePainter extends SvgPainter {
 	@Override
 	protected HashMap<OutputDevice, String> getDeviceCss() {
 		HashMap<OutputDevice, String> deviceCss = new HashMap<>();
-		
+
 		StringBuilder defaultOptions = new StringBuilder();
 
 		// Set the background style
@@ -63,8 +63,21 @@ public class SvgTitlePainter extends SvgPainter {
 				.append(System.lineSeparator());
 		defaultOptions.append("}").append(System.lineSeparator());
 
+		StringBuilder screenHighContrastCss = new StringBuilder();
+		screenHighContrastCss.append("#background { fill: black; }").append(System.lineSeparator());
+		screenHighContrastCss.append("svg { fill: none; stroke: #000000; stroke-width: 0.5; }")
+				.append(System.lineSeparator());
+		screenHighContrastCss.append("text { font-family: sans-serif; font-size: 36pt; fill: white; stroke: none; }")
+				.append(System.lineSeparator());
+		screenHighContrastCss.append("@media print{").append(System.lineSeparator());
+		screenHighContrastCss
+				.append("\ttext { font-family: 'sans-serif'; font-size: 36pt; fill: white; stroke: none; }")
+				.append(System.lineSeparator());
+		screenHighContrastCss.append("}").append(System.lineSeparator());
+
 		deviceCss.put(OutputDevice.Default, defaultOptions.toString());
-		
+		deviceCss.put(OutputDevice.ScreenHighContrast, screenHighContrastCss.toString());
+
 		return deviceCss;
 	}
 
@@ -72,8 +85,9 @@ public class SvgTitlePainter extends SvgPainter {
 	public void paintToSvgDocument(SvgDocument doc, Element viewbox, OutputDevice device) {
 		super.paintToSvgDocument(doc, viewbox, device);
 
-		paintBackground(doc);
-		diagramTitleLowerEnd = createTitle(doc, title);
+		doc.paintBackground();
+		
+		diagramTitleLowerEnd = doc.createTitleText(title, Constants.titlePosition);
 
 		// Set the new margins according to the title
 		diagramContentMargin[0] = (int) diagramTitleLowerEnd.y + 17;
@@ -82,37 +96,9 @@ public class SvgTitlePainter extends SvgPainter {
 	}
 
 	@Override
-	public void paintToSvgLegend(SvgDocument legend, OutputDevice device) {
-		super.paintToSvgLegend(legend, device);
-
-		paintBackground(legend);
-		legendTitleLowerEnd = createTitle(legend, legendTitle);
-	}
-
-	/**
-	 * Adds the textual readable title to the svg document at a predefined
-	 * position in the left top corner of the sheet.
-	 * 
-	 * @param doc
-	 *            | the svg document where the header text should be insert
-	 * @param text
-	 *            | the textual value
-	 * @return the position of the added title node
-	 */
-	private Point createTitle(SvgDocument doc, String text) {
-		Point pos = new Point(Constants.margin[3], Constants.margin[0] + 10);
-		Element title = (Element) doc.appendChild(doc.createText(pos, text));
-		title.setAttribute("id", "title");
-		return pos;
-	}
-
-	/**
-	 * Creates the background SVG object and adds it to the document.
-	 */
-	private void paintBackground(SvgDocument doc) {
-		Element bg = doc.createRectangle(new Point(0, 0), "100%", "100%");
-		bg.setAttribute("id", "background");
-		doc.appendChild(bg);
+	public void prepareLegendRenderer(LegendRenderer renderer, OutputDevice device, int priority) {
+		super.prepareLegendRenderer(renderer, device, priority);
+		renderer.offer(new LegendTitleItem(legendTitle));
 	}
 
 	/**
@@ -128,7 +114,7 @@ public class SvgTitlePainter extends SvgPainter {
 
 	/**
 	 * Get the lower end of the legend title. Call after
-	 * {@link #paintToSvgLegend(SvgDocument, OutputDevice) paintToSvgLegend}.
+	 * {@link #prepareLegendRenderer(SvgDocument, OutputDevice) paintToSvgLegend}.
 	 * 
 	 * @return
 	 */

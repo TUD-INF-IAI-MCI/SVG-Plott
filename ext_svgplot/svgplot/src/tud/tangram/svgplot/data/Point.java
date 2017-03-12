@@ -1,4 +1,4 @@
-package tud.tangram.svgplot.coordinatesystem;
+package tud.tangram.svgplot.data;
 
 import org.w3c.dom.Element;
 

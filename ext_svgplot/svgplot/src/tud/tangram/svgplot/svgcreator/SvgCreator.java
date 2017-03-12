@@ -10,10 +10,12 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
 import tud.tangram.svgplot.Constants;
-import tud.tangram.svgplot.coordinatesystem.Point;
+import tud.tangram.svgplot.data.Point;
+import tud.tangram.svgplot.description.Description;
+import tud.tangram.svgplot.legend.LegendItem;
+import tud.tangram.svgplot.legend.LegendRenderer;
 import tud.tangram.svgplot.options.SvgOptions;
 import tud.tangram.svgplot.svgpainter.SvgTitlePainter;
-import tud.tangram.svgplot.xml.HtmlDocument;
 import tud.tangram.svgplot.xml.SvgDocument;
 
 /**
@@ -24,7 +26,6 @@ public abstract class SvgCreator {
 	protected final SvgOptions options;
 
 	protected Point diagramTitleLowerEnd;
-	protected Point legendTitleLowerEnd;
 
 	/** Margin for the content, which is below the title */
 	protected int[] diagramContentMargin;
@@ -52,16 +53,30 @@ public abstract class SvgCreator {
 	public SvgDocument getLegend() {
 		return legend;
 	}
+	
+	protected LegendRenderer legendRenderer;
+	
+	public LegendRenderer getLegendRenderer() {
+		return legendRenderer;
+	}
+	
+	/**
+	 * Add an item to the legend.
+	 * @param item
+	 */
+	public void addLegendItem(LegendItem item) {
+		legendRenderer.offer(item);
+	}
 
 	/** description of the diagram in html format */
-	protected HtmlDocument desc;
+	protected Description desc;
 
 	/**
 	 * description of the diagram in html format
 	 * 
 	 * @return
 	 */
-	public HtmlDocument getDesc() {
+	public Description getDesc() {
 		return desc;
 	}
 
@@ -70,7 +85,7 @@ public abstract class SvgCreator {
 	 * 
 	 * @param desc
 	 */
-	public void setDesc(HtmlDocument desc) {
+	public void setDesc(Description desc) {
 		this.desc = desc;
 	}
 
@@ -94,7 +109,8 @@ public abstract class SvgCreator {
 		doc = new SvgDocument(options.title, options.size, Constants.margin[1]);
 		legend = new SvgDocument(options.legendTitle, options.size, Constants.margin[1]);
 		legend.setAttribute("id", "legend");
-		desc = new HtmlDocument(options.descTitle);
+		legendRenderer = new LegendRenderer();
+		desc = new Description(options.descTitle);
 
 		beforeCreate();
 		create();
@@ -122,11 +138,10 @@ public abstract class SvgCreator {
 		SvgTitlePainter svgTitlePainter = new SvgTitlePainter(options.title, options.legendTitle);
 
 		svgTitlePainter.paintToSvgDocument(doc, null, options.outputDevice);
-		svgTitlePainter.paintToSvgLegend(legend, options.outputDevice);
+		svgTitlePainter.prepareLegendRenderer(legendRenderer, options.outputDevice);
 
 		diagramContentMargin = svgTitlePainter.getDiagramContentMargin();
 		diagramTitleLowerEnd = svgTitlePainter.getDiagramTitleLowerEnd();
-		legendTitleLowerEnd = svgTitlePainter.getLegendTitleLowerEnd();
 	}
 
 	/**
@@ -141,7 +156,7 @@ public abstract class SvgCreator {
 	 * adding accumulated information like overlays.
 	 */
 	protected void afterCreate() {
-
+		legendRenderer.render(legend, options.size, Constants.titlePosition);
 	}
 
 	// TODO readd option to append external css

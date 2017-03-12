@@ -9,9 +9,9 @@ import com.beust.jcommander.IStringConverterFactory;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
 
-import tud.tangram.svgplot.coordinatesystem.Point;
-import tud.tangram.svgplot.coordinatesystem.PointListList;
 import tud.tangram.svgplot.coordinatesystem.Range;
+import tud.tangram.svgplot.data.Point;
+import tud.tangram.svgplot.data.PointListList;
 import tud.tangram.svgplot.plotting.Function;
 import tud.tangram.svgplot.plotting.IntegralPlotSettings;
 
