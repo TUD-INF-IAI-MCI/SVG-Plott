@@ -2,6 +2,7 @@ package tud.tangram.svgplot.utils;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -9,6 +10,7 @@ import tud.tangram.svgplot.data.Point;
 
 public class Constants {
 	final public static Locale locale = new Locale("de");
+	final public static NumberFormat numberFormat = NumberFormat.getInstance(locale);
 	final public static ResourceBundle bundle = ResourceBundle.getBundle("Bundle");
 	final public static double strokeWidth = 0.5;
 	final public static int[] margin = { 20, 10, 20, 10 };

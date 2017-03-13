@@ -7,6 +7,9 @@ import com.beust.jcommander.IStringConverter;
 import tud.tangram.svgplot.utils.SvgTools;
 
 /**
+ * A point in a coordinate system specified by an x and y coordinate. Can also
+ * have a name and an SVG symbol. Provides helper methods, e.g. for calculating
+ * the distance between two points.
  * 
  * @author Gregor Harlan Idea and supervising by Jens Bornschein
  *         jens.bornschein@tu-dresden.de Copyright by Technische Universität
@@ -154,9 +157,10 @@ public class Point implements Comparable<Point> {
 	}
 
 	/**
-	 * Compares with x priority.
-	 * Returns -1 if p2 is null.
-	 * @param p2	|	other point
+	 * Compares with x priority. Returns -1 if p2 is null.
+	 * 
+	 * @param p2
+	 *            | other point
 	 * @return
 	 */
 	@Override
@@ -171,9 +175,10 @@ public class Point implements Comparable<Point> {
 	}
 
 	/**
-	 * Compare the y values of two points.
-	 * Returns -1 if p2 is null.
-	 * @param p2	|	other point
+	 * Compare the y values of two points. Returns -1 if p2 is null.
+	 * 
+	 * @param p2
+	 *            | other point
 	 * @return
 	 */
 	public int compareToY(Point p2) {
@@ -184,9 +189,10 @@ public class Point implements Comparable<Point> {
 	}
 
 	/**
-	 * Compare the x values of two points.
-	 * Returns -1 if p2 is null.
-	 * @param p2	|	other point
+	 * Compare the x values of two points. Returns -1 if p2 is null.
+	 * 
+	 * @param p2
+	 *            | other point
 	 * @return
 	 */
 	public int compareToX(Point p2) {

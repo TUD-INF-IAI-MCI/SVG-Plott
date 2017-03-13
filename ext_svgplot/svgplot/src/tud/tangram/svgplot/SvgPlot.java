@@ -10,7 +10,9 @@ import com.beust.jcommander.IDefaultProvider;
 import com.beust.jcommander.JCommander;
 import tud.tangram.svgplot.options.SvgGraphOptions;
 import tud.tangram.svgplot.options.SvgPlotOptions;
+import tud.tangram.svgplot.options.SvgScatterPlotOptions;
 import tud.tangram.svgplot.svgcreator.SvgGraphCreator;
+import tud.tangram.svgplot.svgcreator.SvgScatterPlotCreator;
 
 /**
  * 
@@ -60,12 +62,12 @@ public class SvgPlot {
 		
 		options.finalizeOptions();
 		
-		SvgGraphOptions graphOptions = new SvgGraphOptions(options);
+		//SvgGraphOptions graphOptions = new SvgGraphOptions(options);
 		
-		SvgGraphCreator creator = new SvgGraphCreator(graphOptions);
+		//SvgGraphCreator creator = new SvgGraphCreator(graphOptions);
 		
-		//SvgGridOptions gridOptions = new SvgGridOptions(options);
-		//SvgGridCreator creator = new SvgGridCreator(gridOptions);
+		SvgScatterPlotOptions scatterPlotOptions = new SvgScatterPlotOptions(options);
+		SvgScatterPlotCreator creator = new SvgScatterPlotCreator(scatterPlotOptions);
 		
 		try {
 			creator.run();

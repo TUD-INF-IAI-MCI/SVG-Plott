@@ -1,6 +1,8 @@
 package tud.tangram.svgplot.options;
 
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +12,7 @@ import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
 
 import tud.tangram.svgplot.coordinatesystem.Range;
+import tud.tangram.svgplot.data.CsvParser;
 import tud.tangram.svgplot.data.Point;
 import tud.tangram.svgplot.data.PointListList;
 import tud.tangram.svgplot.plotting.Function;
@@ -18,9 +21,9 @@ import tud.tangram.svgplot.plotting.IntegralPlotSettings;
 @Parameters(separators = "=", resourceBundle = "Bundle")
 public class SvgPlotOptions {
 
-	@Parameter(names = {"--device", "-d"})
+	@Parameter(names = { "--device", "-d" })
 	private OutputDevice outputDevice = OutputDevice.Default;
-	
+
 	public OutputDevice getOutputDevice() {
 		return outputDevice;
 	}
@@ -124,7 +127,7 @@ public class SvgPlotOptions {
 
 	@Parameter(names = { "--gnuplot", "-g" }, descriptionKey = "param.gnuplot")
 	private String gnuplot = null;
-	
+
 	public String getGnuplot() {
 		return this.gnuplot;
 	}
@@ -154,7 +157,7 @@ public class SvgPlotOptions {
 
 	@Parameter(names = { "--help", "-h", "-?" }, help = true, descriptionKey = "param.help")
 	private boolean help;
-	
+
 	public boolean getHelp() {
 		return help;
 	}
@@ -181,6 +184,28 @@ public class SvgPlotOptions {
 
 	public void setPts(String pts) {
 		this.pts = pts;
+	}
+
+	@Parameter(names = { "--csvpath", "--csv" }, descriptionKey = "param.csvpath")
+	private String csvPath = null;
+
+	public String getCsvPath() {
+		return csvPath;
+	}
+
+	public void setCsvPath(String csvPath) {
+		this.csvPath = csvPath;
+	}
+
+	@Parameter(names = { "--csvorientation", "--csvo" }, descriptionKey = "param.csvorientation")
+	private CsvOrientation csvOrientation = CsvOrientation.HORIZONTAL;
+
+	public CsvOrientation getCsvOrientation() {
+		return csvOrientation;
+	}
+
+	public void setCsvOrientation(CsvOrientation csvOrientation) {
+		this.csvOrientation = csvOrientation;
 	}
 
 	/**
@@ -219,13 +244,35 @@ public class SvgPlotOptions {
 				return PointListList.Converter.class;
 			else if (forType.equals(IntegralPlotSettings.class))
 				return IntegralPlotSettings.Converter.class;
+			else if (forType.equals(CsvOrientation.class))
+				return CsvOrientation.CsvOrientationConverter.class;
 			else
 				return null;
 		}
 	}
-	
+
 	public void finalizeOptions() {
-		this.points = (new PointListList.Converter()).convert(this.pts);
+		if (csvPath != null) {
+			try {
+				CsvParser parser = new CsvParser(new FileReader(csvPath), ',', '"');
+				switch (this.csvOrientation) {
+				case VERTICAL:
+					this.points = parser.parseAsScatterDataVerticalRows();
+					break;
+				case HORIZONTAL:
+					this.points = parser.parseAsScatterDataHorizontalRows();
+					break;
+				default:
+					this.points = parser.parseAsScatterDataHorizontalRows();
+					break;
+				}
+
+			} catch (IOException e) {
+				this.points = (new PointListList.Converter()).convert(this.pts);
+			}
+		} else {
+			this.points = (new PointListList.Converter()).convert(this.pts);
+		}
 		if (this.points != null) {
 			if (this.xRange.from > this.points.minX)
 				this.xRange.from = this.points.minX * 1.05;
