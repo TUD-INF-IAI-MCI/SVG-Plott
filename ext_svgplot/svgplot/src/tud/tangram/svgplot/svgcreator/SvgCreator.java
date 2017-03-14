@@ -92,7 +92,7 @@ public abstract class SvgCreator {
 	public SvgCreator(SvgOptions options) {
 		this.options = options;
 	}
-
+	
 	/**
 	 * Main function. Combine all the elements and create all the output files.
 	 * 

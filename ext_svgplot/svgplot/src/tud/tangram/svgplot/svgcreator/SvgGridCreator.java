@@ -14,7 +14,7 @@ import tud.tangram.svgplot.svgpainter.SvgOverlayPainter;
 import tud.tangram.svgplot.svgpainter.SvgReferenceLinesPainter;
 import tud.tangram.svgplot.svgpainter.SvgViewboxPainter;
 
-public class SvgGridCreator extends SvgCreator {
+public abstract class SvgGridCreator extends SvgCreator {
 	protected final SvgGridOptions options;
 	
 	protected Element viewbox;
@@ -31,7 +31,7 @@ public class SvgGridCreator extends SvgCreator {
 		super(options);
 		this.options = options;
 	}
-		
+	
 	@Override
 	protected void beforeCreate() {
 		super.beforeCreate();

@@ -21,6 +21,17 @@ import tud.tangram.svgplot.plotting.IntegralPlotSettings;
 @Parameters(separators = "=", resourceBundle = "Bundle")
 public class SvgPlotOptions {
 
+	@Parameter(names = { "--diagramtype", "--dt" }, required = true)
+	private DiagramType diagramType;
+	
+	public DiagramType getDiagramType() {
+		return diagramType;
+	}
+
+	public void setDiagramType(DiagramType diagramType) {
+		this.diagramType = diagramType;
+	}
+
 	@Parameter(names = { "--device", "-d" })
 	private OutputDevice outputDevice = OutputDevice.Default;
 
@@ -246,6 +257,8 @@ public class SvgPlotOptions {
 				return IntegralPlotSettings.Converter.class;
 			else if (forType.equals(CsvOrientation.class))
 				return CsvOrientation.CsvOrientationConverter.class;
+			else if (forType.equals(DiagramType.class))
+				return DiagramType.DiagramTypeConverter.class;
 			else
 				return null;
 		}

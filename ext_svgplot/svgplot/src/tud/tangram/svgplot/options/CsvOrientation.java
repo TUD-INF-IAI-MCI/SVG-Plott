@@ -18,8 +18,12 @@ public enum CsvOrientation {
 		return super.toString().toLowerCase();
 	}
 	
-	public class CsvOrientationConverter implements IStringConverter<CsvOrientation> {
+	public static class CsvOrientationConverter implements IStringConverter<CsvOrientation> {
 
+		public CsvOrientationConverter() {
+			super();
+		}
+		
 		@Override
 		public CsvOrientation convert(String value) {
 			CsvOrientation convertedValue = CsvOrientation.fromString(value);

@@ -9,6 +9,7 @@ import org.w3c.dom.Node;
 import tud.tangram.svgplot.data.Point;
 import tud.tangram.svgplot.data.PointListList.PointList;
 import tud.tangram.svgplot.options.SvgGraphOptions;
+import tud.tangram.svgplot.options.SvgPlotOptions;
 import tud.tangram.svgplot.plotting.Function;
 import tud.tangram.svgplot.plotting.Gnuplot;
 import tud.tangram.svgplot.plotting.OverlayList;
@@ -27,6 +28,15 @@ public class SvgGraphCreator extends SvgGridCreator {
 		super(options);
 		this.options = options;
 	}
+	
+
+	public static SvgCreatorInstantiator INSTANTIATOR = new SvgCreatorInstantiator() {
+		public SvgCreator instantiateCreator(SvgPlotOptions rawOptions) {
+			SvgGraphOptions options = new SvgGraphOptions(rawOptions);
+			SvgGraphCreator creator = new SvgGraphCreator(options);
+			return creator;
+		}
+	};
 
 	/**
 	 * Creates the reference lines and graph/integral/scatter plots and puts
