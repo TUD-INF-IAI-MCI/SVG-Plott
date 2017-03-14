@@ -11,7 +11,7 @@
 		<dependency>
 			<groupId>com.beust</groupId>
 			<artifactId>jcommander</artifactId>
-			<version>1.32</version>
+			<version>1.64</version>
 		</dependency>
 		<dependency>
 			<groupId>com.opencsv</groupId>
@@ -19,6 +19,10 @@
 			<version>3.9</version>
 		</dependency>
 	</dependencies>
+	<properties>
+		<maven.compiler.source>1.7</maven.compiler.source>
+		<maven.compiler.target>1.7</maven.compiler.target>
+	</properties>
 	<organization>
 		<name>TU-Dresden MCI - Project Tangram</name>
 		<url>http://www.inf.tu-dresden.de/index.php?node_id=3245&amp;ln=de</url>
