@@ -181,6 +181,16 @@ public class SvgGridPainter extends SvgPainter {
 			doc.appendChild(doc.createLabel("x", pos2, "x_label", "label"));
 		}
 
+		// Create a double x axis on the smaller side if configured and possible
+		if (xAxisStyle.axisSmaller && yRange.from < 0) {
+			from = cs.convert(xRange.from, yRange.from, -15, 0);
+			to = cs.convert(xRange.to, yRange.from, 10, 0);
+
+			Element xAxisLine = doc.createLine(from, to);
+			axes.appendChild(xAxisLine);
+			xAxisLine.setAttribute("id", "x-axis-smaller");
+		}
+
 		from = cs.convert(0, yRange.from, 0, 15);
 		to = cs.convert(0, yRange.to, 0, -10);
 
@@ -211,25 +221,52 @@ public class SvgGridPainter extends SvgPainter {
 			pos3.translate(-15, 0);
 			doc.appendChild(doc.createLabel("y", pos3, "y_label", "label"));
 		}
+		
+		// Create a double y axis on the smaller side if configured and possible
+		if (yAxisStyle.axisSmaller && xRange.from < 0) {
+			from = cs.convert(xRange.from, yRange.from, 0, 15);
+			to = cs.convert(xRange.from, yRange.to, 0, -10);
+
+			Element xAxisLine = doc.createLine(from, to);
+			axes.appendChild(xAxisLine);
+			xAxisLine.setAttribute("id", "x-axis-smaller");
+		}
 
 		// Create the x tics
 		if (xAxisStyle.tics) {
 			Node xTics = axes.appendChild(doc.createGroup("x-tics"));
 			for (double pos : cs.xAxis.ticLines()) {
-				from = cs.convert(pos, 0, 0, -6);
-				to = from.clone();
-				to.translate(0, 12);
-				xTics.appendChild(doc.createLine(from, to));
+				if (xAxisStyle.axisSmaller && yRange.from < 0) {
+					from = cs.convert(pos, yRange.from, 0, -6);
+					to = from.clone();
+					to.translate(0, 12);
+					xTics.appendChild(doc.createLine(from, to));
+				}
+				// TODO also look at the axisBigger
+				if (!xAxisStyle.axisSmaller || yRange.from >= 0) {
+					from = cs.convert(pos, 0, 0, -6);
+					to = from.clone();
+					to.translate(0, 12);
+					xTics.appendChild(doc.createLine(from, to));
+				}
 			}
 		}
 
 		if (yAxisStyle.tics) {
 			Node yTics = axes.appendChild(doc.createGroup("y-tics"));
 			for (double pos : cs.yAxis.ticLines()) {
-				from = cs.convert(0, pos, -6, 0);
-				to = from.clone();
-				to.translate(12, 0);
-				yTics.appendChild(doc.createLine(from, to));
+				if(yAxisStyle.axisSmaller && xRange.from < 0) {
+					from = cs.convert(xRange.from, pos, -6, 0);
+					to = from.clone();
+					to.translate(12, 0);
+					yTics.appendChild(doc.createLine(from, to));
+				}
+				if(!yAxisStyle.axisSmaller || xRange.from >= 0) {
+					from = cs.convert(0, pos, -6, 0);
+					to = from.clone();
+					to.translate(12, 0);
+					yTics.appendChild(doc.createLine(from, to));
+				}
 			}
 		}
 

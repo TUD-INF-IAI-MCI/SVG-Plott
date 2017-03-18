@@ -8,6 +8,7 @@ public class AxisStyle {
 	public boolean arrow = true;
 	public boolean tics = true;
 	public boolean axis = true;
+	public boolean axisSmaller = true;
 	public boolean label = true;
 
 	/**
