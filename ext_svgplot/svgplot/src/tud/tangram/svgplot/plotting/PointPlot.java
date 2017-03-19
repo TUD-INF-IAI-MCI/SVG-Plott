@@ -19,6 +19,21 @@ import tud.tangram.svgplot.xml.SvgDocument;
 public class PointPlot {
 
 	/**
+	 * The css class for the visual part of a POI Symbol
+	 */
+	public static final String POI_SYMBOL_VISIBLE_CLASS = "poi_symbol";
+	/**
+	 * The css class for the underlying part of a POI Symbol, should result i a kind of outline. 
+	 */
+	public static final String POI_SYMBOL_SPACER_CLASS = Constants.SPACER_CSS_CLASS;
+	
+	/**
+	 * The list of available POI point symbols
+	 */
+	private static List<Element> poiSymbolElements = new ArrayList<Element>();
+	private static SvgDocument poiSymbolDoc;
+	
+	/**
 	 * Place a symbol at a given point.
 	 * 
 	 * @param doc		|	the svg document
@@ -30,7 +45,9 @@ public class PointPlot {
 	public static Element paintPoint(SvgDocument doc, Point p, Element symbol,
 			Element parent) {
 
-		if (doc == null) return null;
+		if (doc == null)
+			return null;
+		
 		Element defs = (Element) doc.defs;
 		if (defs == null)
 			defs = addDevsToDoc(doc);
@@ -60,12 +77,18 @@ public class PointPlot {
 	public static Element paintPoint(SvgDocument doc, Point p, String symbolId,
 			Element parent) {
 
-		if(doc == null) return null;
+		if(doc == null)
+			return null;
+		Element pointParent;
 		if (parent == null)
-			parent = doc.document();
+			pointParent = doc.document();
+		else
+			pointParent = parent;
+		
 		if (symbolId == null || symbolId.isEmpty()
 				|| doc.getElementById(symbolId) == null) {
 			Element defs = (Element) doc.defs;
+			
 			if (defs == null)
 				defs = addDevsToDoc(doc);
 
@@ -92,7 +115,7 @@ public class PointPlot {
 		use.setAttribute("xlink:href", "#" + symbolId);
 		use.setAttribute("x", p.x());
 		use.setAttribute("y", p.y());
-		parent.appendChild(use);
+		pointParent.appendChild(use);
 
 		return use;
 	}
@@ -124,22 +147,18 @@ public class PointPlot {
 	public static Element getPointSymbolForIndex(int index, SvgDocument doc) {
 		if (doc != null) {
 			if (initSymbolArray(doc)) {
-				if (POI_SYMBOL_ELEMNTS.size() > index)
-					return POI_SYMBOL_ELEMNTS.get(index);
-				else if (POI_SYMBOL_ELEMNTS.size() > 0)
-					return POI_SYMBOL_ELEMNTS
-							.get(POI_SYMBOL_ELEMNTS.size() - 1);
+				if (poiSymbolElements.size() > index)
+					return poiSymbolElements.get(index);
+				else if (poiSymbolElements.size() > 0)
+					return poiSymbolElements
+							.get(poiSymbolElements.size() - 1);
 			}
 		}
 		return null;
 	}
+
 	/**
-	 * The list of available POI point symbols
-	 */
-	private static List<Element> POI_SYMBOL_ELEMNTS = new ArrayList<Element>();
-	private static SvgDocument POI_SYMBOL_DOC;
-	/**
-	 * fills the POI_SYMBOL_ELEMNTS list with the svg symbols.
+	 * fills the poiSymbolElements list with the svg symbols.
 	 * 
 	 * @param doc	|	 the svg document
 	 * @return <code>true</code> if the list was , otherwise <code>false</code> 
@@ -147,26 +166,18 @@ public class PointPlot {
 	private static boolean initSymbolArray(SvgDocument doc) {
 		if (doc == null)
 			return false;
-		if (POI_SYMBOL_ELEMNTS == null || POI_SYMBOL_ELEMNTS.size() < 1 || POI_SYMBOL_DOC == null || !POI_SYMBOL_DOC.equals(doc)) {
-			POI_SYMBOL_DOC = doc;
-			POI_SYMBOL_ELEMNTS = new ArrayList<Element>();
-			POI_SYMBOL_ELEMNTS.add(createSquareSymbol(doc));
-			POI_SYMBOL_ELEMNTS.add(createCrossSymbol(doc));
-			POI_SYMBOL_ELEMNTS.add(createRhombusSymbol(doc));
-			POI_SYMBOL_ELEMNTS.add(createPlusSymbol(doc));
-			POI_SYMBOL_ELEMNTS.add(createDotSymbol(doc));
-			POI_SYMBOL_ELEMNTS.add(createCircleSymbol(doc));
+		if (poiSymbolElements == null || poiSymbolElements.isEmpty() || poiSymbolDoc == null || !poiSymbolDoc.equals(doc)) {
+			poiSymbolDoc = doc;
+			poiSymbolElements = new ArrayList<Element>();
+			poiSymbolElements.add(createSquareSymbol(doc));
+			poiSymbolElements.add(createCrossSymbol(doc));
+			poiSymbolElements.add(createRhombusSymbol(doc));
+			poiSymbolElements.add(createPlusSymbol(doc));
+			poiSymbolElements.add(createDotSymbol(doc));
+			poiSymbolElements.add(createCircleSymbol(doc));
 		}
 		return true;
 	}
-	/**
-	 * The css class for the visual part of a POI Symbol
-	 */
-	public static final String POI_SYMBOL_VISSIBLE_CLASS = "poi_symbol";
-	/**
-	 * The css class for the underlying part of a POI Symbol, should result i a kind of outline. 
-	 */
-	public final static String POI_SYMBOL_SPACER_CLASS = Constants.SPACER_CSS_CLASS;
 
 	/**
 	 * Creates a cross Symbol with the id 'poi_cross'
@@ -180,7 +191,7 @@ public class PointPlot {
 		symbol.setAttribute("style", "stroke-linecap:round; ");
 
 		Element vGroup = doc.createElement("g");
-		vGroup.setAttribute("class", POI_SYMBOL_VISSIBLE_CLASS);
+		vGroup.setAttribute("class", POI_SYMBOL_VISIBLE_CLASS);
 		Element bgGroup = doc.createElement("g");
 		bgGroup.setAttribute("class", POI_SYMBOL_SPACER_CLASS);
 
@@ -242,7 +253,7 @@ public class PointPlot {
 		symbol.setAttribute("style", "stroke-linecap:round; fill-opacity:0");
 
 		Element vGroup = doc.createElement("g");
-		vGroup.setAttribute("class", POI_SYMBOL_VISSIBLE_CLASS);
+		vGroup.setAttribute("class", POI_SYMBOL_VISIBLE_CLASS);
 		Element bgGroup = doc.createElement("g");
 		bgGroup.setAttribute("class", POI_SYMBOL_SPACER_CLASS);
 
@@ -268,7 +279,7 @@ public class PointPlot {
 		symbol.setAttribute("style", "stroke-linecap:round;");
 
 		Element vGroup = doc.createElement("g");
-		vGroup.setAttribute("class", POI_SYMBOL_VISSIBLE_CLASS);
+		vGroup.setAttribute("class", POI_SYMBOL_VISIBLE_CLASS);
 		vGroup.setAttribute("style", "stroke-opacity:0");
 		Element bgGroup = doc.createElement("g");
 		bgGroup.setAttribute("class", POI_SYMBOL_SPACER_CLASS);
@@ -295,7 +306,7 @@ public class PointPlot {
 		symbol.setAttribute("style", "stroke-linecap:round;");
 
 		Element vGroup = doc.createElement("g");
-		vGroup.setAttribute("class", POI_SYMBOL_VISSIBLE_CLASS);
+		vGroup.setAttribute("class", POI_SYMBOL_VISIBLE_CLASS);
 		vGroup.setAttribute("style", "stroke-opacity:0");
 		Element bgGroup = doc.createElement("g");
 		bgGroup.setAttribute("class", POI_SYMBOL_SPACER_CLASS);
@@ -322,7 +333,7 @@ public class PointPlot {
 		symbol.setAttribute("style", "stroke-linecap:round;");
 
 		Element vGroup = doc.createElement("g");
-		vGroup.setAttribute("class", POI_SYMBOL_VISSIBLE_CLASS);
+		vGroup.setAttribute("class", POI_SYMBOL_VISIBLE_CLASS);
 		vGroup.setAttribute("style", "stroke-opacity:0");
 		Element bgGroup = doc.createElement("g");
 		bgGroup.setAttribute("class", POI_SYMBOL_SPACER_CLASS);

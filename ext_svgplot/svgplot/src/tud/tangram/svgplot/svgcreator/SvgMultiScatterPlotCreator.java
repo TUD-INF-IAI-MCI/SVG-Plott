@@ -2,6 +2,7 @@ package tud.tangram.svgplot.svgcreator;
 
 import tud.tangram.svgplot.options.SvgMultiScatterPlotOptions;
 import tud.tangram.svgplot.options.SvgPlotOptions;
+import tud.tangram.svgplot.styles.AxisStyle;
 import tud.tangram.svgplot.svgpainter.SvgPointsPainter;
 
 public class SvgMultiScatterPlotCreator extends SvgGridCreator {
@@ -20,6 +21,16 @@ public class SvgMultiScatterPlotCreator extends SvgGridCreator {
 			return creator;
 		}
 	};
+	
+	@Override
+	protected AxisStyle getXAxisStyle() {
+		return AxisStyle.BOX_MIDDLE;
+	}
+
+	@Override
+	protected AxisStyle getYAxisStyle() {
+		return AxisStyle.BOX_MIDDLE;
+	}
 
 	@Override
 	protected void create() {

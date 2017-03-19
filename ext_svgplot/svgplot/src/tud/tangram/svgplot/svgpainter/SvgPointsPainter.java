@@ -70,33 +70,34 @@ public class SvgPointsPainter extends SvgPainter {
 
 		overlays = new OverlayList(cs);
 
-		// TODO: add scatter plot
-		// points or scatter plots
-		if (points != null && points.size() > 0) {
-			int j = 0;
-			Element poiGroup = doc.createElement("g", "points");
-			viewbox.appendChild(poiGroup);
-			for (PointList pl : points) {
-				if (pl != null && pl.size() > 0) {
-
-					Element plGroup = doc.createElement("g", "points_" + j);
-					poiGroup.appendChild(plGroup);
-
-					for (Point p : pl) {
-						Element symbol = PointPlot.getPointSymbolForIndex(j, doc);
-						Element ps = PointPlot.paintPoint(doc, cs.convert(p), symbol,
-								plGroup != null ? plGroup : viewbox);
-						ps.appendChild(doc.createTitle(SvgTools.formatForSpeech(cs, p)));
-						if (pl.getName() != null && !pl.getName().isEmpty())
-							ps.appendChild(doc.createDesc(pl.getName())); // TODO:
-																		// maybe
-																		// fine
-																		// this
-
-						overlays.add(new Overlay(p), true);
-					}
-				}
+		if (points == null || points.isEmpty()) {
+			return;
+		}
+		
+		int j = 0;
+		Element poiGroup = doc.createElement("g", "points");
+		viewbox.appendChild(poiGroup);
+		for (PointList pl : points) {
+			if (pl == null || pl.isEmpty()) {
 				j++;
+				continue;
+			}
+
+			Element plGroup = doc.createElement("g", "points_" + j);
+			poiGroup.appendChild(plGroup);
+
+			for (Point p : pl) {
+				Element symbol = PointPlot.getPointSymbolForIndex(j, doc);
+				Element ps = PointPlot.paintPoint(doc, cs.convert(p), symbol,
+						plGroup != null ? plGroup : viewbox);
+				ps.appendChild(doc.createTitle(SvgTools.formatForSpeech(cs, p)));
+				if (pl.getName() != null && !pl.getName().isEmpty())
+					ps.appendChild(doc.createDesc(pl.getName())); // TODO:
+																// maybe
+																// fine
+																// this
+
+				overlays.add(new Overlay(p), true);
 			}
 		}
 	}

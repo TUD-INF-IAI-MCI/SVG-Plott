@@ -91,16 +91,16 @@ public class Axis {
 	private void calculateIntervalSteps(double dimension, double factor) {
 		int i = 0;
 		if (Math.abs(factor - 2.5) < Constants.EPSILON) {
-			intervalSteps.set(i++, 2.5 * dimension);
-			intervalSteps.set(i++, dimension);
+			intervalSteps.add(i++, 2.5 * dimension);
+			intervalSteps.add(i++, dimension);
 		} else if (Math.abs(factor - 1) < Constants.EPSILON) {
-			intervalSteps.set(i++, dimension);
+			intervalSteps.add(i++, dimension);
 		}
-		
-		intervalSteps.set(i++, 0.5 * dimension);
-		intervalSteps.set(i++, 0.1 * dimension);
-		intervalSteps.set(i++, 0.05 * dimension);
-		intervalSteps.set(i, 0.01 * dimension);
+
+		intervalSteps.add(i++, 0.5 * dimension);
+		intervalSteps.add(i++, 0.1 * dimension);
+		intervalSteps.add(i++, 0.05 * dimension);
+		intervalSteps.add(i, 0.01 * dimension);
 	}
 
 	/**
@@ -145,17 +145,19 @@ public class Axis {
 			current = range.getFrom();
 		}
 
+		/**
+		 * Get the next axis value. There used to be a check for skipping the
+		 * zero value, but now it is not skipped anymore, because there are axis
+		 * configurations where the zero tics and gridlines are needed.
+		 */
 		@Override
 		public boolean hasNext() {
-			if (Math.abs(current) < Constants.EPSILON) {
-				current += interval;
-			}
 			return current <= range.getTo();
 		}
 
 		@Override
 		public Double next() {
-			if(!hasNext())
+			if (!hasNext())
 				throw new NoSuchElementException();
 			double nextCurrent = this.current;
 			this.current += interval;

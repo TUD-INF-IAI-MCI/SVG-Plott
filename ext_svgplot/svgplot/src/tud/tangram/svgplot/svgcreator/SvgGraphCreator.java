@@ -16,6 +16,7 @@ import tud.tangram.svgplot.plotting.OverlayList;
 import tud.tangram.svgplot.plotting.PlotList;
 import tud.tangram.svgplot.plotting.ReferenceLine;
 import tud.tangram.svgplot.plotting.ReferenceLine.Direction;
+import tud.tangram.svgplot.styles.AxisStyle;
 import tud.tangram.svgplot.svgpainter.SvgPlotPainter;
 import tud.tangram.svgplot.svgpainter.SvgPointsPainter;
 import tud.tangram.svgplot.svgpainter.SvgReferenceLinesPainter;
@@ -69,6 +70,16 @@ public class SvgGraphCreator extends SvgGridCreator {
 			System.out.println("Could not create the plots.");
 			System.out.println(e);
 		}
+	}
+	
+	@Override
+	protected AxisStyle getXAxisStyle() {
+		return AxisStyle.GRAPH;
+	}
+
+	@Override
+	protected AxisStyle getYAxisStyle() {
+		return AxisStyle.GRAPH;
 	}
 
 	/**

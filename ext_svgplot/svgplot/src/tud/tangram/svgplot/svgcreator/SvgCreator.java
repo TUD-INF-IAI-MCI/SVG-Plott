@@ -21,6 +21,7 @@ import tud.tangram.svgplot.description.Description;
 import tud.tangram.svgplot.legend.LegendItem;
 import tud.tangram.svgplot.legend.LegendRenderer;
 import tud.tangram.svgplot.options.SvgOptions;
+import tud.tangram.svgplot.styles.AxisStyle;
 import tud.tangram.svgplot.svgpainter.SvgTitlePainter;
 import tud.tangram.svgplot.utils.Constants;
 import tud.tangram.svgplot.xml.SvgDocument;
