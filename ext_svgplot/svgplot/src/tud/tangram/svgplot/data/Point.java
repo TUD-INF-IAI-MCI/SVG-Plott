@@ -32,7 +32,7 @@ public class Point implements Comparable<Point> {
 	 */
 	public Point(Point otherPoint) {
 		this(otherPoint.getX(), otherPoint.getY(), otherPoint.getName(),
-				(Element) otherPoint.getSymbol().cloneNode(true));
+				 otherPoint.getSymbol() != null ? (Element) otherPoint.getSymbol().cloneNode(true) : null);
 	}
 
 	/**
