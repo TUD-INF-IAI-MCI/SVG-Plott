@@ -5,6 +5,7 @@ import org.w3c.dom.Element;
 import tud.tangram.svgplot.data.Point;
 import tud.tangram.svgplot.data.PointListList.PointList;
 import tud.tangram.svgplot.plotting.PointPlot;
+import tud.tangram.svgplot.styles.PointPlotStyle;
 import tud.tangram.svgplot.utils.SvgTools;
 import tud.tangram.svgplot.xml.SvgDocument;
 
@@ -14,15 +15,17 @@ public class LegendPointItem extends LegendItem {
 	
 	private Integer pointSymbolIndex;
 	private PointList pointList;
+	private PointPlotStyle style;
 	
-	public LegendPointItem(PointList pointList, int pointSymbolIndex) {
-		this(pointList, pointSymbolIndex, 0);
+	public LegendPointItem(PointList pointList, PointPlotStyle style, int pointSymbolIndex) {
+		this(pointList, style, pointSymbolIndex, 0);
 	}
 	
-	public LegendPointItem(PointList pointList, int pointSymbolIndex, int priority) {
+	public LegendPointItem(PointList pointList, PointPlotStyle style, int pointSymbolIndex, int priority) {
 		super(priority);
 		this.pointSymbolIndex = pointSymbolIndex;
 		this.pointList = pointList;
+		this.style = style;
 	}
 	
 	/**
@@ -36,8 +39,8 @@ public class LegendPointItem extends LegendItem {
 		
 		currentPosition.translate(5, 3);
 		
-		Element symbol = PointPlot.getPointSymbolForIndex(pointSymbolIndex, legend);
-		PointPlot.paintPoint(legend, currentPosition, symbol, group != null ? group : viewbox);
+		PointPlot pointPlot = new PointPlot(legend, style);
+		pointPlot.paintPoint(group != null ? group : viewbox, currentPosition, pointSymbolIndex);
 		
 		currentPosition.translate(-5, -3);
 

@@ -17,6 +17,7 @@ import tud.tangram.svgplot.plotting.PlotList;
 import tud.tangram.svgplot.plotting.ReferenceLine;
 import tud.tangram.svgplot.plotting.ReferenceLine.Direction;
 import tud.tangram.svgplot.styles.AxisStyle;
+import tud.tangram.svgplot.styles.PointPlotStyle;
 import tud.tangram.svgplot.svgpainter.SvgPlotPainter;
 import tud.tangram.svgplot.svgpainter.SvgPointsPainter;
 import tud.tangram.svgplot.svgpainter.SvgReferenceLinesPainter;
@@ -106,7 +107,7 @@ public class SvgGraphCreator extends SvgGridCreator {
 		OverlayList overlays = plotList.overlays();
 
 		// Paint the scatter plot points to the SVG file
-		SvgPointsPainter svgPointsPainter = new SvgPointsPainter(cs, options.points);
+		SvgPointsPainter svgPointsPainter = new SvgPointsPainter(cs, options.points, PointPlotStyle.MULTI_ROWS);
 		svgPointsPainter.paintToSvgDocument(doc, viewbox, options.outputDevice);
 		svgPointsPainter.addOverlaysToList(overlays);
 

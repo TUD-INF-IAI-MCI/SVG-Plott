@@ -14,23 +14,25 @@ import tud.tangram.svgplot.options.OutputDevice;
 import tud.tangram.svgplot.plotting.Overlay;
 import tud.tangram.svgplot.plotting.OverlayList;
 import tud.tangram.svgplot.plotting.PointPlot;
+import tud.tangram.svgplot.styles.PointPlotStyle;
 import tud.tangram.svgplot.utils.Constants;
 import tud.tangram.svgplot.utils.SvgTools;
 import tud.tangram.svgplot.xml.SvgDocument;
 
 /**
- * Paint points to the SVG document and document them in the legend (TODO). TODO
- * add more styles
+ * Paint points to the SVG document and document them in the legend.
  */
 public class SvgPointsPainter extends SvgPainter {
 
 	CoordinateSystem cs;
 	PointListList points;
 	OverlayList overlays;
+	PointPlotStyle pointPlotStyle;
 
-	public SvgPointsPainter(CoordinateSystem cs, PointListList points) {
+	public SvgPointsPainter(CoordinateSystem cs, PointListList points, PointPlotStyle pointPlotStyle) {
 		this.cs = cs;
 		this.points = points;
+		this.pointPlotStyle = pointPlotStyle;
 	}
 
 	@Override
@@ -57,10 +59,12 @@ public class SvgPointsPainter extends SvgPainter {
 		screenHighContrastOptions
 				.append(".poi_symbol { stroke: white; stroke-dasharray: none; stroke-width:0.75;  fill: white; }")
 				.append(System.lineSeparator());
-		screenHighContrastOptions.append(".poi_symbol_bg { stroke: black; stroke-dasharray: none; stroke-width:3.0;  fill: transparent; }").append(System.lineSeparator());
-		
+		screenHighContrastOptions
+				.append(".poi_symbol_bg { stroke: black; stroke-dasharray: none; stroke-width:3.0;  fill: transparent; }")
+				.append(System.lineSeparator());
+
 		deviceCss.put(OutputDevice.ScreenHighContrast, screenHighContrastOptions.toString());
-		
+
 		return deviceCss;
 	}
 
@@ -73,32 +77,34 @@ public class SvgPointsPainter extends SvgPainter {
 		if (points == null || points.isEmpty()) {
 			return;
 		}
-		
+
 		int j = 0;
-		Element poiGroup = doc.createElement("g", "points");
-		viewbox.appendChild(poiGroup);
+		Element pointGroup = doc.createElement("g", "points");
+		viewbox.appendChild(pointGroup);
+		
+		PointPlot pointPlot = new PointPlot(doc, pointPlotStyle);
+		
 		for (PointList pl : points) {
 			if (pl == null || pl.isEmpty()) {
 				j++;
 				continue;
 			}
 
-			Element plGroup = doc.createElement("g", "points_" + j);
-			poiGroup.appendChild(plGroup);
-
+			Element pointSubGroup = doc.createElement("g", "points_" + j);
+			pointGroup.appendChild(pointSubGroup);
+			
 			for (Point p : pl) {
-				Element symbol = PointPlot.getPointSymbolForIndex(j, doc);
-				Element ps = PointPlot.paintPoint(doc, cs.convert(p), symbol,
-						plGroup != null ? plGroup : viewbox);
-				ps.appendChild(doc.createTitle(SvgTools.formatForSpeech(cs, p)));
+				Element paintedPoint = pointPlot.paintPoint(pointSubGroup, cs.convert(p), j);
+				paintedPoint.appendChild(doc.createTitle(SvgTools.formatForSpeech(cs, p)));
+				
+				// Add a description if the point list has a name. TODO refine this
 				if (pl.getName() != null && !pl.getName().isEmpty())
-					ps.appendChild(doc.createDesc(pl.getName())); // TODO:
-																// maybe
-																// fine
-																// this
+					paintedPoint.appendChild(doc.createDesc(pl.getName()));
 
 				overlays.add(new Overlay(p), true);
 			}
+			
+			j++;
 		}
 	}
 
@@ -118,7 +124,7 @@ public class SvgPointsPainter extends SvgPainter {
 		int pointSymbolIndex = 0;
 		for (PointList pl : points) {
 			if (pl != null && pl.size() > 0) {
-				renderer.offer(new LegendPointItem(pl, pointSymbolIndex, priority));
+				renderer.offer(new LegendPointItem(pl, pointPlotStyle, pointSymbolIndex, priority));
 			}
 			pointSymbolIndex++;
 		}
