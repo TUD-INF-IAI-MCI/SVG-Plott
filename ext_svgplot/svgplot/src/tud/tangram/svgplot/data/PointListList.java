@@ -15,10 +15,10 @@ import com.beust.jcommander.IStringConverter;
 public class PointListList extends ArrayList<PointListList.PointList> {
 
 	private static final long serialVersionUID = 6902232865786868851L;
-	public double maxX = 0;
-	public double maxY = 0;
-	public double minX = 0;
-	public double minY = 0;
+	private double maxX = 0;
+	private double maxY = 0;
+	private double minX = 0;
+	private double minY = 0;
 
 	public PointListList() {
 		this("");
@@ -34,7 +34,7 @@ public class PointListList extends ArrayList<PointListList.PointList> {
 		String[] lists = pointLists.split("\\}");
 		for (String l : lists) {
 			PointList pl = new PointList(l);
-			if (pl.size() > 0) {
+			if (!pl.isEmpty()) {
 				this.add(pl);
 			}
 		}
@@ -42,20 +42,36 @@ public class PointListList extends ArrayList<PointListList.PointList> {
 
 	@Override
 	public boolean add(PointListList.PointList pl) {
-		maxX = Math.max(maxX, pl.maxX);
-		maxY = Math.max(maxY, pl.maxY);
-		minX = Math.min(minX, pl.minX);
-		minY = Math.min(minY, pl.minY);
+		maxX = Math.max(getMaxX(), pl.getMaxX());
+		maxY = Math.max(getMaxY(), pl.getMaxY());
+		minX = Math.min(getMinX(), pl.getMinX());
+		minY = Math.min(getMinY(), pl.getMinY());
 		return super.add(pl);
 	}
 
 	public boolean add(List<Point> points) {
 		PointList pl = new PointList(points);
-		maxX = Math.max(maxX, pl.maxX);
-		maxY = Math.max(maxY, pl.maxY);
-		minX = Math.min(minX, pl.minX);
-		minY = Math.min(minY, pl.minY);
+		maxX = Math.max(getMaxX(), pl.getMaxX());
+		maxY = Math.max(getMaxY(), pl.getMaxY());
+		minX = Math.min(getMinX(), pl.getMinX());
+		minY = Math.min(getMinY(), pl.getMinY());
 		return super.add(pl);
+	}
+
+	public double getMaxX() {
+		return maxX;
+	}
+
+	public double getMaxY() {
+		return maxY;
+	}
+
+	public double getMinX() {
+		return minX;
+	}
+
+	public double getMinY() {
+		return minY;
 	}
 
 	public static class Converter implements IStringConverter<PointListList> {
@@ -74,14 +90,14 @@ public class PointListList extends ArrayList<PointListList.PointList> {
 	public class PointList extends ArrayList<Point> {
 
 		private static final long serialVersionUID = -2318768874799315111L;
-		public double maxX = 0;
-		public double maxY = 0;
-		public double minX = 0;
-		public double minY = 0;
-		public String name = "";
+		private double maxX = 0;
+		private double maxY = 0;
+		private double minX = 0;
+		private double minY = 0;
+		private String name = "";
 
 		public PointList(List<Point> points) {
-			if (points != null && points.size() > 0) {
+			if (points != null && !points.isEmpty()) {
 				for (Point p : points) {
 					this.add(p);
 				}
@@ -98,7 +114,7 @@ public class PointListList extends ArrayList<PointListList.PointList> {
 
 				String pts;
 				if (pl.length > 1) {
-					name = pl[0].trim();
+					setName(pl[0].trim());
 					pts = pl[1].replaceAll("[^\\d.,^\\s+,^-]", "");
 				} else {
 					pts = pl[0].replaceAll("[^\\d.,^\\s+,^-]", "");
@@ -120,11 +136,35 @@ public class PointListList extends ArrayList<PointListList.PointList> {
 
 		@Override
 		public boolean add(Point p) {
-			maxX = Math.max(maxX, p.x);
-			maxY = Math.max(maxY, p.y);
-			minX = Math.min(minX, p.x);
-			minY = Math.min(minY, p.y);
+			maxX = Math.max(getMaxX(), p.getX());
+			maxY = Math.max(getMaxY(), p.getY());
+			minX = Math.min(getMinX(), p.getX());
+			minY = Math.min(getMinY(), p.getY());
 			return super.add(p);
+		}
+
+		public double getMaxX() {
+			return maxX;
+		}
+
+		public double getMaxY() {
+			return maxY;
+		}
+
+		public double getMinX() {
+			return minX;
+		}
+
+		public double getMinY() {
+			return minY;
+		}
+
+		public String getName() {
+			return name;
+		}
+
+		public void setName(String name) {
+			this.name = name;
 		}
 
 		public class Converter implements IStringConverter<PointList> {

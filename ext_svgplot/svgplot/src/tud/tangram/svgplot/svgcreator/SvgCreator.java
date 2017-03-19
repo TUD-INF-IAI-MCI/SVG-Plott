@@ -3,11 +3,18 @@
  */
 package tud.tangram.svgplot.svgcreator;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import tud.tangram.svgplot.data.Point;
 import tud.tangram.svgplot.description.Description;
@@ -23,16 +30,31 @@ import tud.tangram.svgplot.xml.SvgDocument;
  *
  */
 public abstract class SvgCreator {
+	
 	protected final SvgOptions options;
 
 	protected Point diagramTitleLowerEnd;
 
 	/** Margin for the content, which is below the title */
-	protected int[] diagramContentMargin;
+	protected List<Integer> diagramContentMargin;
 
 	/** Final diagram svg */
 	protected SvgDocument doc;
 
+	/** key to the diagram */
+	protected SvgDocument legend;
+	
+	protected LegendRenderer legendRenderer;
+
+	/** description of the diagram in html format */
+	protected Description desc;
+	
+	private static final Logger log = LoggerFactory.getLogger(SvgCreator.class);
+	
+	public SvgCreator(SvgOptions options) {
+		this.options = options;
+	}
+	
 	/**
 	 * Final diagram svg
 	 * 
@@ -41,10 +63,7 @@ public abstract class SvgCreator {
 	public SvgDocument getDoc() {
 		return doc;
 	}
-
-	/** key to the diagram */
-	protected SvgDocument legend;
-
+	
 	/**
 	 * key to the diagram
 	 * 
@@ -53,8 +72,6 @@ public abstract class SvgCreator {
 	public SvgDocument getLegend() {
 		return legend;
 	}
-	
-	protected LegendRenderer legendRenderer;
 	
 	public LegendRenderer getLegendRenderer() {
 		return legendRenderer;
@@ -67,10 +84,7 @@ public abstract class SvgCreator {
 	public void addLegendItem(LegendItem item) {
 		legendRenderer.offer(item);
 	}
-
-	/** description of the diagram in html format */
-	protected Description desc;
-
+	
 	/**
 	 * description of the diagram in html format
 	 * 
@@ -88,10 +102,6 @@ public abstract class SvgCreator {
 	public void setDesc(Description desc) {
 		this.desc = desc;
 	}
-
-	public SvgCreator(SvgOptions options) {
-		this.options = options;
-	}
 	
 	/**
 	 * Main function. Combine all the elements and create all the output files.
@@ -106,8 +116,8 @@ public abstract class SvgCreator {
 			options.title = options.output.getName();
 		}
 
-		doc = new SvgDocument(options.title, options.size, Constants.margin[1]);
-		legend = new SvgDocument(options.legendTitle, options.size, Constants.margin[1]);
+		doc = new SvgDocument(options.title, options.size, Constants.MARGIN.get(1));
+		legend = new SvgDocument(options.legendTitle, options.size, Constants.MARGIN.get(1));
 		legend.setAttribute("id", "legend");
 		legendRenderer = new LegendRenderer();
 		desc = new Description(options.descTitle);
@@ -157,18 +167,29 @@ public abstract class SvgCreator {
 	 */
 	protected void afterCreate() {
 		legendRenderer.render(legend, options.size, Constants.titlePosition);
+		appendOptionsCss(doc, legend);
 	}
 
-	// TODO readd option to append external css
-	//protected void appendOptionsCss(SvgDocument doc, String css) throws IOException {
-	//	if (options.css != null) {
-	//		css += "\n\n/* custom */\n";
-	//		if (new File(options.css).isFile()) {
-	//			options.css = new String(Files.readAllBytes(Paths.get(options.css)));
-	//		}
-	//		css += options.css;
-	//	}
-	//	doc.appendCss(css);
-	//}
+	protected void appendOptionsCss(SvgDocument... documents) {
+		String css = "";
+		if (options.css != null) {
+			css += "\n\n/* custom */\n";
+			if (new File(options.css).isFile()) {
+				try{
+					options.css = new String(Files.readAllBytes(Paths.get(options.css)));
+				}
+				catch (IOException e) {
+					log.warn("Die CSS-Datei {} kann nicht gelesen werden. Fahre ohne zusätzliche CSS-Inhalte fort.", options.css);
+					log.debug("Stacktrace", e);
+				}
+			}
+			else {
+				log.warn("Die CSS-Datei {} existiert nicht. Fahre ohne zusätzliche CSS-Inhalte fort.", options.css);
+			}
+			css += options.css;
+		}
+		for(SvgDocument document : documents)
+			document.appendCss(css);
+	}
 	
 }

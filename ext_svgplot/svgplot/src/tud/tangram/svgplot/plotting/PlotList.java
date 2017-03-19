@@ -13,7 +13,7 @@ import tud.tangram.svgplot.coordinatesystem.CoordinateSystem;
 public class PlotList extends ArrayList<Plot> {
 
 	private static final long serialVersionUID = 2449399739807644999L;
-	final private CoordinateSystem cs;
+	private final CoordinateSystem cs;
 
 	public PlotList(CoordinateSystem cs) {
 		super();
@@ -44,7 +44,7 @@ public class PlotList extends ArrayList<Plot> {
 		// Other points
 		for (double interval : cs.xAxis.intervalSteps) {
 			for (Plot plot : this) {
-				overlays.addAll(plot.getPoints(interval, cs.xAxis.range.from), plot.getFunction());
+				overlays.addAll(plot.getPoints(interval, cs.xAxis.range.getFrom()), plot.getFunction());
 			}
 		}
 

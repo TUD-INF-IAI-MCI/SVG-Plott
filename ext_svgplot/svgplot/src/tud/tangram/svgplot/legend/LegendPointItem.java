@@ -30,7 +30,7 @@ public class LegendPointItem extends LegendItem {
 	 */
 	@Override
 	public double render(SvgDocument legend, Element viewbox, Point startingPosition) {
-		Point currentPosition = startingPosition.clone();
+		Point currentPosition = new Point(startingPosition);
 		
 		Element group = getOrCreateGroup(legend, viewbox, pointSymbolIndex.toString());
 		
@@ -41,12 +41,12 @@ public class LegendPointItem extends LegendItem {
 		
 		currentPosition.translate(-5, -3);
 
-		String text = pointList.name.isEmpty() ? SvgTools.translateN("legend.poi", SvgTools.getPointName(pointSymbolIndex), pointList.size())
-				: pointList.name;
+		String text = pointList.getName().isEmpty() ? SvgTools.translateN("legend.poi", SvgTools.getPointName(pointSymbolIndex), pointList.size())
+				: pointList.getName();
 		currentPosition.translate(20, pointSymbolVerticalTextAlignment);
 		legend.appendChild(legend.createText(currentPosition, text));
 		
-		return currentPosition.y;
+		return currentPosition.getY();
 	}
 
 	@Override

@@ -55,7 +55,7 @@ public class Plot implements Iterable<List<Point>> {
 				double lastDistance = 0;
 				Point last = null;
 				for (Point point : list) {
-					while (other.x < point.x) {
+					while (other.getX() < point.getX()) {
 						if (!it2.hasNext()) {
 							if (!it1.hasNext()) {
 								Collections.sort(intersectionsPoints);
@@ -65,10 +65,10 @@ public class Plot implements Iterable<List<Point>> {
 						}
 						other = it2.next();
 					}
-					if (other.x > point.x) {
+					if (other.getX() > point.getX()) {
 						continue;
 					}
-					double distance = other.y - point.y;
+					double distance = other.getY() - point.getY();
 					if (distance == 0 || lastDistance != 0 && (lastDistance < 0 ^ distance < 0)) {
 						if (Math.abs(lastDistance) < Math.abs(distance)) {
 							intersectionsPoints.add(last);
@@ -95,7 +95,7 @@ public class Plot implements Iterable<List<Point>> {
 				for (Point point : list) {
 					direction = 0;
 					if (last != null) {
-						direction = last.y > point.y ? -1 : 1;
+						direction = last.getY() > point.getY() ? -1 : 1;
 						if (lastDirection != 0 && direction != lastDirection) {
 							extrema.add(last);
 						}
@@ -115,8 +115,8 @@ public class Plot implements Iterable<List<Point>> {
 			for (List<Point> list : plot) {
 				Point last = null;
 				for (Point point : list) {
-					if (last != null && last.y < 0 ^ point.y < 0) {
-						if (Math.abs(last.y) < Math.abs(point.y)) {
+					if (last != null && last.getY() < 0 ^ point.getY() < 0) {
+						if (Math.abs(last.getY()) < Math.abs(point.getY())) {
 							roots.add(last);
 						} else {
 							roots.add(point);
@@ -138,13 +138,13 @@ public class Plot implements Iterable<List<Point>> {
 			Point last = null;
 			for (Point point : list) {
 				if (last == null) {
-					while (next < point.x) {
+					while (next < point.getX()) {
 						next += interval;
 						//System.out.print(SvgPlot.format(next) + ", ");
 					}
 				}
-				if (point.x >= next) {
-					if (last == null || next - last.x >= point.x - next) {
+				if (point.getX() >= next) {
+					if (last == null || next - last.getX() >= point.getX() - next) {
 						points.add(point);
 					} else {
 						points.add(last);

@@ -4,6 +4,7 @@ import org.w3c.dom.Element;
 
 import com.beust.jcommander.IStringConverter;
 
+import tud.tangram.svgplot.utils.Constants;
 import tud.tangram.svgplot.utils.SvgTools;
 
 /**
@@ -18,10 +19,21 @@ import tud.tangram.svgplot.utils.SvgTools;
  */
 public class Point implements Comparable<Point> {
 
-	public double x;
-	public double y;
-	public String name;
-	public Element symbol;
+	private double x;
+	private double y;
+	private String name;
+	private Element symbol;
+
+	/**
+	 * Copy constructor
+	 * 
+	 * @param otherPoint
+	 *            the point to copy
+	 */
+	public Point(Point otherPoint) {
+		this(otherPoint.getX(), otherPoint.getY(), otherPoint.getName(),
+				(Element) otherPoint.getSymbol().cloneNode(true));
+	}
 
 	/**
 	 * Represents a two dimensional Point in the plot
@@ -76,10 +88,10 @@ public class Point implements Comparable<Point> {
 	 *            | the symbol to use for the point
 	 */
 	public Point(double x, double y, String name, Element symbol) {
-		this.x = x;
-		this.y = y;
-		this.name = name;
-		this.symbol = symbol;
+		this.setX(x);
+		this.setY(y);
+		this.setName(name);
+		this.setSymbol(symbol);
 	}
 
 	/**
@@ -91,8 +103,8 @@ public class Point implements Comparable<Point> {
 	 *            | movement in y (vertical) direction
 	 */
 	public void translate(double dx, double dy) {
-		x += dx;
-		y += dy;
+		setX(getX() + dx);
+		setY(getY() + dy);
 	}
 
 	/**
@@ -101,7 +113,7 @@ public class Point implements Comparable<Point> {
 	 * @return
 	 */
 	public String x() {
-		return SvgTools.format2svg(x);
+		return SvgTools.format2svg(getX());
 	}
 
 	/**
@@ -110,7 +122,7 @@ public class Point implements Comparable<Point> {
 	 * @return
 	 */
 	public String y() {
-		return SvgTools.format2svg(y);
+		return SvgTools.format2svg(getY());
 	}
 
 	@Override
@@ -124,11 +136,6 @@ public class Point implements Comparable<Point> {
 		return x() + "," + y();
 	}
 
-	@Override
-	public Point clone() {
-		return new Point(x, y, name, symbol);
-	}
-
 	/**
 	 * computes the two dimensional euclidean distance of two points.
 	 * 
@@ -138,7 +145,7 @@ public class Point implements Comparable<Point> {
 	 *         point.
 	 */
 	public double distance(Point other) {
-		return Math.sqrt(Math.pow(other.x - x, 2) + Math.pow(other.y - y, 2));
+		return Math.sqrt(Math.pow(other.getX() - getX(), 2) + Math.pow(other.getY() - getY(), 2));
 	}
 
 	public static class Converter implements IStringConverter<Point> {
@@ -166,10 +173,10 @@ public class Point implements Comparable<Point> {
 	@Override
 	public int compareTo(Point p2) {
 		if (p2 != null) {
-			if (p2.x == x) {
-				return y < p2.y ? -1 : 1;
+			if (Math.abs(p2.getX() - getX()) < Constants.EPSILON) {
+				return getY() < p2.getY() ? -1 : 1;
 			} else
-				return x < p2.x ? -1 : 1;
+				return getX() < p2.getX() ? -1 : 1;
 		}
 		return -1;
 	}
@@ -183,7 +190,7 @@ public class Point implements Comparable<Point> {
 	 */
 	public int compareToY(Point p2) {
 		if (p2 != null) {
-			return y < p2.y ? -1 : 1;
+			return getY() < p2.getY() ? -1 : 1;
 		}
 		return -1;
 	}
@@ -197,9 +204,41 @@ public class Point implements Comparable<Point> {
 	 */
 	public int compareToX(Point p2) {
 		if (p2 != null) {
-			return x < p2.x ? -1 : 1;
+			return getX() < p2.getX() ? -1 : 1;
 		}
 		return -1;
+	}
+
+	public double getX() {
+		return x;
+	}
+
+	public void setX(double x) {
+		this.x = x;
+	}
+
+	public double getY() {
+		return y;
+	}
+
+	public void setY(double y) {
+		this.y = y;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public Element getSymbol() {
+		return symbol;
+	}
+
+	public void setSymbol(Element symbol) {
+		this.symbol = symbol;
 	}
 
 }

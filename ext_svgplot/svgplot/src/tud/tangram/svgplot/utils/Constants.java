@@ -3,34 +3,44 @@ package tud.tangram.svgplot.utils;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
 import tud.tangram.svgplot.data.Point;
 
 public class Constants {
-	final public static Locale locale = new Locale("de");
-	final public static NumberFormat numberFormat = NumberFormat.getInstance(locale);
-	final public static ResourceBundle bundle = ResourceBundle.getBundle("Bundle");
-	final public static double strokeWidth = 0.5;
-	final public static int[] margin = { 20, 10, 20, 10 };
+	public static final String PROPERTIES_FILENAME = "svgplot.properties";
+	public static final Locale locale = new Locale("de");
+	public static final NumberFormat numberFormat = NumberFormat.getInstance(locale);
+	public static final ResourceBundle bundle = ResourceBundle.getBundle("Bundle");
+	public static final double STROKE_WIDTH = 0.5;
+	public static final List<Integer> MARGIN = Collections.unmodifiableList(Arrays.asList(20, 10, 20, 10));
 	/** List of letters for function naming */
-	final public static String[] fnList = new String[] { "f", "g", "h", "i", "j", "k", "l", "m", "o", "p", "q", "r" };
+	public static final List<String> FN_LIST = Collections
+			.unmodifiableList(Arrays.asList("f", "g", "h", "i", "j", "k", "l", "m", "o", "p", "q", "r"));
 	/** List of letters for point naming */
-	final public static String[] pnList = new String[] { "A", "B", "C", "D", "F", "G", "H", "I", "J", "K", "L", "M",
-			"N", "O", "P", "Q", "R", "T" };
-	final public static String spacerCssClass = "poi_symbol_bg";
-	final public static DecimalFormat decimalFormat = getSvgDecimalFormat();
+	public static final List<String> PN_LIST = Collections.unmodifiableList(
+			Arrays.asList("A", "B", "C", "D", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "T"));
+	public static final String SPACER_CSS_CLASS = "poi_symbol_bg";
+	public static final DecimalFormat decimalFormat = getSvgDecimalFormat();
 	/** The minimal distance of grid lines in mm */
-	final public static int minGridDistance = 10;
+	public static final int MIN_GRID_DISTANCE = 10;
+	public static final Point titlePosition = new Point(Constants.MARGIN.get(3), Constants.MARGIN.get(0) + 10);
+	
+	// Used for double comparisons
+	public static final double EPSILON = 1E-10;
 
-	final private static DecimalFormat getSvgDecimalFormat() {
+	private Constants() {
+	}
+
+	private static final DecimalFormat getSvgDecimalFormat() {
 		DecimalFormat decimalFormat = new DecimalFormat("0.###");
 		DecimalFormatSymbols dfs = new DecimalFormatSymbols();
 		dfs.setDecimalSeparator('.');
 		decimalFormat.setDecimalFormatSymbols(dfs);
 		return decimalFormat;
 	}
-	
-	final public static Point titlePosition = new Point(Constants.margin[3], Constants.margin[0] + 10);
 }

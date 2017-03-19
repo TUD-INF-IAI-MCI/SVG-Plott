@@ -27,11 +27,11 @@ public class LegendFunctionLineItem extends LegendItem {
 	
 	@Override
 	public double render(SvgDocument legend, Element viewbox, Point startingPosition) {
-		Point currentPosition = startingPosition.clone();
+		Point currentPosition = new Point(startingPosition);
 		
 		Node plot = getOrCreateGroup(legend, viewbox, new Integer(functionSymbolIndex + 1).toString());
-		plot.appendChild(legend.createLine(new Point(currentPosition.x, currentPosition.y + 2),
-				new Point(currentPosition.x + 26, currentPosition.y + 2)));
+		plot.appendChild(legend.createLine(new Point(currentPosition.getX(), currentPosition.getY() + 2),
+				new Point(currentPosition.getX() + 26, currentPosition.getY() + 2)));
 
 		currentPosition.translate(35, lineSymbolVerticalTextAlignment);
 		
@@ -45,7 +45,7 @@ public class LegendFunctionLineItem extends LegendItem {
 		
 		currentPosition.translate(-35, 0);
 		
-		return currentPosition.y;
+		return currentPosition.getY();
 	}
 
 	@Override

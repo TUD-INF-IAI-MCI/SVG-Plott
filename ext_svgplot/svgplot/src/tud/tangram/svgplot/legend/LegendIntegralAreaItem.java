@@ -29,7 +29,7 @@ public class LegendIntegralAreaItem extends LegendItem {
 	
 	@Override
 	public double render(SvgDocument legend, Element viewbox, Point startingPosition) {
-		Point currentPosition = startingPosition.clone();
+		Point currentPosition = new Point(startingPosition);
 		
 		Node integralGroup = getOrCreateGroup(legend, viewbox, "0");
 
@@ -44,19 +44,19 @@ public class LegendIntegralAreaItem extends LegendItem {
 		String text = "";
 		if (integral.function2 >= 0)
 			text = SvgTools.translate("legend.integral_1",
-					Math.max(cs.xAxis.range.from, integral.xRange.from),
-					Math.min(cs.xAxis.range.to, integral.xRange.to),
+					Math.max(cs.xAxis.range.getFrom(), integral.xRange.getFrom()),
+					Math.min(cs.xAxis.range.getTo(), integral.xRange.getTo()),
 					SvgTools.getFunctionName(integral.function1), SvgTools.getFunctionName(integral.function2));
 		else
 			text = SvgTools.translate("legend.integral_0",
-					Math.max(cs.xAxis.range.from, integral.xRange.from),
-					Math.min(cs.xAxis.range.to, integral.xRange.to),
+					Math.max(cs.xAxis.range.getFrom(), integral.xRange.getFrom()),
+					Math.min(cs.xAxis.range.getTo(), integral.xRange.getTo()),
 					SvgTools.getFunctionName(integral.function1));
 
 		currentPosition.translate(35, areaSymbolVerticalTextAlignment);
 		legend.appendChild(legend.createText(currentPosition, text));
 
-		return currentPosition.y + 5;
+		return currentPosition.getY() + 5;
 	}
 
 	@Override

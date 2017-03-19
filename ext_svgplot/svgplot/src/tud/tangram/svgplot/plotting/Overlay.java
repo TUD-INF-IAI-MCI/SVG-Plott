@@ -3,12 +3,12 @@ package tud.tangram.svgplot.plotting;
 import tud.tangram.svgplot.data.Point;
 
 public class Overlay extends Point {
-	final public static double RADIUS = 2.9;
+	public static final double RADIUS = 2.9;
 
 	private Function function = null;
 
 	public Overlay(Point p){
-		super(p.x, p.y, p.name, p.symbol);
+		super(p.getX(), p.getY(), p.getName(), p.getSymbol());
 	}
 	
 	public Overlay(double x, double y) {
@@ -16,7 +16,7 @@ public class Overlay extends Point {
 	}
 
 	public Overlay(Point point, Function function) {
-		this(point.x, point.y);
+		this(point.getX(), point.getY());
 		this.function = function;
 	}
 

@@ -46,7 +46,7 @@ public class SvgPlotPainter extends SvgPainter {
 	protected HashMap<OutputDevice, String> getDeviceCss() {
 		HashMap<OutputDevice, String> deviceCss = new HashMap<>();
 		
-		double width = 2 * Constants.strokeWidth;
+		double width = 2 * Constants.STROKE_WIDTH;
 		
 		StringBuilder defaultCss = new StringBuilder();
 		defaultCss.append(".integral { stroke: white; stroke-dasharray: none; stroke-width:" + 3 * width + "; }").append(System.lineSeparator());
@@ -132,10 +132,10 @@ public class SvgPlotPainter extends SvgPainter {
 					&& integral.function2 != integral.function1)
 				p2 = plotList.get(integral.function2);
 			new IntegralPlot(cs).handlePlotIntegral(plotList.get(integral.function1), doc, parent,
-					integral.xRange != null ? Math.max(integral.xRange.from, cs.xAxis.range.from)
-							: cs.xAxis.range.from,
-					integral.xRange != null ? Math.min(integral.xRange.to, cs.xAxis.range.to)
-							: cs.xAxis.range.to,
+					integral.xRange != null ? Math.max(integral.xRange.getFrom(), cs.xAxis.range.getFrom())
+							: cs.xAxis.range.getFrom(),
+					integral.xRange != null ? Math.min(integral.xRange.getTo(), cs.xAxis.range.getTo())
+							: cs.xAxis.range.getTo(),
 					p2);
 		}
 	}

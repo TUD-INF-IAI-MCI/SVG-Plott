@@ -43,21 +43,21 @@ public class SvgViewboxPainter extends SvgPainter {
 	}
 
 	private Element createViewbox(SvgDocument doc) {
-		Element viewbox = (Element) doc.appendChild(doc.createElement("svg"));
-		viewbox.setAttribute("viewBox",
-				"0 0 " + SvgTools.format2svg(size.x) + " " + SvgTools.format2svg(size.y));
+		Element newViewbox = (Element) doc.appendChild(doc.createElement("svg"));
+		newViewbox.setAttribute("viewBox",
+				"0 0 " + SvgTools.format2svg(size.getX()) + " " + SvgTools.format2svg(size.getY()));
 
-		Node defs = viewbox.appendChild(doc.createElement("defs"));
+		Node defs = newViewbox.appendChild(doc.createElement("defs"));
 
 		Node clipPath = defs.appendChild(doc.createElement("clipPath", "plot-area"));
 		Element rect = (Element) clipPath.appendChild(doc.createElement("rect"));
-		Point topLeft = cs.convert(cs.xAxis.range.from, cs.yAxis.range.to);
-		Point bottomRight = cs.convert(cs.xAxis.range.to, cs.yAxis.range.from);
+		Point topLeft = cs.convert(cs.xAxis.range.getFrom(), cs.yAxis.range.getTo());
+		Point bottomRight = cs.convert(cs.xAxis.range.getTo(), cs.yAxis.range.getFrom());
 		rect.setAttribute("x", topLeft.x());
 		rect.setAttribute("y", topLeft.y());
-		rect.setAttribute("width", SvgTools.format2svg(bottomRight.x - topLeft.x));
-		rect.setAttribute("height", SvgTools.format2svg(bottomRight.y - topLeft.y));
+		rect.setAttribute("width", SvgTools.format2svg(bottomRight.getX() - topLeft.getX()));
+		rect.setAttribute("height", SvgTools.format2svg(bottomRight.getY() - topLeft.getY()));
 		
-		return viewbox;
+		return newViewbox;
 	}
 }

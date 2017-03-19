@@ -54,8 +54,8 @@ public class Gnuplot {
 		String command = "set table; \n";
 		command += "set sample " + sample + "; ";
 		String pi = this.pi ? "*pi" : "";
-		command += "set xrange [" + xrange.from + pi + ":" + xrange.to + pi + "]; ";
-		command += "set yrange [" + yrange.from + ":" + yrange.to + "]; ";
+		command += "set xrange [" + xrange.getFrom() + pi + ":" + xrange.getTo() + pi + "]; ";
+		command += "set yrange [" + yrange.getFrom() + ":" + yrange.getTo() + "]; ";
 		//call gnuplot with command
 		Process p = Runtime.getRuntime().exec(new String[] { executable, "-e", command, "-e", "plot " + function });
 		BufferedReader bri = new BufferedReader(new InputStreamReader(p.getInputStream()));
@@ -89,7 +89,7 @@ public class Gnuplot {
 			scanner.useLocale(Locale.ENGLISH);
 			point = new Point(scanner.nextDouble(), scanner.nextDouble());
 			if (this.pi) {
-				point.x /= Math.PI;
+				point.setX(point.getX() / Math.PI);
 			}
 			String type = scanner.next();
 			if (type.equals("u")) {

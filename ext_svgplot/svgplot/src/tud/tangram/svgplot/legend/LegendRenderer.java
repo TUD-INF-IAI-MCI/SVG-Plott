@@ -35,10 +35,10 @@ public class LegendRenderer extends PriorityQueue<LegendItem> {
 		legend.appendCss(legendCss);
 
 		Element viewbox = (Element) legend.appendChild(legend.createElement("svg"));
-		viewbox.setAttribute("viewBox", "0 0 " + SvgTools.format2svg(size.x) + " " + SvgTools.format2svg(size.y));
+		viewbox.setAttribute("viewBox", "0 0 " + SvgTools.format2svg(size.getX()) + " " + SvgTools.format2svg(size.getY()));
 
-		double x = startingPosition.x;
-		double currentY = startingPosition.y;
+		double x = startingPosition.getX();
+		double currentY = startingPosition.getY();
 
 		while (!isEmpty()) {
 			LegendItem item = poll();

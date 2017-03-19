@@ -117,11 +117,11 @@ public class SvgGridPainter extends SvgPainter {
 			Element xGrid = (Element) grid.appendChild(doc.createGroup("x-grid"));
 			dotDistance = cs.convertYDistance(cs.yAxis.gridInterval);
 			factor = (int) (dotDistance / 2.3);
-			dotDistance = (dotDistance - factor * Constants.strokeWidth) / factor;
-			xGrid.setAttribute("stroke-dasharray", Constants.strokeWidth + ", " + SvgTools.format2svg(dotDistance));
+			dotDistance = (dotDistance - factor * Constants.STROKE_WIDTH) / factor;
+			xGrid.setAttribute("stroke-dasharray", Constants.STROKE_WIDTH + ", " + SvgTools.format2svg(dotDistance));
 			for (double pos : cs.xAxis.gridLines()) {
-				Point from = cs.convert(pos, cs.yAxis.range.to, 0, -Constants.strokeWidth / 2);
-				Point to = cs.convert(pos, cs.yAxis.range.from, 0, Constants.strokeWidth / 2);
+				Point from = cs.convert(pos, cs.yAxis.range.getTo(), 0, -Constants.STROKE_WIDTH / 2);
+				Point to = cs.convert(pos, cs.yAxis.range.getFrom(), 0, Constants.STROKE_WIDTH / 2);
 				xGrid.appendChild(doc.createLine(from, to));
 			}
 		}
@@ -130,11 +130,11 @@ public class SvgGridPainter extends SvgPainter {
 			Element yGrid = (Element) grid.appendChild(doc.createGroup("y-grid"));
 			dotDistance = cs.convertXDistance(cs.xAxis.gridInterval);
 			factor = (int) (dotDistance / 2.3);
-			dotDistance = (dotDistance - factor * Constants.strokeWidth) / factor;
-			yGrid.setAttribute("stroke-dasharray", Constants.strokeWidth + ", " + SvgTools.format2svg(dotDistance));
+			dotDistance = (dotDistance - factor * Constants.STROKE_WIDTH) / factor;
+			yGrid.setAttribute("stroke-dasharray", Constants.STROKE_WIDTH + ", " + SvgTools.format2svg(dotDistance));
 			for (double pos : cs.yAxis.gridLines()) {
-				Point from = cs.convert(cs.xAxis.range.from, pos, -Constants.strokeWidth / 2, 0);
-				Point to = cs.convert(cs.xAxis.range.to, pos, Constants.strokeWidth / 2, 0);
+				Point from = cs.convert(cs.xAxis.range.getFrom(), pos, -Constants.STROKE_WIDTH / 2, 0);
+				Point to = cs.convert(cs.xAxis.range.getTo(), pos, Constants.STROKE_WIDTH / 2, 0);
 				yGrid.appendChild(doc.createLine(from, to));
 			}
 		}
@@ -150,8 +150,8 @@ public class SvgGridPainter extends SvgPainter {
 		Point from, to;
 		String points;
 
-		from = cs.convert(xRange.from, 0, -15, 0);
-		to = cs.convert(xRange.to, 0, 10, 0);
+		from = cs.convert(xRange.getFrom(), 0, -15, 0);
+		to = cs.convert(xRange.getTo(), 0, 10, 0);
 
 		// Create the x axis line
 		if (xAxisStyle.axis) {
@@ -182,17 +182,17 @@ public class SvgGridPainter extends SvgPainter {
 		}
 
 		// Create a double x axis on the smaller side if configured and possible
-		if (xAxisStyle.axisSmaller && yRange.from < 0) {
-			from = cs.convert(xRange.from, yRange.from, -15, 0);
-			to = cs.convert(xRange.to, yRange.from, 10, 0);
+		if (xAxisStyle.axisSmaller && yRange.getFrom() < 0) {
+			from = cs.convert(xRange.getFrom(), yRange.getFrom(), -15, 0);
+			to = cs.convert(xRange.getTo(), yRange.getFrom(), 10, 0);
 
 			Element xAxisLine = doc.createLine(from, to);
 			axes.appendChild(xAxisLine);
 			xAxisLine.setAttribute("id", "x-axis-smaller");
 		}
 
-		from = cs.convert(0, yRange.from, 0, 15);
-		to = cs.convert(0, yRange.to, 0, -10);
+		from = cs.convert(0, yRange.getFrom(), 0, 15);
+		to = cs.convert(0, yRange.getTo(), 0, -10);
 
 		// Create the y axis line
 		if (yAxisStyle.axis) {
@@ -223,9 +223,9 @@ public class SvgGridPainter extends SvgPainter {
 		}
 		
 		// Create a double y axis on the smaller side if configured and possible
-		if (yAxisStyle.axisSmaller && xRange.from < 0) {
-			from = cs.convert(xRange.from, yRange.from, 0, 15);
-			to = cs.convert(xRange.from, yRange.to, 0, -10);
+		if (yAxisStyle.axisSmaller && xRange.getFrom() < 0) {
+			from = cs.convert(xRange.getFrom(), yRange.getFrom(), 0, 15);
+			to = cs.convert(xRange.getFrom(), yRange.getTo(), 0, -10);
 
 			Element xAxisLine = doc.createLine(from, to);
 			axes.appendChild(xAxisLine);
@@ -236,16 +236,16 @@ public class SvgGridPainter extends SvgPainter {
 		if (xAxisStyle.tics) {
 			Node xTics = axes.appendChild(doc.createGroup("x-tics"));
 			for (double pos : cs.xAxis.ticLines()) {
-				if (xAxisStyle.axisSmaller && yRange.from < 0) {
-					from = cs.convert(pos, yRange.from, 0, -6);
-					to = from.clone();
+				if (xAxisStyle.axisSmaller && yRange.getFrom() < 0) {
+					from = cs.convert(pos, yRange.getFrom(), 0, -6);
+					to = new Point(from);
 					to.translate(0, 12);
 					xTics.appendChild(doc.createLine(from, to));
 				}
 				// TODO also look at the axisBigger
-				if (!xAxisStyle.axisSmaller || yRange.from >= 0) {
+				if (!xAxisStyle.axisSmaller || yRange.getFrom() >= 0) {
 					from = cs.convert(pos, 0, 0, -6);
-					to = from.clone();
+					to = new Point(from);
 					to.translate(0, 12);
 					xTics.appendChild(doc.createLine(from, to));
 				}
@@ -255,15 +255,15 @@ public class SvgGridPainter extends SvgPainter {
 		if (yAxisStyle.tics) {
 			Node yTics = axes.appendChild(doc.createGroup("y-tics"));
 			for (double pos : cs.yAxis.ticLines()) {
-				if(yAxisStyle.axisSmaller && xRange.from < 0) {
-					from = cs.convert(xRange.from, pos, -6, 0);
-					to = from.clone();
+				if(yAxisStyle.axisSmaller && xRange.getFrom() < 0) {
+					from = cs.convert(xRange.getFrom(), pos, -6, 0);
+					to = new Point(from);
 					to.translate(12, 0);
 					yTics.appendChild(doc.createLine(from, to));
 				}
-				if(!yAxisStyle.axisSmaller || xRange.from >= 0) {
+				if(!yAxisStyle.axisSmaller || xRange.getFrom() >= 0) {
 					from = cs.convert(0, pos, -6, 0);
-					to = from.clone();
+					to = new Point(from);
 					to.translate(12, 0);
 					yTics.appendChild(doc.createLine(from, to));
 				}
@@ -274,7 +274,7 @@ public class SvgGridPainter extends SvgPainter {
 		Element axesClone = (Element) axes.cloneNode(true);
 		axesClone.setAttribute("id", "axes_spacer");
 		axesClone.setAttribute("class", axesClone.hasAttribute("class")
-				? axesClone.getAttribute("class") + " " + Constants.spacerCssClass : Constants.spacerCssClass);
+				? axesClone.getAttribute("class") + " " + Constants.SPACER_CSS_CLASS : Constants.SPACER_CSS_CLASS);
 
 		axes.insertBefore(axesClone, axes.getFirstChild());
 
@@ -286,13 +286,13 @@ public class SvgGridPainter extends SvgPainter {
 		super.prepareLegendRenderer(renderer, device, priority);
 
 		renderer.add(new LegendTextItem(priority,
-				SvgTools.translate("legend.xrange", SvgTools.formatX(cs, cs.xAxis.range.from),
-						SvgTools.formatX(cs, cs.xAxis.range.to), SvgTools.formatName(cs.xAxis.range.name)),
+				SvgTools.translate("legend.xrange", SvgTools.formatX(cs, cs.xAxis.range.getFrom()),
+						SvgTools.formatX(cs, cs.xAxis.range.getTo()), SvgTools.formatName(cs.xAxis.range.getName())),
 				SvgTools.translate("legend.xtic", SvgTools.formatX(cs, cs.xAxis.ticInterval))));
 
 		renderer.add(new LegendTextItem(priority,
-				SvgTools.translate("legend.yrange", SvgTools.formatY(cs, cs.yAxis.range.from),
-						SvgTools.formatY(cs, cs.yAxis.range.to), SvgTools.formatName(cs.yAxis.range.name)),
+				SvgTools.translate("legend.yrange", SvgTools.formatY(cs, cs.yAxis.range.getFrom()),
+						SvgTools.formatY(cs, cs.yAxis.range.getTo()), SvgTools.formatName(cs.yAxis.range.getName())),
 				SvgTools.translate("legend.ytic", SvgTools.formatY(cs, cs.yAxis.ticInterval))));
 	}
 

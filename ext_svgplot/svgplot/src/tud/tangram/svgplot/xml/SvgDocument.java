@@ -33,14 +33,14 @@ public class SvgDocument extends Document {
 		root.setAttribute("xmlns", "http://www.w3.org/2000/svg");
 		root.setAttribute("version", "1.1");
 		root.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
-		root.setAttribute("width", SvgTools.format2svg(size.x) + "mm");
-		root.setAttribute("height", SvgTools.format2svg(size.y) + "mm");
+		root.setAttribute("width", SvgTools.format2svg(size.getX()) + "mm");
+		root.setAttribute("height", SvgTools.format2svg(size.getY()) + "mm");
 
 		defs = root.appendChild(doc.createElement("defs"));
 
 		titleNode = root.appendChild(createTitle(title));
 
-		textEnd = size.x - marginRight;
+		textEnd = size.getX() - marginRight;
 	}
 
 	public void setAttribute(String name, String value) {
@@ -160,7 +160,7 @@ public class SvgDocument extends Document {
 	 * @return the lower end of the title {@link Element}
 	 */
 	public Point createTitleText(String titleText, Point startingPosition) {
-		Point position = startingPosition.clone();
+		Point position = new Point(startingPosition);
 		Element title = (Element) insertAfter(createText(position, titleText), titleNode);
 		title.setAttribute("id", "title");
 		return position;
@@ -181,7 +181,7 @@ public class SvgDocument extends Document {
 
 	public Element createText(Point point, String line1, String... lines) {
 		Element text = createElement("text");
-		int charLimit = (int) ((textEnd - point.x) / 6.5);
+		int charLimit = (int) ((textEnd - point.getX()) / 6.5);
 		if (lines.length == 0 && line1.length() <= charLimit) {
 			text.setAttribute("x", point.x() + "mm");
 			text.setAttribute("y", point.y() + "mm");

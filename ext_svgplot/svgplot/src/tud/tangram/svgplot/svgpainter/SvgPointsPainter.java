@@ -45,10 +45,10 @@ public class SvgPointsPainter extends SvgPainter {
 		StringBuilder defaultOptions = new StringBuilder();
 
 		defaultOptions.append(".poi_symbol { stroke: black; stroke-dasharray: none; stroke-width:"
-				+ (Constants.strokeWidth * 1.5) + ";  fill: black; }").append(System.lineSeparator());
+				+ (Constants.STROKE_WIDTH * 1.5) + ";  fill: black; }").append(System.lineSeparator());
 		defaultOptions
-				.append("." + Constants.spacerCssClass + " { stroke: white; stroke-dasharray: none; stroke-width:"
-						+ (Constants.strokeWidth * 6) + ";  fill: transparent; stroke-linecap: round; }")
+				.append("." + Constants.SPACER_CSS_CLASS + " { stroke: white; stroke-dasharray: none; stroke-width:"
+						+ (Constants.STROKE_WIDTH * 6) + ";  fill: transparent; stroke-linecap: round; }")
 				.append(System.lineSeparator());
 
 		deviceCss.put(OutputDevice.Default, defaultOptions.toString());
@@ -87,8 +87,8 @@ public class SvgPointsPainter extends SvgPainter {
 						Element ps = PointPlot.paintPoint(doc, cs.convert(p), symbol,
 								plGroup != null ? plGroup : viewbox);
 						ps.appendChild(doc.createTitle(SvgTools.formatForSpeech(cs, p)));
-						if (pl.name != null && !pl.name.isEmpty())
-							ps.appendChild(doc.createDesc(pl.name)); // TODO:
+						if (pl.getName() != null && !pl.getName().isEmpty())
+							ps.appendChild(doc.createDesc(pl.getName())); // TODO:
 																		// maybe
 																		// fine
 																		// this

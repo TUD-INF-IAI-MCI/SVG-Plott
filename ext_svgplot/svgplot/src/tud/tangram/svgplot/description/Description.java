@@ -107,9 +107,9 @@ public class Description extends HtmlDocument{
 		int i = offset;
 		for (Point point : points) {
 			if (cap != null && !cap.isEmpty()) {
-				list.appendChild(createTextElement("li", cap + "_" + ++i + " = " + SvgTools.formatX(cs, point.x)));
+				list.appendChild(createTextElement("li", cap + "_" + ++i + " = " + SvgTools.formatX(cs, point.getX())));
 			} else {
-				list.appendChild(createTextElement("li", SvgTools.formatX(cs, point.x)));
+				list.appendChild(createTextElement("li", SvgTools.formatX(cs, point.getX())));
 			}
 		}
 		return list;

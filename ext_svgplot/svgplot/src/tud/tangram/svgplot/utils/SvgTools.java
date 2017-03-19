@@ -6,6 +6,9 @@ import tud.tangram.svgplot.coordinatesystem.CoordinateSystem;
 import tud.tangram.svgplot.data.Point;
 
 public class SvgTools {
+	private SvgTools() {
+	}
+	
 	/**
 	 * Format a number for svg usage according to the constant decimalFormat
 	 * 
@@ -108,8 +111,8 @@ public class SvgTools {
 	 * @return formated string for the point with '/' as delimiter
 	 */
 	public static String formatForSpeech(CoordinateSystem cs, Point point) {
-		return ((point.name != null && !point.name.isEmpty()) ? point.name + " " : "") + formatX(cs, point.x)
-				+ " / " + formatY(cs, point.y);
+		return ((point.getName() != null && !point.getName().isEmpty()) ? point.getName() + " " : "") + formatX(cs, point.getX()) + " / "
+				+ formatY(cs, point.getY());
 	}
 
 	/**
@@ -122,17 +125,17 @@ public class SvgTools {
 	 *            The point that should be transformed into a textual
 	 *            representation
 	 * @param cap
-	 *            The caption sting without brackets
+	 *            The caption string without brackets
 	 * @return formated string for the point with '/' as delimiter if now
 	 *         caption is set, otherwise packed in the caption with brackets and
 	 *         the '|' as delimiter
 	 */
 	public static String formatForText(CoordinateSystem cs, Point point, String cap) {
-		String p = formatX(cs, point.x) + " | " + formatY(cs, point.y);
-		cap = cap.trim();
-		return (cap != null && !cap.isEmpty()) ? cap + "(" + p + ")" : p;
+		String p = formatX(cs, point.getX()) + " | " + formatY(cs, point.getY());
+		String capTrimmed = cap.trim();
+		return (capTrimmed != null && !capTrimmed.isEmpty()) ? capTrimmed + "(" + p + ")" : p;
 	}
-	
+
 	/**
 	 * Try to translate the function index into a continuous literal starting
 	 * with the char 'f'. If the given index is not valid it returns the name as
@@ -144,14 +147,14 @@ public class SvgTools {
 	 *         'g', 'h' or 'f1000'.
 	 */
 	public static String getFunctionName(int f) {
-		if (f < 0 || f > (Constants.fnList.length - 1))
-			return "f" + String.valueOf(f);
-		return Constants.fnList[f];
+		if (f < 0 || f > (Constants.FN_LIST.size() - 1))
+			return "f" + f;
+		return Constants.FN_LIST.get(f);
 	}
 
 	public static String getPointName(int p) {
-		if (p < 0 || p > (Constants.pnList.length - 1))
-			return "P" + String.valueOf(p);
-		return Constants.pnList[p];
+		if (p < 0 || p > (Constants.PN_LIST.size() - 1))
+			return "P" + p;
+		return Constants.PN_LIST.get(p);
 	}
 }

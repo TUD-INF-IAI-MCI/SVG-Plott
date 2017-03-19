@@ -166,7 +166,7 @@ public class PointPlot {
 	/**
 	 * The css class for the underlying part of a POI Symbol, should result i a kind of outline. 
 	 */
-	public final static String POI_SYMBOL_SPACER_CLASS = Constants.spacerCssClass;
+	public final static String POI_SYMBOL_SPACER_CLASS = Constants.SPACER_CSS_CLASS;
 
 	/**
 	 * Creates a cross Symbol with the id 'poi_cross'

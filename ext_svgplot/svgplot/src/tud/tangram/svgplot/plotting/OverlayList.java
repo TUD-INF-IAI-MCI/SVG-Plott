@@ -41,13 +41,13 @@ public class OverlayList extends ArrayList<Overlay> {
 	 */
 	public boolean add(Overlay overlay, boolean overwrite) {
 		// Do not add the overlay if would not be shown anyway.
-		if (overlay.y < cs.yAxis.range.from || overlay.y > cs.yAxis.range.to) {
+		if (overlay.getY() < cs.yAxis.range.getFrom() || overlay.getY() > cs.yAxis.range.getTo()) {
 			return false;
 		}
 
 		// Search for the first overlay not being left (x) of the one to add.
 		int i = 0;
-		while (i < size() && get(i).x <= overlay.x) {
+		while (i < size() && get(i).getX() <= overlay.getX()) {
 			i++;
 		}
 
@@ -57,7 +57,7 @@ public class OverlayList extends ArrayList<Overlay> {
 		// Check whether on of the overlays left (x) to the current one
 		// intersects with it. If it does, do not add the current one/overwrite.
 		int k = i - 1;
-		while (k >= 0 && cs.convertXDistance(overlay.x - get(k).x) < d) {
+		while (k >= 0 && cs.convertXDistance(overlay.getX() - get(k).getX()) < d) {
 			if (cs.convertDistance(get(k), overlay) < d) {
 				if (overwrite) {
 					i--;
@@ -72,7 +72,7 @@ public class OverlayList extends ArrayList<Overlay> {
 		// Check whether one of the overlays right (x) to the current one
 		// intersects with it. If it does, do not add the current one/overwrite.
 		k = i;
-		while (k < size() && cs.convertXDistance(get(k).x - overlay.x) < d) {
+		while (k < size() && cs.convertXDistance(get(k).getX() - overlay.getX()) < d) {
 			if (cs.convertDistance(get(k), overlay) < d) {
 				if (overwrite) {
 					remove(k);

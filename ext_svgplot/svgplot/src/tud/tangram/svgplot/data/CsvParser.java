@@ -63,7 +63,7 @@ public class CsvParser {
 
 			// Get the row name
 			if (xRowIterator.hasNext() && yRowIterator.hasNext()) {
-				rowPoints.name = xRowIterator.next();
+				rowPoints.setName(xRowIterator.next());
 				yRowIterator.next();
 			} else {
 				continue;
@@ -76,8 +76,7 @@ public class CsvParser {
 				try {
 					xValue = Constants.numberFormat.parse(xRowIterator.next());
 					yValue = Constants.numberFormat.parse(yRowIterator.next());
-				}
-				catch(ParseException e) {
+				} catch (ParseException e) {
 					continue;
 				}
 				Point newPoint = new Point(xValue.doubleValue(), yValue.doubleValue());
@@ -85,83 +84,93 @@ public class CsvParser {
 			}
 
 			// If there were no points found, do not add the row to the list
-			if (rowPoints.size() == 0) {
-				continue;
-			}
-
-			pointListList.add(rowPoints);
+			if (!rowPoints.isEmpty())
+				pointListList.add(rowPoints);
 		}
 
 		return pointListList;
 	}
-	
+
 	public PointListList parseAsScatterDataVerticalRows() {
 		int row = 0;
 
 		PointListList pointListList = new PointListList();
-		
-		if(csvData.size() == 0)
+
+		if (csvData.isEmpty())
 			return pointListList;
-		
+
 		// Iterate over the first row in order to get the headers
 		int col = 0;
-		for(String header : csvData.get(0)) {
-			if(col % 2 == 0) {
+		for (String header : csvData.get(0)) {
+			if (col % 2 == 0) {
 				PointList pointList = pointListList.new PointList();
-				pointList.name = header;
+				pointList.setName(header);
 				pointListList.add(pointList);
 			}
 			col++;
 		}
-		
+
 		row++;
-		
+
 		// Continue as long as there is at least one further rows left
 		while (csvData.size() >= row + 1) {
 			ArrayList<String> fields = csvData.get(row);
 			Iterator<String> fieldIterator = fields.iterator();
-			
+
 			col = -1;
-			
-			while(fieldIterator.hasNext()) {
+
+			while (fieldIterator.hasNext()) {
 				String xRaw = fieldIterator.next();
 				String yRaw;
-				
+
 				col++;
-				
-				if(fieldIterator.hasNext()) {
-					yRaw = fieldIterator.next();
-					
-					Number xValue;
-					Number yValue;
-					
-					try {
-						xValue = Constants.numberFormat.parse(xRaw);
-						yValue = Constants.numberFormat.parse(yRaw);
-					}
-					catch(ParseException e) {
-						col++;
-						continue;
-					}
-					
-					Point point = new Point(xValue.doubleValue(), yValue.doubleValue());
-					
-					while(pointListList.size() < col/2) {
-						pointListList.add(pointListList.new PointList());
-					}
-					
-					pointListList.get(col/2).add(point);
-					
-					col++;
-				}
-				else {
+
+				if (!fieldIterator.hasNext())
 					break;
+				
+				yRaw = fieldIterator.next();
+
+				Number xValue;
+				Number yValue;
+
+				try {
+					xValue = Constants.numberFormat.parse(xRaw);
+					yValue = Constants.numberFormat.parse(yRaw);
+				} catch (ParseException e) {
+					col++;
+					continue;
 				}
+
+				Point point = new Point(xValue.doubleValue(), yValue.doubleValue());
+
+				addPointToPointListList(pointListList, col / 2, point);
+
+				col++;
 			}
-			
+
 			row++;
 		}
-		
+
 		return pointListList;
+	}
+
+	/**
+	 * Adds a {@code point} to a {@link PointList} in a {@link PointListList},
+	 * specified by {@code listIndex}. Adds more {@link PointList PointLists} if
+	 * needed.
+	 * 
+	 * @param pointListList
+	 *            the {@link PointListList} to which the point shall be added
+	 * @param listIndex
+	 *            the index of the list to which the point shall be added
+	 * @param point
+	 *            the point which shall be added
+	 */
+	private void addPointToPointListList(PointListList pointListList, int listIndex, Point point) {
+		while (pointListList.size() < listIndex) {
+			pointListList.add(pointListList.new PointList());
+		}
+
+		pointListList.get(listIndex).add(point);
 	}
 }

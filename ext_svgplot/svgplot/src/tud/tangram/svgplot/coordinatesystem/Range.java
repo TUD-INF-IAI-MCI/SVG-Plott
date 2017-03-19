@@ -10,11 +10,11 @@ import com.beust.jcommander.IStringConverter;
  */
 public class Range {
 	/** Start of the range */
-	public double from;
+	private double from;
 	/** End of the range */
-	public double to;
+	private double to;
 	
-	public String name;
+	private String name;
 
 	/**
 	 * Constructor with name.
@@ -89,5 +89,29 @@ public class Range {
 					Double.parseDouble(s[0]), Double.parseDouble(s[1]), name);				
 			}
 		
+	}
+
+	public double getFrom() {
+		return from;
+	}
+
+	public void setFrom(double from) {
+		this.from = from;
+	}
+
+	public double getTo() {
+		return to;
+	}
+
+	public void setTo(double to) {
+		this.to = to;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 }

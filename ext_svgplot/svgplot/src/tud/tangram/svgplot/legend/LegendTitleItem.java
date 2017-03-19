@@ -28,7 +28,7 @@ public class LegendTitleItem extends LegendItem {
 	public double render(SvgDocument legend, Element viewbox, Point startingPosition) {
 		legend.paintBackground();
 		Point legendTitleLowerEnd = legend.createTitleText(legendTitle, startingPosition);
-		return legendTitleLowerEnd.y + 5;
+		return legendTitleLowerEnd.getY() + 5;
 	}
 
 	@Override

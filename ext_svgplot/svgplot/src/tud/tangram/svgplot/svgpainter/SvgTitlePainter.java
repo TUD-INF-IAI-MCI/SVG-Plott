@@ -1,6 +1,8 @@
 package tud.tangram.svgplot.svgpainter;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.w3c.dom.Element;
 
@@ -20,13 +22,8 @@ public class SvgTitlePainter extends SvgPainter {
 
 	private String title;
 	private String legendTitle;
-	private int[] diagramContentMargin;
+	private List<Integer> diagramContentMargin;
 	private Point diagramTitleLowerEnd;
-
-	@Override
-	protected String getPainterName() {
-		return "Title Painter";
-	}
 
 	/**
 	 * 
@@ -38,7 +35,7 @@ public class SvgTitlePainter extends SvgPainter {
 	public SvgTitlePainter(String title, String legendTitle) {
 		this.title = title;
 		this.legendTitle = legendTitle;
-		this.diagramContentMargin = Constants.margin.clone();
+		this.diagramContentMargin = new ArrayList<>(Constants.MARGIN);
 	}
 
 	@Override
@@ -48,7 +45,7 @@ public class SvgTitlePainter extends SvgPainter {
 		StringBuilder defaultOptions = new StringBuilder();
 
 		// Set the background style
-		defaultOptions.append("svg { fill: none; stroke: #000000; stroke-width: " + Constants.strokeWidth + "; }")
+		defaultOptions.append("svg { fill: none; stroke: #000000; stroke-width: " + Constants.STROKE_WIDTH + "; }")
 				.append(System.lineSeparator());
 
 		// Set the text style
@@ -85,13 +82,13 @@ public class SvgTitlePainter extends SvgPainter {
 		super.paintToSvgDocument(doc, viewbox, device);
 
 		doc.paintBackground();
-		
+
 		diagramTitleLowerEnd = doc.createTitleText(title, Constants.titlePosition);
 
 		// Set the new margins according to the title
-		diagramContentMargin[0] = (int) diagramTitleLowerEnd.y + 17;
-		diagramContentMargin[1] += 20;
-		diagramContentMargin[3] += 10;
+		diagramContentMargin.set(0, (int) diagramTitleLowerEnd.getY() + 17);
+		diagramContentMargin.set(1, diagramContentMargin.get(1) + 20);
+		diagramContentMargin.set(3, diagramContentMargin.get(3) + 10);
 	}
 
 	@Override
@@ -118,7 +115,12 @@ public class SvgTitlePainter extends SvgPainter {
 	 * 
 	 * @return
 	 */
-	public int[] getDiagramContentMargin() {
+	public List<Integer> getDiagramContentMargin() {
 		return diagramContentMargin;
+	}
+
+	@Override
+	protected String getPainterName() {
+		return "Title Painter";
 	}
 }

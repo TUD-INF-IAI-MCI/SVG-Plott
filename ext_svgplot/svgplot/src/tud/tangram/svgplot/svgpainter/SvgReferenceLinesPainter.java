@@ -1,7 +1,7 @@
 package tud.tangram.svgplot.svgpainter;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.w3c.dom.Element;
 
@@ -15,10 +15,10 @@ import tud.tangram.svgplot.xml.SvgDocument;
 
 public class SvgReferenceLinesPainter extends SvgPainter {
 
-	private ArrayList<ReferenceLine> lines;
+	private List<ReferenceLine> lines;
 	private CoordinateSystem cs;
 
-	public SvgReferenceLinesPainter(CoordinateSystem cs, ArrayList<ReferenceLine> lines) {
+	public SvgReferenceLinesPainter(CoordinateSystem cs, List<ReferenceLine> lines) {
 		this.lines = lines;
 		this.cs = cs;
 	}
@@ -33,14 +33,14 @@ public class SvgReferenceLinesPainter extends SvgPainter {
 		HashMap<OutputDevice, String> deviceCss = new HashMap<>();
 
 		StringBuilder css = new StringBuilder();
-		css.append("#reference-lines { stroke-width: " + Constants.strokeWidth + "; }").append(System.lineSeparator());
+		css.append("#reference-lines { stroke-width: " + Constants.STROKE_WIDTH + "; }").append(System.lineSeparator());
 
 		deviceCss.put(OutputDevice.Default, css.toString());
 
 		StringBuilder screenHighContrastCss = new StringBuilder();
 		screenHighContrastCss.append("#reference-lines { stroke: white; fill: transparent; }")
 				.append(System.lineSeparator());
-		
+
 		deviceCss.put(OutputDevice.ScreenHighContrast, screenHighContrastCss.toString());
 
 		return deviceCss;
@@ -53,7 +53,8 @@ public class SvgReferenceLinesPainter extends SvgPainter {
 	}
 
 	private void paintLines(SvgDocument doc, Element viewbox) {
-		Element xGroup, yGroup;
+		Element xGroup;
+		Element yGroup;
 		Element linesNode = doc.getOrCreateChildGroupById(viewbox, "reference-lines");
 
 		if (linesNode == null) {
@@ -62,25 +63,26 @@ public class SvgReferenceLinesPainter extends SvgPainter {
 
 		for (ReferenceLine line : lines) {
 			if (line.direction == Direction.X_LINE) {
+				Point from = cs.convert(line.position, cs.yAxis.range.getTo(), 0, -Constants.STROKE_WIDTH / 2);
+				Point to = cs.convert(line.position, cs.yAxis.range.getFrom(), 0, Constants.STROKE_WIDTH / 2);
+
 				xGroup = doc.getOrCreateChildGroupById(linesNode, "x-reference-lines");
 
-				if (xGroup == null) {
+				if (xGroup != null)
+					xGroup.appendChild(doc.createLine(from, to));
+				else
 					System.err.println("There exists already a non-group element with the id \"x-reference-lines\"");
-				}
 
-				Point from = cs.convert(line.position, cs.yAxis.range.to, 0, -Constants.strokeWidth / 2);
-				Point to = cs.convert(line.position, cs.yAxis.range.from, 0, Constants.strokeWidth / 2);
-				xGroup.appendChild(doc.createLine(from, to));
 			} else if (line.direction == Direction.Y_LINE) {
+				Point from = cs.convert(cs.xAxis.range.getFrom(), line.position, -Constants.STROKE_WIDTH / 2, 0);
+				Point to = cs.convert(cs.xAxis.range.getTo(), line.position, Constants.STROKE_WIDTH / 2, 0);
+
 				yGroup = doc.getOrCreateChildGroupById(linesNode, "y-reference-lines");
 
-				if (yGroup == null) {
+				if (yGroup != null)
+					yGroup.appendChild(doc.createLine(from, to));
+				else
 					System.err.println("There exists already a non-group element with the id \"y-reference-lines\"");
-				}
-
-				Point from = cs.convert(cs.xAxis.range.from, line.position, -Constants.strokeWidth / 2, 0);
-				Point to = cs.convert(cs.xAxis.range.to, line.position, Constants.strokeWidth / 2, 0);
-				yGroup.appendChild(doc.createLine(from, to));
 			}
 		}
 	}

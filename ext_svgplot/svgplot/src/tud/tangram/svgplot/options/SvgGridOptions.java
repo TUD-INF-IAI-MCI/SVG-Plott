@@ -16,13 +16,13 @@ public class SvgGridOptions extends SvgOptions {
 	}
 	
 	private void createFromSvgPlotOptions(SvgPlotOptions options) {
-		this.xRange = options.getxRange();
-		this.yRange = options.getyRange();
+		xRange = options.getxRange();
+		yRange = options.getyRange();
 		
-		this.xRange.from = Math.min(0, this.xRange.from);
-		this.xRange.to = Math.max(0, this.xRange.to);
-		this.yRange.from = Math.min(0, this.yRange.from);
-		this.yRange.to = Math.max(0, this.yRange.to);
+		xRange.setFrom(Math.min(0, xRange.getFrom()));
+		xRange.setTo(Math.max(0, xRange.getTo()));
+		yRange.setFrom(Math.min(0, yRange.getFrom()));
+		yRange.setTo(Math.max(0, yRange.getTo()));
 		
 		this.pi = options.isPi();
 		

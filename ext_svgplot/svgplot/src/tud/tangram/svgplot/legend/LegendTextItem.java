@@ -24,10 +24,10 @@ public class LegendTextItem extends LegendItem {
 	
 	@Override
 	public double render(SvgDocument legend, Element viewbox, Point startingPosition) {
-		Point currentPosition = startingPosition.clone();
+		Point currentPosition = new Point(startingPosition);
 		currentPosition.translate(0, textVerticalTextAlignment);
 		legend.appendChild(legend.createText(currentPosition, line1, lines));
-		return currentPosition.y;
+		return currentPosition.getY();
 	}
 
 	@Override

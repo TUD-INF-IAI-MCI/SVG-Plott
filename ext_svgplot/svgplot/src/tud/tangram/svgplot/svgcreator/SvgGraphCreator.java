@@ -28,7 +28,6 @@ public class SvgGraphCreator extends SvgGridCreator {
 		super(options);
 		this.options = options;
 	}
-	
 
 	public static SvgCreatorInstantiator INSTANTIATOR = new SvgCreatorInstantiator() {
 		public SvgCreator instantiateCreator(SvgPlotOptions rawOptions) {
@@ -53,12 +52,12 @@ public class SvgGraphCreator extends SvgGridCreator {
 			 * If the integral start and/or end is within the axis range, paint
 			 * reference lines for them
 			 */
-			if (options.integral.xRange.from > cs.xAxis.range.from)
-				lines.add(new ReferenceLine(Direction.X_LINE, options.integral.xRange.from));
-			if (options.integral.xRange.to < cs.xAxis.range.to)
-				lines.add(new ReferenceLine(Direction.X_LINE, options.integral.xRange.to));
+			if (options.integral.xRange.getFrom() > cs.xAxis.range.getFrom())
+				lines.add(new ReferenceLine(Direction.X_LINE, options.integral.xRange.getFrom()));
+			if (options.integral.xRange.getTo() < cs.xAxis.range.getTo())
+				lines.add(new ReferenceLine(Direction.X_LINE, options.integral.xRange.getTo()));
 
-			if (lines.size() > 0) {
+			if (!lines.isEmpty()) {
 				SvgReferenceLinesPainter svgReferenceLinesPainter = new SvgReferenceLinesPainter(cs, lines);
 				svgReferenceLinesPainter.paintToSvgDocument(doc, viewbox, options.outputDevice);
 			}
@@ -73,7 +72,8 @@ public class SvgGraphCreator extends SvgGridCreator {
 	}
 
 	/**
-	 * Paint the function/integral/scatter plots into the svg file and add according information into the legend.
+	 * Paint the function/integral/scatter plots into the svg file and add
+	 * according information into the legend.
 	 */
 	private void createPlots() {
 		/*
@@ -123,11 +123,11 @@ public class SvgGraphCreator extends SvgGridCreator {
 
 		// general description
 		Node div = desc.appendBodyChild(desc.createDiv("functions"));
-		div.appendChild(desc.createP(SvgTools.translateN("desc.intro", SvgTools.formatX(cs, cs.xAxis.range.from),
-				SvgTools.formatX(cs, cs.xAxis.range.to), SvgTools.formatX(cs, cs.xAxis.ticInterval),
-				SvgTools.formatY(cs, cs.yAxis.range.from), SvgTools.formatY(cs, cs.yAxis.range.to),
-				SvgTools.formatY(cs, cs.yAxis.ticInterval), SvgTools.formatName(cs.xAxis.range.name),
-				SvgTools.formatName(cs.yAxis.range.name), options.functions.size())));
+		div.appendChild(desc.createP(SvgTools.translateN("desc.intro", SvgTools.formatX(cs, cs.xAxis.range.getFrom()),
+				SvgTools.formatX(cs, cs.xAxis.range.getTo()), SvgTools.formatX(cs, cs.xAxis.ticInterval),
+				SvgTools.formatY(cs, cs.yAxis.range.getFrom()), SvgTools.formatY(cs, cs.yAxis.range.getTo()),
+				SvgTools.formatY(cs, cs.yAxis.ticInterval), SvgTools.formatName(cs.xAxis.range.getName()),
+				SvgTools.formatName(cs.yAxis.range.getName()), options.functions.size())));
 
 		// functions
 		if (!options.functions.isEmpty()) {
@@ -191,7 +191,7 @@ public class SvgGraphCreator extends SvgGridCreator {
 			int j = 0;
 			for (PointList pts : options.points) {
 				if (pts != null && pts.size() > 0) {
-					String text = pts.name.isEmpty() ? SvgTools.getPointName(j) : pts.name;
+					String text = pts.getName().isEmpty() ? SvgTools.getPointName(j) : pts.getName();
 					div.appendChild(desc.createP(SvgTools.translateN("legend.poi.list", text, pts.size())));
 
 					div.appendChild(desc.createPointList(cs, pts, SvgTools.getPointName(j), 0));
@@ -205,14 +205,14 @@ public class SvgGraphCreator extends SvgGridCreator {
 			div = desc.appendBodyChild(desc.createDiv("integral-"));
 			if (options.integral.function2 >= 0)
 				div.appendChild(desc.createP(SvgTools.translate("desc.integral_1",
-						Math.max(cs.xAxis.range.from, options.integral.xRange.from),
-						Math.min(cs.xAxis.range.to, options.integral.xRange.to),
+						Math.max(cs.xAxis.range.getFrom(), options.integral.xRange.getFrom()),
+						Math.min(cs.xAxis.range.getTo(), options.integral.xRange.getTo()),
 						SvgTools.getFunctionName(options.integral.function1),
 						SvgTools.getFunctionName(options.integral.function2))));
 			else
 				div.appendChild(desc.createP(SvgTools.translate("desc.integral_0",
-						Math.max(cs.xAxis.range.from, options.integral.xRange.from),
-						Math.min(cs.xAxis.range.to, options.integral.xRange.to),
+						Math.max(cs.xAxis.range.getFrom(), options.integral.xRange.getFrom()),
+						Math.min(cs.xAxis.range.getTo(), options.integral.xRange.getTo()),
 						SvgTools.getFunctionName(options.integral.function1))));
 		}
 

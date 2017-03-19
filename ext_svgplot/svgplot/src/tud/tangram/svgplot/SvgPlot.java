@@ -1,15 +1,19 @@
 package tud.tangram.svgplot;
 
-import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.beust.jcommander.IDefaultProvider;
 import com.beust.jcommander.JCommander;
+
 import tud.tangram.svgplot.options.SvgPlotOptions;
 import tud.tangram.svgplot.svgcreator.SvgCreator;
+import tud.tangram.svgplot.utils.Constants;
 
 /**
  * 
@@ -19,6 +23,12 @@ import tud.tangram.svgplot.svgcreator.SvgCreator;
  * 
  */
 public class SvgPlot {
+	
+	static final Logger log = LoggerFactory.getLogger(SvgPlot.class);
+	
+	private SvgPlot(){
+	}
+	
 	/**
 	 * @param args
 	 */
@@ -26,12 +36,10 @@ public class SvgPlot {
 		SvgPlotOptions options = new SvgPlotOptions();
 		JCommander jc = new JCommander(options);
 		jc.addConverterFactory(new SvgPlotOptions.StringConverterFactory());
-
-		try {
+		
+		try (final FileInputStream fis = new FileInputStream(Constants.PROPERTIES_FILENAME)){
 			final Properties properties = new Properties();
-			BufferedInputStream stream = new BufferedInputStream(new FileInputStream("svgplot.properties"));
-			properties.load(stream);
-			stream.close();
+			properties.load(fis);
 
 			jc.setDefaultProvider(new IDefaultProvider() {
 				@Override
@@ -40,7 +48,11 @@ public class SvgPlot {
 				}
 			});
 		} catch (FileNotFoundException e) {
+			log.info("Keine Konfigurationsdatei {} gefunden", Constants.PROPERTIES_FILENAME);
+			log.debug("Stacktrace", e);
 		} catch (IOException e) {
+			log.error("Datei {} konnte nicht geöffnet werden", Constants.PROPERTIES_FILENAME);
+			log.debug("Stacktrace", e);
 		}
 
 		for (int i = 0; i < args.length; i++) {
@@ -59,12 +71,13 @@ public class SvgPlot {
 		
 		options.finalizeOptions();
 		
+		// Create the SvgCreator that is responsible for rendering the selected diagram type
 		SvgCreator creator = options.getDiagramType().getInstance(options);
 		
 		try {
 			creator.run();
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error("Fehler beim Erstellen der SVG-Datei", e);
 		}
 	}
 

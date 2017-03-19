@@ -268,33 +268,26 @@ public class SvgPlotOptions {
 		if (csvPath != null) {
 			try {
 				CsvParser parser = new CsvParser(new FileReader(csvPath), ',', '"');
-				switch (this.csvOrientation) {
-				case VERTICAL:
-					this.points = parser.parseAsScatterDataVerticalRows();
-					break;
-				case HORIZONTAL:
-					this.points = parser.parseAsScatterDataHorizontalRows();
-					break;
-				default:
-					this.points = parser.parseAsScatterDataHorizontalRows();
-					break;
-				}
+				if(csvOrientation == CsvOrientation.VERTICAL)
+					points = parser.parseAsScatterDataVerticalRows();
+				else
+					points = parser.parseAsScatterDataHorizontalRows();
 
 			} catch (IOException e) {
-				this.points = (new PointListList.Converter()).convert(this.pts);
+				points = (new PointListList.Converter()).convert(pts);
 			}
 		} else {
-			this.points = (new PointListList.Converter()).convert(this.pts);
+			this.points = (new PointListList.Converter()).convert(pts);
 		}
 		if (this.points != null) {
-			if (this.xRange.from > this.points.minX)
-				this.xRange.from = this.points.minX * 1.05;
-			if (this.xRange.to < this.points.maxX)
-				this.xRange.to = this.points.maxX * 1.05;
-			if (this.yRange.from > this.points.minY)
-				this.yRange.from = this.points.minY * 1.05;
-			if (this.yRange.to < this.points.maxY)
-				this.yRange.to = this.points.maxY * 1.05;
+			if (xRange.getFrom() > points.getMinX())
+				xRange.setFrom(points.getMinX() * 1.05);
+			if (xRange.getTo() < points.getMaxX())
+				xRange.setTo(points.getMaxX() * 1.05);
+			if (yRange.getFrom() > points.getMinY())
+				yRange.setFrom(points.getMinY() * 1.05);
+			if (yRange.getTo() < points.getMaxY())
+				yRange.setTo(points.getMaxY() * 1.05);
 		}
 	}
 }

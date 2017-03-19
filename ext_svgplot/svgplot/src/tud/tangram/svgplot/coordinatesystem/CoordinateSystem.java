@@ -1,5 +1,7 @@
 package tud.tangram.svgplot.coordinatesystem;
 
+import java.util.List;
+
 import tud.tangram.svgplot.data.Point;
 
 /**
@@ -10,32 +12,33 @@ import tud.tangram.svgplot.data.Point;
  *
  */
 public class CoordinateSystem {
+	
+	public final Axis xAxis;
+	public final Axis yAxis;
+	
+	public final boolean pi;
+	
 	/** Origin of the real coordinate system (left upper corner) */
-	final private Point origin;
+	private final Point origin;
 	
 	/** Size of the drawing area excluding margins */
-	final private Point size;
-	
-	final public Axis xAxis;
-	final public Axis yAxis;
-	
-	final public boolean pi;
+	private final Point size;
 
-	public CoordinateSystem(Range xRange, Range yRange, Point size, int[] margin) {
+	public CoordinateSystem(Range xRange, Range yRange, Point size, List<Integer> margin) {
 		this(xRange, yRange, size, margin, false);
 	}
 	
-	public CoordinateSystem(Range xRange, Range yRange, Point size, int[] margin, boolean pi) {
-		origin = new Point(margin[3], margin[0]);
+	public CoordinateSystem(Range xRange, Range yRange, Point size, List<Integer> diagramContentMargin, boolean pi) {
+		origin = new Point(diagramContentMargin.get(3), diagramContentMargin.get(0));
 
-		this.size = size.clone();
-		this.size.x -= margin[1] + margin[3];
-		this.size.y -= margin[0] + margin[2];
+		this.size = new Point(size);
+		this.size.setX(this.size.getX() - (diagramContentMargin.get(1) + diagramContentMargin.get(3)));
+		this.size.setY(this.size.getY() - (diagramContentMargin.get(0) + diagramContentMargin.get(2)));
 //		this.size.x = Math.min(this.size.x, this.size.y);
 //		this.size.y = this.size.x;
 
-		xAxis = new Axis(xRange, this.size.x);
-		yAxis = new Axis(yRange, this.size.y);
+		xAxis = new Axis(xRange, this.size.getX());
+		yAxis = new Axis(yRange, this.size.getY());
 		
 		this.pi = pi;
 	}
@@ -47,9 +50,9 @@ public class CoordinateSystem {
 	 * @return real point
 	 */
 	public Point convert(double x, double y) {
-		x = origin.x + (x - xAxis.range.from) * size.x / (xAxis.range.to - xAxis.range.from);
-		y = origin.y + size.y - ((y - yAxis.range.from) * size.y / (yAxis.range.to - yAxis.range.from));
-		return new Point(x, y);
+		double newX = origin.getX() + (x - xAxis.range.getFrom()) * size.getX() / (xAxis.range.getTo() - xAxis.range.getFrom());
+		double newY = origin.getY() + size.getY() - ((y - yAxis.range.getFrom()) * size.getY() / (yAxis.range.getTo() - yAxis.range.getFrom()));
+		return new Point(newX, newY);
 	}
 
 	/**
@@ -58,7 +61,7 @@ public class CoordinateSystem {
 	 * @return real point
 	 */
 	public Point convert(Point point) {
-		return convert(point.x, point.y);
+		return convert(point.getX(), point.getY());
 	}
 
 	/**
@@ -85,7 +88,7 @@ public class CoordinateSystem {
 	 * @return real point
 	 */
 	public Point convert(Point point, double dx, double dy) {
-		return convert(point.x, point.y, dx, dy);
+		return convert(point.getX(), point.getY(), dx, dy);
 	}
 
 	/**
@@ -94,7 +97,7 @@ public class CoordinateSystem {
 	 * @return real distance
 	 */
 	public double convertXDistance(double distance) {
-		return distance * size.x / (xAxis.range.to - xAxis.range.from);
+		return distance * size.getX() / (xAxis.range.getTo() - xAxis.range.getFrom());
 	}
 
 	/**
@@ -103,7 +106,7 @@ public class CoordinateSystem {
 	 * @return real distance
 	 */
 	public double convertYDistance(double distance) {
-		return distance * size.y / (yAxis.range.to - yAxis.range.from);
+		return distance * size.getY() / (yAxis.range.getTo() - yAxis.range.getFrom());
 	}
 
 	/**
