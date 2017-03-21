@@ -10,6 +10,7 @@ import com.beust.jcommander.IStringConverter;
 import tud.tangram.svgplot.svgcreator.SvgCreator;
 import tud.tangram.svgplot.svgcreator.SvgCreatorInstantiator;
 import tud.tangram.svgplot.svgcreator.SvgGraphCreator;
+import tud.tangram.svgplot.svgcreator.SvgLineChartCreator;
 import tud.tangram.svgplot.svgcreator.SvgMultiScatterPlotCreator;
 
 /**
@@ -21,13 +22,14 @@ import tud.tangram.svgplot.svgcreator.SvgMultiScatterPlotCreator;
  *
  */
 public enum DiagramType {
-	FunctionPlot(SvgGraphCreator.INSTANTIATOR, "fp", "function", "f"), MultiScatterPlot(SvgMultiScatterPlotCreator.INSTANTIATOR, "multiscatter", "ms", "msp");
+	FunctionPlot(SvgGraphCreator.INSTANTIATOR, "fp", "function", "f"), MultiScatterPlot(SvgMultiScatterPlotCreator.INSTANTIATOR, "multiscatter", "ms", "msp")
+	, LineChart(SvgLineChartCreator.INSTANTIATOR, "lc", "linechart", "l");
 
 	/**
 	 * A map for easy retrieval of the right {@link DiagramType} belonging to
 	 * the {@link #synonyms}.
 	 */
-	static final private Map<String, DiagramType> SYNONYM_MAP = new HashMap<>();
+	private static final Map<String, DiagramType> SYNONYM_MAP = new HashMap<>();
 	static {
 		for (DiagramType diagramType : DiagramType.values()) {
 			SYNONYM_MAP.put(diagramType.name().toLowerCase(), diagramType);
