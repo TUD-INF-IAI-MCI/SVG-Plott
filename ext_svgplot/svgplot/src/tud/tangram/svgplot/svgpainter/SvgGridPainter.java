@@ -113,6 +113,10 @@ public class SvgGridPainter extends SvgPainter {
 	 */
 	public void addOverlaysToList(OverlayList overlays) {
 		overlays.add(new Overlay(0, 0));
+		for(double x : new double[]{xRange.getFrom(), xRange.getTo()}) {
+			for(double y : new double[]{yRange.getFrom(), yRange.getTo()})
+				overlays.add(new Overlay(x, y));
+		}
 		for (double tic : cs.xAxis.ticLines()) {
 			overlays.add(new Overlay(tic, 0));
 			overlays.add(new Overlay(tic, yRange.getFrom()));
