@@ -42,20 +42,23 @@ public class PointListList extends ArrayList<PointListList.PointList> {
 
 	@Override
 	public boolean add(PointListList.PointList pl) {
-		maxX = Math.max(getMaxX(), pl.getMaxX());
-		maxY = Math.max(getMaxY(), pl.getMaxY());
-		minX = Math.min(getMinX(), pl.getMinX());
-		minY = Math.min(getMinY(), pl.getMinY());
-		return super.add(pl);
+		boolean success = super.add(pl);
+		updateMinMax();
+		return success;
 	}
 
 	public boolean add(List<Point> points) {
 		PointList pl = new PointList(points);
-		maxX = Math.max(getMaxX(), pl.getMaxX());
-		maxY = Math.max(getMaxY(), pl.getMaxY());
-		minX = Math.min(getMinX(), pl.getMinX());
-		minY = Math.min(getMinY(), pl.getMinY());
-		return super.add(pl);
+		return add(pl);
+	}
+	
+	public void updateMinMax() {
+		for(PointList checkPl : this) {
+			maxX = Math.max(getMaxX(), checkPl.getMaxX());
+			maxY = Math.max(getMaxY(), checkPl.getMaxY());
+			minX = Math.min(getMinX(), checkPl.getMinX());
+			minY = Math.min(getMinY(), checkPl.getMinY());
+		}
 	}
 
 	public double getMaxX() {

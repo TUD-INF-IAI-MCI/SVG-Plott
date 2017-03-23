@@ -277,19 +277,20 @@ public class SvgPlotOptions {
 				points = (new PointListList.Converter()).convert(pts);
 			}
 		} else {
-			this.points = (new PointListList.Converter()).convert(pts);
+			points = (new PointListList.Converter()).convert(pts);
 		}
-		if (this.points != null && !this.points.isEmpty() && this.points.hasValidMinMaxValues()) {
-			double xPointRangeFactor = 0.05 * (points.getMaxX() - points.getMinX());
-			double yPointRangeFactor = 0.05 * (points.getMaxY() - points.getMinY());
+		points.updateMinMax();
+		if (points != null && !points.isEmpty() && points.hasValidMinMaxValues()) {
+			double xPointRangeMargin = 0.05 * (points.getMaxX() - points.getMinX());
+			double yPointRangeMargin = 0.05 * (points.getMaxY() - points.getMinY());
 			if (xRange.getFrom() > points.getMinX())
-				xRange.setFrom(points.getMinX() - Math.abs(xPointRangeFactor * points.getMinX()));
+				xRange.setFrom(points.getMinX() - xPointRangeMargin);
 			if (xRange.getTo() < points.getMaxX())
-				xRange.setTo(points.getMaxX() + Math.abs(xPointRangeFactor * points.getMaxX()));
+				xRange.setTo(points.getMaxX() + xPointRangeMargin);
 			if (yRange.getFrom() > points.getMinY())
-				yRange.setFrom(points.getMinY() - Math.abs(yPointRangeFactor * points.getMinY()));
+				yRange.setFrom(points.getMinY() - yPointRangeMargin);
 			if (yRange.getTo() < points.getMaxY())
-				yRange.setTo(points.getMaxY() + Math.abs(yPointRangeFactor * points.getMaxY()));
+				yRange.setTo(points.getMaxY() + yPointRangeMargin);
 		}
 	}
 }
