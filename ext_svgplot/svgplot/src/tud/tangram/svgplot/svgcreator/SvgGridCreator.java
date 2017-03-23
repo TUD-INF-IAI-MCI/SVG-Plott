@@ -59,7 +59,7 @@ public abstract class SvgGridCreator extends SvgCreator {
 	protected void create() {
 		super.create();
 
-		SvgGridPainter svgGridPainter = new SvgGridPainter(cs, options.xRange, options.yRange, getXAxisStyle(),
+		SvgGridPainter svgGridPainter = new SvgGridPainter(cs, getXAxisStyle(),
 				getYAxisStyle(), null);
 
 		svgGridPainter.paintToSvgDocument(doc, viewbox, options.outputDevice);

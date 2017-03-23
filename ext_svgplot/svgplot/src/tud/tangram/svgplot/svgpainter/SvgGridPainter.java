@@ -61,12 +61,12 @@ public class SvgGridPainter extends SvgPainter {
 	 * @param gridStyle
 	 *            may be <code>null</code>
 	 */
-	public SvgGridPainter(CoordinateSystem cs, Range xRange, Range yRange, AxisStyle xAxisStyle, AxisStyle yAxisStyle,
+	public SvgGridPainter(CoordinateSystem cs, AxisStyle xAxisStyle, AxisStyle yAxisStyle,
 			GridStyle gridStyle) {
 		super();
-		this.xRange = xRange;
-		this.yRange = yRange;
 		this.cs = cs;
+		this.xRange = cs.xAxis.range;
+		this.yRange = cs.yAxis.range;
 		this.gridStyle = gridStyle != null ? gridStyle : new GridStyle();
 		this.yAxisStyle = yAxisStyle;
 		this.xAxisStyle = xAxisStyle;

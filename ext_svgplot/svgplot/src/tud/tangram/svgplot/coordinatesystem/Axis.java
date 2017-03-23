@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import org.apache.commons.collections.ExtendedProperties;
+
 import tud.tangram.svgplot.utils.Constants;
 
 /**
@@ -72,8 +74,8 @@ public class Axis {
 		gridInterval = interval;
 
 		ticInterval = 2 * interval;
-		ticRange = new Range(((int) (range.getFrom() / ticInterval)) * ticInterval,
-				((int) (range.getTo() / ticInterval)) * ticInterval);
+		ticRange = new Range(Math.ceil(range.getFrom() / ticInterval) * ticInterval,
+				Math.floor(range.getTo() / ticInterval) * ticInterval);
 
 		decimalFormat.setMaximumFractionDigits(Math.max(0, -dimensionExp + 2));
 
@@ -152,6 +154,8 @@ public class Axis {
 		 */
 		@Override
 		public boolean hasNext() {
+			System.out.println(current);
+			System.out.println(range.getTo());
 			return current <= range.getTo();
 		}
 
