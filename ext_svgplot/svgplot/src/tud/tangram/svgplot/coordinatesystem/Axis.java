@@ -154,8 +154,6 @@ public class Axis {
 		 */
 		@Override
 		public boolean hasNext() {
-			System.out.println(current);
-			System.out.println(range.getTo());
 			return current <= range.getTo();
 		}
 
