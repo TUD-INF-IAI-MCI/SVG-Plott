@@ -21,6 +21,17 @@ import tud.tangram.svgplot.plotting.IntegralPlotSettings;
 @Parameters(separators = "=", resourceBundle = "Bundle")
 public class SvgPlotOptions {
 
+	@Parameter(names = {"--as", "--autoscale"}, descriptionKey = "param.autoscale")
+	private boolean autoScale = false;
+	
+	public boolean hasAutoScale() {
+		return autoScale;
+	}
+
+	public void setAutoScale(boolean autoScale) {
+		this.autoScale = autoScale;
+	}
+
 	@Parameter(names = { "--diagramtype", "--dt" }, required = true)
 	private DiagramType diagramType;
 	
@@ -71,7 +82,7 @@ public class SvgPlotOptions {
 	}
 
 	@Parameter(names = { "--xrange", "-x" }, descriptionKey = "param.xrange")
-	private Range xRange = new Range(-8, 8);
+	private Range xRange;
 
 	public Range getxRange() {
 		return xRange;
@@ -82,7 +93,7 @@ public class SvgPlotOptions {
 	}
 
 	@Parameter(names = { "--yrange", "-y" }, descriptionKey = "param.yrange")
-	private Range yRange = new Range(-8, 8);
+	private Range yRange;
 
 	public Range getyRange() {
 		return yRange;
@@ -265,6 +276,16 @@ public class SvgPlotOptions {
 	}
 
 	public void finalizeOptions() {
+		boolean xRangeSpecified = true;
+		boolean yRangeSpecified = true;
+		if(xRange == null) {
+			xRangeSpecified = false;
+			xRange = new Range(-8, 8);
+		}
+		if(yRange == null) {
+			yRangeSpecified = false;
+			yRange = new Range(-8, 8);
+		}
 		if (csvPath != null) {
 			try {
 				CsvParser parser = new CsvParser(new FileReader(csvPath), ',', '"');
@@ -280,16 +301,16 @@ public class SvgPlotOptions {
 			points = (new PointListList.Converter()).convert(pts);
 		}
 		points.updateMinMax();
-		if (points != null && !points.isEmpty() && points.hasValidMinMaxValues()) {
-			double xPointRangeMargin = 0.05 * (points.getMaxX() - points.getMinX());
-			double yPointRangeMargin = 0.05 * (points.getMaxY() - points.getMinY());
-			if (xRange.getFrom() > points.getMinX())
+		if (autoScale && !points.isEmpty() && points.hasValidMinMaxValues()) {
+			double xPointRangeMargin = 0.01 * (points.getMaxX() - points.getMinX());
+			double yPointRangeMargin = 0.01 * (points.getMaxY() - points.getMinY());
+			if (!xRangeSpecified || xRange.getFrom() > points.getMinX())
 				xRange.setFrom(points.getMinX() - xPointRangeMargin);
-			if (xRange.getTo() < points.getMaxX())
+			if (!xRangeSpecified || xRange.getTo() < points.getMaxX())
 				xRange.setTo(points.getMaxX() + xPointRangeMargin);
-			if (yRange.getFrom() > points.getMinY())
+			if (!yRangeSpecified || yRange.getFrom() > points.getMinY())
 				yRange.setFrom(points.getMinY() - yPointRangeMargin);
-			if (yRange.getTo() < points.getMaxY())
+			if (!yRangeSpecified || yRange.getTo() < points.getMaxY())
 				yRange.setTo(points.getMaxY() + yPointRangeMargin);
 		}
 	}
