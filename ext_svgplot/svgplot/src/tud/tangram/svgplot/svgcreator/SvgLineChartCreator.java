@@ -37,7 +37,8 @@ public class SvgLineChartCreator extends SvgGridCreator {
 		// Paint the lines into the svg file
 		SvgLinesPainter svgLinesPainter = new SvgLinesPainter(cs, options.points);
 		svgLinesPainter.paintToSvgDocument(doc, viewbox, options.outputDevice);
-
+		svgLinesPainter.prepareLegendRenderer(getLegendRenderer(), options.outputDevice);
+		
 		// Calculate whether it is possible to paint dots according to the
 		// minimal line section length and the point count. Only reliable for
 		// regular lines going from left to right.
@@ -55,8 +56,7 @@ public class SvgLineChartCreator extends SvgGridCreator {
 			svgPointsPainter.paintToSvgDocument(doc, viewbox, options.outputDevice);
 			svgPointsPainter.addOverlaysToList(overlays);
 			
-			// Add the legend items for the scatter plot
-			svgPointsPainter.prepareLegendRenderer(legendRenderer, options.outputDevice);
+			// The legend items for the scatter plot are not added
 		}
 		else {
 			OverlayList overlayList = new OverlayList(cs);

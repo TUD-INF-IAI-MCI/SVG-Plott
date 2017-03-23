@@ -8,6 +8,8 @@ import tud.tangram.svgplot.coordinatesystem.CoordinateSystem;
 import tud.tangram.svgplot.data.Point;
 import tud.tangram.svgplot.data.PointListList;
 import tud.tangram.svgplot.data.PointListList.PointList;
+import tud.tangram.svgplot.legend.LegendLineItem;
+import tud.tangram.svgplot.legend.LegendRenderer;
 import tud.tangram.svgplot.options.OutputDevice;
 import tud.tangram.svgplot.utils.Constants;
 import tud.tangram.svgplot.xml.SvgDocument;
@@ -83,6 +85,22 @@ public class SvgLinesPainter extends SvgPainter {
 			polyLine.setAttribute("points", polyLinePointsBuilder.toString());
 			
 			linechartGroup.appendChild(polyLine);
+		}
+	}
+	
+	@Override
+	public void prepareLegendRenderer(LegendRenderer renderer, OutputDevice device) {
+		super.prepareLegendRenderer(renderer, device);
+		
+		int j = 0;
+		
+		for(PointList pointList : points) {
+			if(pointList.size() <= 1) {
+				j++;
+				continue;
+			}
+
+			renderer.add(new LegendLineItem(pointList.getName(), ++j));
 		}
 	}
 
