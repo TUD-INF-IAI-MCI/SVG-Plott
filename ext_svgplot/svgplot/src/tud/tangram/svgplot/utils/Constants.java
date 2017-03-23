@@ -28,6 +28,7 @@ public class Constants {
 	public static final DecimalFormat decimalFormat = getSvgDecimalFormat();
 	/** The minimal distance of grid lines in mm */
 	public static final int MIN_GRID_DISTANCE = 12;
+	public static final int MIN_LINE_LENGTH = 30;
 	public static final Point titlePosition = new Point(Constants.MARGIN.get(3), Constants.MARGIN.get(0) + 10);
 	
 	// Used for double comparisons
