@@ -279,7 +279,7 @@ public class SvgPlotOptions {
 		} else {
 			this.points = (new PointListList.Converter()).convert(pts);
 		}
-		if (this.points != null) {
+		if (this.points != null && !this.points.isEmpty() && this.points.hasValidMinMaxValues()) {
 			if (xRange.getFrom() > points.getMinX())
 				xRange.setFrom(points.getMinX() * 1.05);
 			if (xRange.getTo() < points.getMaxX())

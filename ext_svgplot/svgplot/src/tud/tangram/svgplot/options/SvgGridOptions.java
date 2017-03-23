@@ -19,11 +19,6 @@ public class SvgGridOptions extends SvgOptions {
 		xRange = options.getxRange();
 		yRange = options.getyRange();
 		
-		xRange.setFrom(Math.min(0, xRange.getFrom()));
-		xRange.setTo(Math.max(0, xRange.getTo()));
-		yRange.setFrom(Math.min(0, yRange.getFrom()));
-		yRange.setTo(Math.max(0, yRange.getTo()));
-		
 		this.pi = options.isPi();
 		
 		this.xLines = options.getxLines();

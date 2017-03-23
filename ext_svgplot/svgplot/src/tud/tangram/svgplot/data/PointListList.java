@@ -15,10 +15,10 @@ import com.beust.jcommander.IStringConverter;
 public class PointListList extends ArrayList<PointListList.PointList> {
 
 	private static final long serialVersionUID = 6902232865786868851L;
-	private double maxX = 0;
-	private double maxY = 0;
-	private double minX = 0;
-	private double minY = 0;
+	private Double maxX = Double.NEGATIVE_INFINITY;
+	private Double maxY = Double.NEGATIVE_INFINITY;
+	private Double minX = Double.POSITIVE_INFINITY;
+	private Double minY = Double.POSITIVE_INFINITY;
 
 	public PointListList() {
 		this("");
@@ -73,6 +73,10 @@ public class PointListList extends ArrayList<PointListList.PointList> {
 	public double getMinY() {
 		return minY;
 	}
+	
+	public boolean hasValidMinMaxValues() {
+		return maxX > minX && maxY > minY;
+	}
 
 	public static class Converter implements IStringConverter<PointListList> {
 		@Override
@@ -90,10 +94,10 @@ public class PointListList extends ArrayList<PointListList.PointList> {
 	public class PointList extends ArrayList<Point> {
 
 		private static final long serialVersionUID = -2318768874799315111L;
-		private double maxX = 0;
-		private double maxY = 0;
-		private double minX = 0;
-		private double minY = 0;
+		private Double maxX = Double.NEGATIVE_INFINITY;
+		private Double maxY = Double.NEGATIVE_INFINITY;
+		private Double minX = Double.POSITIVE_INFINITY;
+		private Double minY = Double.POSITIVE_INFINITY;
 		private String name = "";
 
 		public PointList(List<Point> points) {
