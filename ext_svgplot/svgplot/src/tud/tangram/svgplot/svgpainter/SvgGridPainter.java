@@ -67,7 +67,7 @@ public class SvgGridPainter extends SvgPainter {
 		this.cs = cs;
 		this.xRange = cs.xAxis.range;
 		this.yRange = cs.yAxis.range;
-		this.gridStyle = gridStyle != null ? gridStyle : new GridStyle();
+		this.gridStyle = gridStyle != null ? gridStyle : GridStyle.FULL;
 		this.yAxisStyle = yAxisStyle;
 		this.xAxisStyle = xAxisStyle;
 	}
@@ -142,7 +142,7 @@ public class SvgGridPainter extends SvgPainter {
 		boolean skipZeroX = xAxisStyle == AxisStyle.EDGE_MIDDLE || xAxisStyle == AxisStyle.BOX_MIDDLE
 				|| xAxisStyle == AxisStyle.GRAPH;
 		
-		if (gridStyle.showX) {
+		if (gridStyle.showHorizontal()) {
 			Element xGrid = (Element) grid.appendChild(doc.createGroup("x-grid"));
 			dotDistance = cs.convertYDistance(cs.yAxis.gridInterval);
 			factor = (int) (dotDistance / 2.3);
@@ -161,7 +161,7 @@ public class SvgGridPainter extends SvgPainter {
 		boolean skipZeroY = yAxisStyle == AxisStyle.EDGE_MIDDLE || yAxisStyle == AxisStyle.BOX_MIDDLE
 				|| yAxisStyle == AxisStyle.GRAPH;
 		
-		if (gridStyle.showY) {
+		if (gridStyle.showVertical()) {
 			Element yGrid = (Element) grid.appendChild(doc.createGroup("y-grid"));
 			dotDistance = cs.convertXDistance(cs.xAxis.gridInterval);
 			factor = (int) (dotDistance / 2.3);

@@ -1,32 +1,23 @@
 package tud.tangram.svgplot.styles;
 
-/**
- * Style class for setting whether to show x and y grid lines.
- */
-public class GridStyle {
-	public boolean showX = true;
-	public boolean showY = true;
-	
-	/**
-	 * Constructor for showing the whole grid.
-	 */
-	public GridStyle() {}
-	
-	/**
-	 * Set the whole grid on or off.
-	 */
-	public GridStyle(boolean show) {
-		this.showX = show;
-		this.showY = show;
+public enum GridStyle {
+	NONE, HORIZONTAL, VERTICAL, FULL;
+
+	public boolean showHorizontal() {
+		return this.equals(FULL) || this.equals(HORIZONTAL);
 	}
 	
-	/**
-	 * Set the grid lines independently.
-	 * @param showX
-	 * @param showY
-	 */
-	public GridStyle(boolean showX, boolean showY) {
-		this.showX = showX;
-		this.showY = showY;
+	public boolean showVertical() {
+		return this.equals(FULL) || this.equals(VERTICAL);
+	}
+
+	public static GridStyle fromStrings(String horizontal, String vertical) {
+		if(horizontal == null && vertical == null)
+			return null;
+		if(horizontal == null || "off".equals(horizontal))
+			return "on".equals(vertical) ? VERTICAL : NONE;
+		if(vertical == null || "off".equals(vertical))
+			return "on".equals(horizontal) ? HORIZONTAL : NONE;
+		return FULL;
 	}
 }

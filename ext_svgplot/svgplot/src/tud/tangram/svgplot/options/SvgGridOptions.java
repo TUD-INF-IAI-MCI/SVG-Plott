@@ -1,6 +1,7 @@
 package tud.tangram.svgplot.options;
 
 import tud.tangram.svgplot.coordinatesystem.Range;
+import tud.tangram.svgplot.styles.GridStyle;
 
 public class SvgGridOptions extends SvgOptions {
 	public Range xRange;
@@ -9,6 +10,8 @@ public class SvgGridOptions extends SvgOptions {
 	
 	public String xLines;
 	public String yLines;
+	
+	public GridStyle gridStyle;
 	
 	public SvgGridOptions(SvgPlotOptions options) {
 		super(options);
@@ -23,6 +26,8 @@ public class SvgGridOptions extends SvgOptions {
 		
 		this.xLines = options.getxLines();
 		this.yLines = options.getyLines();
+		
+		this.gridStyle = GridStyle.fromStrings(options.getShowHorizontalGrid(), options.getShowVerticalGrid());
 	}
 	
 }

@@ -60,7 +60,7 @@ public abstract class SvgGridCreator extends SvgCreator {
 		super.create();
 
 		SvgGridPainter svgGridPainter = new SvgGridPainter(cs, getXAxisStyle(),
-				getYAxisStyle(), null);
+				getYAxisStyle(), options.gridStyle);
 
 		svgGridPainter.paintToSvgDocument(doc, viewbox, options.outputDevice);
 		svgGridPainter.prepareLegendRenderer(legendRenderer, options.outputDevice, Integer.MAX_VALUE);

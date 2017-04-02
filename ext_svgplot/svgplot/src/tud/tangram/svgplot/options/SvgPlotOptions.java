@@ -5,10 +5,13 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
+import com.beust.jcommander.IParameterValidator;
 import com.beust.jcommander.IStringConverter;
 import com.beust.jcommander.IStringConverterFactory;
 import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
 
 import tud.tangram.svgplot.coordinatesystem.Range;
@@ -21,9 +24,9 @@ import tud.tangram.svgplot.plotting.IntegralPlotSettings;
 @Parameters(separators = "=", resourceBundle = "Bundle")
 public class SvgPlotOptions {
 
-	@Parameter(names = {"--as", "--autoscale"}, descriptionKey = "param.autoscale")
+	@Parameter(names = { "--as", "--autoscale" }, descriptionKey = "param.autoscale")
 	private boolean autoScale = false;
-	
+
 	public boolean hasAutoScale() {
 		return autoScale;
 	}
@@ -34,7 +37,7 @@ public class SvgPlotOptions {
 
 	@Parameter(names = { "--diagramtype", "--dt" }, required = true)
 	private DiagramType diagramType;
-	
+
 	public DiagramType getDiagramType() {
 		return diagramType;
 	}
@@ -249,6 +252,30 @@ public class SvgPlotOptions {
 		this.points = points;
 	}
 
+	@Parameter(names = { "--hgrid",
+			"--horizontalgrid" }, descriptionKey = "param.showhorizontalgrid", validateWith = OnOffParameterValidator.class)
+	private String showHorizontalGrid;
+
+	public String getShowHorizontalGrid() {
+		return showHorizontalGrid;
+	}
+
+	public void setShowHorizontalGrid(String showHorizontalGrid) {
+		this.showHorizontalGrid = showHorizontalGrid;
+	}
+
+	@Parameter(names = { "--vgrid",
+			"--verticalgrid" }, descriptionKey = "param.showverticalgrid", validateWith = OnOffParameterValidator.class)
+	private String showVerticalGrid;
+
+	public String getShowVerticalGrid() {
+		return showHorizontalGrid;
+	}
+
+	public void setShowVerticalGrid(String showVerticalGrid) {
+		this.showVerticalGrid = showVerticalGrid;
+	}
+
 	/**
 	 * Returns a converter for the special class-types of this project for
 	 * JCommander interpretation.
@@ -278,18 +305,18 @@ public class SvgPlotOptions {
 	public void finalizeOptions() {
 		boolean xRangeSpecified = true;
 		boolean yRangeSpecified = true;
-		if(xRange == null) {
+		if (xRange == null) {
 			xRangeSpecified = false;
 			xRange = new Range(-8, 8);
 		}
-		if(yRange == null) {
+		if (yRange == null) {
 			yRangeSpecified = false;
 			yRange = new Range(-8, 8);
 		}
 		if (csvPath != null) {
 			try {
 				CsvParser parser = new CsvParser(new FileReader(csvPath), ',', '"');
-				if(csvOrientation == CsvOrientation.VERTICAL)
+				if (csvOrientation == CsvOrientation.VERTICAL)
 					points = parser.parseAsScatterDataVerticalRows();
 				else
 					points = parser.parseAsScatterDataHorizontalRows();
@@ -313,5 +340,18 @@ public class SvgPlotOptions {
 			if (!yRangeSpecified || yRange.getTo() < points.getMaxY())
 				yRange.setTo(points.getMaxY() + yPointRangeMargin);
 		}
+	}
+
+	private static class OnOffParameterValidator implements IParameterValidator {
+
+		@Override
+		public void validate(String name, String value) throws ParameterException {
+			String lowerCaseValue = value.toLowerCase();
+			if ("on".equals(lowerCaseValue) || "off".equals(lowerCaseValue))
+				return;
+			ResourceBundle bundle = ResourceBundle.getBundle("Bundle");
+			throw new ParameterException(bundle.getString("error.onoffparameter"));
+		}
+
 	}
 }
