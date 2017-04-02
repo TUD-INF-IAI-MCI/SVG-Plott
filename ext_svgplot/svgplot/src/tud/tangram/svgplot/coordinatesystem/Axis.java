@@ -73,7 +73,7 @@ public class Axis {
 
 		gridInterval = interval;
 
-		ticInterval = 2 * interval;
+		ticInterval = interval; // TODO set this to 2 * interval if needed, maybe create an option
 		ticRange = new Range(Math.ceil(range.getFrom() / ticInterval) * ticInterval,
 				Math.floor(range.getTo() / ticInterval) * ticInterval);
 

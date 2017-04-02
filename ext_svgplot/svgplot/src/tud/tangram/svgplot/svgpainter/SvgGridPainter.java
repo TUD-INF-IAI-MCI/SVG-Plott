@@ -200,14 +200,22 @@ public class SvgGridPainter extends SvgPainter {
 	}
 
 	private void createXAxis(SvgDocument doc, Element axes) {
-		Point from = cs.convert(xRange.getFrom(), 0, -15, 0);
-		Point to = cs.convert(xRange.getTo(), 0, 10, 0);
+		double offsetFrom = 0;
+		double offsetTo = 0;
+		
+		if(xAxisStyle == AxisStyle.GRAPH) {
+			offsetFrom = -15;
+			offsetTo = 10;
+		}
+		
+		Point from = cs.convert(xRange.getFrom(), 0, offsetFrom, 0);
+		Point to = cs.convert(xRange.getTo(), 0, offsetTo, 0);
 
-		Point fromSmaller = cs.convert(xRange.getFrom(), yRange.getFrom(), -15, 0);
-		Point toSmaller = cs.convert(xRange.getTo(), yRange.getFrom(), 10, 0);
+		Point fromSmaller = cs.convert(xRange.getFrom(), yRange.getFrom(), 0, 0);
+		Point toSmaller = cs.convert(xRange.getTo(), yRange.getFrom(), 0, 0);
 
-		Point fromBigger = cs.convert(xRange.getFrom(), yRange.getTo(), -15, 0);
-		Point toBigger = cs.convert(xRange.getTo(), yRange.getTo(), 10, 0);
+		Point fromBigger = cs.convert(xRange.getFrom(), yRange.getTo(), 0, 0);
+		Point toBigger = cs.convert(xRange.getTo(), yRange.getTo(), 0, 0);
 
 		// Create the x axis line
 		if (xAxisStyle == AxisStyle.BOX_MIDDLE || xAxisStyle == AxisStyle.EDGE_MIDDLE || xAxisStyle == AxisStyle.GRAPH)
@@ -256,14 +264,22 @@ public class SvgGridPainter extends SvgPainter {
 	}
 
 	private void createYAxis(SvgDocument doc, Element axes) {
-		Point from = cs.convert(0, yRange.getFrom(), 0, 15);
-		Point to = cs.convert(0, yRange.getTo(), 0, -10);
+		double offsetFrom = 0;
+		double offsetTo = 0;
+		
+		if(yAxisStyle == AxisStyle.GRAPH) {
+			offsetFrom = 15;
+			offsetTo = -10;
+		}
+		
+		Point from = cs.convert(0, yRange.getFrom(), 0, offsetFrom);
+		Point to = cs.convert(0, yRange.getTo(), 0, offsetTo);
 
-		Point fromSmaller = cs.convert(xRange.getFrom(), yRange.getFrom(), 0, 15);
-		Point toSmaller = cs.convert(xRange.getFrom(), yRange.getTo(), 0, -10);
+		Point fromSmaller = cs.convert(xRange.getFrom(), yRange.getFrom(), 0, 0);
+		Point toSmaller = cs.convert(xRange.getFrom(), yRange.getTo(), 0, 0);
 
-		Point fromBigger = cs.convert(xRange.getTo(), yRange.getFrom(), 0, 15);
-		Point toBigger = cs.convert(xRange.getTo(), yRange.getTo(), 0, -10);
+		Point fromBigger = cs.convert(xRange.getTo(), yRange.getFrom(), 0, 0);
+		Point toBigger = cs.convert(xRange.getTo(), yRange.getTo(), 0, 0);
 
 		// Create the y axis line
 		if (yAxisStyle == AxisStyle.BOX_MIDDLE || yAxisStyle == AxisStyle.EDGE_MIDDLE || yAxisStyle == AxisStyle.GRAPH)
