@@ -269,7 +269,7 @@ public class SvgPlotOptions {
 	private String showVerticalGrid;
 
 	public String getShowVerticalGrid() {
-		return showHorizontalGrid;
+		return showVerticalGrid;
 	}
 
 	public void setShowVerticalGrid(String showVerticalGrid) {
@@ -342,7 +342,7 @@ public class SvgPlotOptions {
 		}
 	}
 
-	private static class OnOffParameterValidator implements IParameterValidator {
+	public static class OnOffParameterValidator implements IParameterValidator {
 
 		@Override
 		public void validate(String name, String value) throws ParameterException {
