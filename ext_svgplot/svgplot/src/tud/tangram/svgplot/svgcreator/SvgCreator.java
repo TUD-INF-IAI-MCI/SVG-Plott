@@ -126,6 +126,8 @@ public abstract class SvgCreator {
 		create();
 		afterCreate();
 
+		// TODO do not write to any file here, support getting the results and provide file writing in main
+		
 		if (options.output != null) {
 			doc.writeTo(new FileOutputStream(options.output));
 			// TODO fix path bug

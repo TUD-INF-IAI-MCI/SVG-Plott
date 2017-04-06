@@ -13,11 +13,17 @@ import com.beust.jcommander.IStringConverterFactory;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
+import com.beust.jcommander.SubParameter;
 
 import tud.tangram.svgplot.coordinatesystem.Range;
 import tud.tangram.svgplot.data.CsvParser;
 import tud.tangram.svgplot.data.Point;
 import tud.tangram.svgplot.data.PointListList;
+import tud.tangram.svgplot.data.trendline.BrownLinearExponentialSmoothingTrendLine;
+import tud.tangram.svgplot.data.trendline.ExponentialSmoothingTrendline;
+import tud.tangram.svgplot.data.trendline.LinearRegressionTrendLine;
+import tud.tangram.svgplot.data.trendline.MovingAverageTrendline;
+import tud.tangram.svgplot.data.trendline.TrendLineAlgorithm;
 import tud.tangram.svgplot.plotting.Function;
 import tud.tangram.svgplot.plotting.IntegralPlotSettings;
 
@@ -35,7 +41,7 @@ public class SvgPlotOptions {
 		this.autoScale = autoScale;
 	}
 
-	@Parameter(names = { "--diagramtype", "--dt" }, required = true)
+	@Parameter(names = { "--diagramtype", "--dt" }, descriptionKey = "param.diagramtype", required = true)
 	private DiagramType diagramType;
 
 	public DiagramType getDiagramType() {
@@ -46,7 +52,7 @@ public class SvgPlotOptions {
 		this.diagramType = diagramType;
 	}
 
-	@Parameter(names = { "--device", "-d" })
+	@Parameter(names = { "--device", "-d" }, descriptionKey = "param.device")
 	private OutputDevice outputDevice = OutputDevice.Default;
 
 	public OutputDevice getOutputDevice() {
@@ -198,8 +204,6 @@ public class SvgPlotOptions {
 		this.integral = integral;
 	}
 
-	// TODO: add parameter for scatter plot file
-	// parameter for marking some points
 	@Parameter(names = { "--points", "--pts" }, descriptionKey = "param.points")
 	private String pts;
 
@@ -276,6 +280,23 @@ public class SvgPlotOptions {
 		this.showVerticalGrid = showVerticalGrid;
 	}
 
+	@Parameter(names = "--trendline", descriptionKey = "param.trendline", variableArity = true)
+	public List<String> trendLine = new ArrayList<>();
+
+	public List<String> getTrendLine() {
+		return trendLine;
+	}
+
+	public void setTrendLine(List<String> trendLine) {
+		this.trendLine = trendLine;
+	}
+
+	private TrendLineAlgorithm trendLineAlgorithm;
+
+	public TrendLineAlgorithm getTrendLineAlgorithm() {
+		return trendLineAlgorithm;
+	}
+
 	/**
 	 * Returns a converter for the special class-types of this project for
 	 * JCommander interpretation.
@@ -339,6 +360,40 @@ public class SvgPlotOptions {
 				yRange.setFrom(points.getMinY() - yPointRangeMargin);
 			if (!yRangeSpecified || yRange.getTo() < points.getMaxY())
 				yRange.setTo(points.getMaxY() + yPointRangeMargin);
+		}
+		parseTrendLine();
+	}
+
+	private void parseTrendLine() {
+		if (trendLine.isEmpty() || trendLine.get(0) == null)
+			return;
+		
+		String trendlineAlgorithm = trendLine.get(0).toLowerCase();
+		int paramCount = trendLine.size() - 1;
+
+		switch (trendlineAlgorithm) {
+		case "movingaverage":
+			int n = paramCount == 0 ? 1 : Integer.valueOf(trendLine.get(1));
+			this.trendLineAlgorithm = new MovingAverageTrendline(n);
+			break;
+
+		case "exponentialsmoothing":
+			double expAlpha = paramCount == 0 ? 0.3 : Double.valueOf(trendLine.get(1));
+			this.trendLineAlgorithm = new ExponentialSmoothingTrendline(expAlpha);
+			break;
+
+		case "brownles":
+			double brownAlpha = paramCount == 0 ? 0.2 : Double.valueOf(trendLine.get(1));
+			int forecast = paramCount < 2 ? 5 : Integer.valueOf(trendLine.get(2));
+			this.trendLineAlgorithm = new BrownLinearExponentialSmoothingTrendLine(brownAlpha, forecast);
+			break;
+
+		case "linearregression":
+			this.trendLineAlgorithm = new LinearRegressionTrendLine(xRange.getFrom(), xRange.getTo());
+			break;
+
+		default:
+			return;
 		}
 	}
 

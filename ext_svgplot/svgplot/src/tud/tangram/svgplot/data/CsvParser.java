@@ -54,7 +54,7 @@ public class CsvParser {
 
 		// Continue as long as there are at least two further rows left
 		while (csvData.size() >= row + 2) {
-			PointList rowPoints = pointListList.new PointList();
+			PointList rowPoints = new PointList();
 
 			Iterator<String> xRowIterator = csvData.get(row).iterator();
 			Iterator<String> yRowIterator = csvData.get(row + 1).iterator();
@@ -103,7 +103,7 @@ public class CsvParser {
 		int col = 0;
 		for (String header : csvData.get(0)) {
 			if (col % 2 == 0) {
-				PointList pointList = pointListList.new PointList();
+				PointList pointList = new PointList();
 				pointList.setName(header);
 				pointListList.add(pointList);
 			}
@@ -168,7 +168,7 @@ public class CsvParser {
 	 */
 	private void addPointToPointListList(PointListList pointListList, int listIndex, Point point) {
 		while (pointListList.size() < listIndex) {
-			pointListList.add(pointListList.new PointList());
+			pointListList.add(new PointList());
 		}
 
 		pointListList.get(listIndex).add(point);

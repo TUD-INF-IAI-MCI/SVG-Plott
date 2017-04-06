@@ -11,7 +11,7 @@ import tud.tangram.svgplot.svgcreator.SvgCreator;
 import tud.tangram.svgplot.svgcreator.SvgCreatorInstantiator;
 import tud.tangram.svgplot.svgcreator.SvgGraphCreator;
 import tud.tangram.svgplot.svgcreator.SvgLineChartCreator;
-import tud.tangram.svgplot.svgcreator.SvgMultiScatterPlotCreator;
+import tud.tangram.svgplot.svgcreator.SvgScatterPlotCreator;
 
 /**
  * Special enum used for retrieving the desired plot from the command line and
@@ -22,7 +22,7 @@ import tud.tangram.svgplot.svgcreator.SvgMultiScatterPlotCreator;
  *
  */
 public enum DiagramType {
-	FunctionPlot(SvgGraphCreator.INSTANTIATOR, "fp", "function", "f"), MultiScatterPlot(SvgMultiScatterPlotCreator.INSTANTIATOR, "multiscatter", "ms", "msp")
+	FunctionPlot(SvgGraphCreator.INSTANTIATOR, "fp", "function", "f"), ScatterPlot(SvgScatterPlotCreator.INSTANTIATOR, "scatter", "scatterplot", "s", "sp")
 	, LineChart(SvgLineChartCreator.INSTANTIATOR, "lc", "linechart", "l");
 
 	/**

@@ -94,7 +94,7 @@ public class PointListList extends ArrayList<PointListList.PointList> {
 	 * @author Jens Bornschein
 	 * 
 	 */
-	public class PointList extends ArrayList<Point> {
+	public static class PointList extends ArrayList<Point> {
 
 		private static final long serialVersionUID = -2318768874799315111L;
 		private Double maxX = Double.NEGATIVE_INFINITY;
