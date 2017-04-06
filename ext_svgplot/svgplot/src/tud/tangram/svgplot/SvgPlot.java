@@ -60,6 +60,9 @@ public class SvgPlot {
 				args[i] = "\\" + args[i].trim();
 			}
 		}
+		
+		if(args.length == 0)
+			args = new String[]{"-h"};
 
 		jc.parse(args);
 
