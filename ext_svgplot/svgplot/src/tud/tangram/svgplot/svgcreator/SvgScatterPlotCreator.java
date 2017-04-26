@@ -36,12 +36,12 @@ public class SvgScatterPlotCreator extends SvgGridCreator {
 
 	@Override
 	protected AxisStyle getXAxisStyle() {
-		return AxisStyle.BOX;
+		return options.showDoubleAxes == null || "on".equals(options.showDoubleAxes) ? AxisStyle.BOX : AxisStyle.EDGE;
 	}
 
 	@Override
 	protected AxisStyle getYAxisStyle() {
-		return AxisStyle.BOX;
+		return options.showDoubleAxes == null || "on".equals(options.showDoubleAxes) ? AxisStyle.BOX : AxisStyle.EDGE;
 	}
 
 	@Override

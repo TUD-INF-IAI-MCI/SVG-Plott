@@ -12,6 +12,7 @@ public class SvgGridOptions extends SvgOptions {
 	public String yLines;
 	
 	public GridStyle gridStyle;
+	public String showDoubleAxes;
 	
 	public SvgGridOptions(SvgPlotOptions options) {
 		super(options);
@@ -28,6 +29,7 @@ public class SvgGridOptions extends SvgOptions {
 		this.yLines = options.getyLines();
 		
 		this.gridStyle = GridStyle.fromStrings(options.getShowHorizontalGrid(), options.getShowVerticalGrid());
+		this.showDoubleAxes = options.getShowDoubleAxes();
 	}
 	
 }

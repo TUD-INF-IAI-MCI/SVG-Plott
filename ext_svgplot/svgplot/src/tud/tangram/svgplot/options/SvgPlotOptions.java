@@ -279,6 +279,18 @@ public class SvgPlotOptions {
 		this.showVerticalGrid = showVerticalGrid;
 	}
 
+	@Parameter(names = { "--daxes",
+			"--doubleaxes" }, descriptionKey = "param.showdoubleaxes", validateWith = OnOffParameterValidator.class)
+	private String showDoubleAxes;
+
+	public String getShowDoubleAxes() {
+		return showDoubleAxes;
+	}
+
+	public void setShowDoubleAxes(String showDoubleAxes) {
+		this.showDoubleAxes = showDoubleAxes;
+	}
+
 	@Parameter(names = "--trendline", descriptionKey = "param.trendline", variableArity = true)
 	public List<String> trendLine = new ArrayList<>();
 
@@ -295,14 +307,14 @@ public class SvgPlotOptions {
 	public TrendLineAlgorithm getTrendLineAlgorithm() {
 		return trendLineAlgorithm;
 	}
-	
-	@Parameter(names = {"--hideoriginalpoints", "--hop"}, descriptionKey = "param.hideoriginalpoints")
+
+	@Parameter(names = { "--hideoriginalpoints", "--hop" }, descriptionKey = "param.hideoriginalpoints")
 	private boolean hideOriginalPoints = false;
-	
+
 	public boolean isHideOriginalPoints() {
 		return hideOriginalPoints;
 	}
-	
+
 	public void setHideOriginalPoints(boolean hideOriginalPoints) {
 		this.hideOriginalPoints = hideOriginalPoints;
 	}
@@ -359,9 +371,14 @@ public class SvgPlotOptions {
 			points = (new PointListList.Converter()).convert(pts);
 		}
 		points.updateMinMax();
-		if (autoScale && !points.isEmpty() && points.hasValidMinMaxValues()) { // TODO add margin option
-			double xPointRangeMargin = 0; //0.01 * (points.getMaxX() - points.getMinX());
-			double yPointRangeMargin = 0; //0.01 * (points.getMaxY() - points.getMinY());
+		if (autoScale && !points.isEmpty() && points.hasValidMinMaxValues()) { // TODO
+																				// add
+																				// margin
+																				// option
+			double xPointRangeMargin = 0; // 0.01 * (points.getMaxX() -
+											// points.getMinX());
+			double yPointRangeMargin = 0; // 0.01 * (points.getMaxY() -
+											// points.getMinY());
 			if (!xRangeSpecified || xRange.getFrom() > points.getMinX())
 				xRange.setFrom(points.getMinX() - xPointRangeMargin);
 			if (!xRangeSpecified || xRange.getTo() < points.getMaxX())
@@ -377,7 +394,7 @@ public class SvgPlotOptions {
 	private void parseTrendLine() {
 		if (trendLine.isEmpty() || trendLine.get(0) == null)
 			return;
-		
+
 		String trendlineAlgorithm = trendLine.get(0).toLowerCase();
 		int paramCount = trendLine.size() - 1;
 
