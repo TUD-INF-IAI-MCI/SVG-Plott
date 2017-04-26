@@ -96,9 +96,17 @@ public class SvgScatterPlotCreator extends SvgGridCreator {
 	}
 
 	private PointPlotStyle getPointPlotStyle() {
-		if (options.points.size() == 1 && options.points.get(0) != null && options.points.get(0).size() > 15)
-			return PointPlotStyle.DOTS;
-		else
-			return PointPlotStyle.MULTI_ROWS;
+		if (options.points.size() == 1 && options.points.get(0) != null && options.points.get(0).size() > 15) {
+			if (options.dotsBorderless)
+				return PointPlotStyle.DOTS_BORDERLESS;
+			else
+				return PointPlotStyle.DOTS;
+		}
+		else {
+			if (options.dotsBorderless)
+				return PointPlotStyle.MULTI_ROWS_BORDERLESS;
+			else
+				return PointPlotStyle.MULTI_ROWS;
+		}
 	}
 }

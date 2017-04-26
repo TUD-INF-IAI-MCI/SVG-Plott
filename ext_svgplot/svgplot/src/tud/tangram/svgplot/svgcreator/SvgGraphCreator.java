@@ -107,7 +107,7 @@ public class SvgGraphCreator extends SvgGridCreator {
 		OverlayList overlays = plotList.overlays();
 
 		// Paint the scatter plot points to the SVG file
-		SvgPointsPainter svgPointsPainter = new SvgPointsPainter(cs, options.points, PointPlotStyle.MULTI_ROWS);
+		SvgPointsPainter svgPointsPainter = new SvgPointsPainter(cs, options.points, options.dotsBorderless ? PointPlotStyle.MULTI_ROWS_BORDERLESS : PointPlotStyle.MULTI_ROWS);
 		svgPointsPainter.paintToSvgDocument(doc, viewbox, options.outputDevice);
 		svgPointsPainter.addOverlaysToList(overlays);
 

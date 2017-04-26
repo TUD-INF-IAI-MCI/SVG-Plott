@@ -14,6 +14,8 @@ public class SvgGridOptions extends SvgOptions {
 	public GridStyle gridStyle;
 	public String showDoubleAxes;
 	
+	public boolean dotsBorderless;
+	
 	public SvgGridOptions(SvgPlotOptions options) {
 		super(options);
 		createFromSvgPlotOptions(options);
@@ -30,6 +32,8 @@ public class SvgGridOptions extends SvgOptions {
 		
 		this.gridStyle = GridStyle.fromStrings(options.getShowHorizontalGrid(), options.getShowVerticalGrid());
 		this.showDoubleAxes = options.getShowDoubleAxes();
+		
+		this.dotsBorderless = options.isPointsBorderless();
 	}
 	
 }

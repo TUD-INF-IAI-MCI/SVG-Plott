@@ -83,10 +83,10 @@ public class SvgPointsPainter extends SvgPainter {
 
 		Element pointMainGroup = doc.createElement("g", "points");
 		viewbox.appendChild(pointMainGroup);
-		
+
 		Element backgroundGroup = doc.createElement("g", "points_bg");
 		pointMainGroup.appendChild(backgroundGroup);
-		
+
 		Element pointGroup = doc.createElement("g", "points_fg");
 		pointMainGroup.appendChild(pointGroup);
 
@@ -108,15 +108,17 @@ public class SvgPointsPainter extends SvgPainter {
 				for (PointType pt : PointType.values()) {
 					Element paintedPoint = pointPlot.paintPoint(pt == PointType.BG ? backgroundSubGroup : pointSubGroup,
 							pt, cs.convert(p), j);
-					paintedPoint.appendChild(doc.createTitle(SvgTools.formatForSpeech(cs, p)));
+					if (paintedPoint != null) {
+						paintedPoint.appendChild(doc.createTitle(SvgTools.formatForSpeech(cs, p)));
 
-					// Add a description if the point list has a name. TODO
-					// refine this
-					if (pl.getName() != null && !pl.getName().isEmpty())
-						paintedPoint.appendChild(doc.createDesc(pl.getName()));
-
-					overlays.add(new Overlay(p), true);
+						// Add a description if the point list has a name. TODO
+						// refine this
+						if (pl.getName() != null && !pl.getName().isEmpty())
+							paintedPoint.appendChild(doc.createDesc(pl.getName()));
+					}
 				}
+				
+				overlays.add(new Overlay(p), true);
 			}
 
 			j++;

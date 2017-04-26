@@ -291,6 +291,29 @@ public class SvgPlotOptions {
 		this.showDoubleAxes = showDoubleAxes;
 	}
 
+	@Parameter(names = { "--linepoints",
+			"--lp" }, descriptionKey = "param.showlinepoints", validateWith = OnOffParameterValidator.class)
+	private String showLinePoints;
+
+	public String getShowLinePoints() {
+		return showLinePoints;
+	}
+
+	public void setShowLinePoints(String showLinePoints) {
+		this.showLinePoints = showLinePoints;
+	}
+	
+	@Parameter(names = { "--pointsborderless", "--dbl"}, descriptionKey = "param.pointsborderless")
+	private boolean pointsBorderless = false;
+	
+	public boolean isPointsBorderless() {
+		return pointsBorderless;
+	}
+	
+	public void setPointsBorderless(boolean pointsBorderless) {
+		this.pointsBorderless = pointsBorderless;
+	}
+
 	@Parameter(names = "--trendline", descriptionKey = "param.trendline", variableArity = true)
 	public List<String> trendLine = new ArrayList<>();
 

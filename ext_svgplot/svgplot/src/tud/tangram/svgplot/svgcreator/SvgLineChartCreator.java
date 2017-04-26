@@ -56,17 +56,19 @@ public class SvgLineChartCreator extends SvgGridCreator {
 		boolean drawPoints = maxPointCount <= maxAllowedPointCount;
 
 		// Paint the scatter plot points to the SVG file if possible.
-		if (drawPoints) {
-			SvgPointsPainter svgPointsPainter = new SvgPointsPainter(cs, options.points, PointPlotStyle.DOTS);
+		if ((drawPoints || "on".equals(options.showLinePoints)) && !"off".equals(options.showLinePoints)) {
+			SvgPointsPainter svgPointsPainter = new SvgPointsPainter(cs, options.points,
+					options.dotsBorderless ? PointPlotStyle.DOTS_BORDERLESS : PointPlotStyle.DOTS);
 			svgPointsPainter.paintToSvgDocument(doc, viewbox, options.outputDevice);
 			svgPointsPainter.addOverlaysToList(overlays);
 
 			// The legend items for the scatter plot are not added
 		}
-		// If only the lines and no visible data plot points can be drawn, add overlays for the data points.
+		// If only the lines and no visible data plot points can be drawn, add
+		// overlays for the data points.
 		else {
-			for(PointList pointList : options.points) {
-				for(Point point : pointList)
+			for (PointList pointList : options.points) {
+				for (Point point : pointList)
 					overlays.add(new Overlay(point), true);
 			}
 		}
@@ -77,10 +79,11 @@ public class SvgLineChartCreator extends SvgGridCreator {
 	 */
 	@Override
 	protected void afterCreate() {
-		// Paint the line overlays before the point overlays are painted in the super class
+		// Paint the line overlays before the point overlays are painted in the
+		// super class
 		SvgLineOverlayPainter svgLineOverlayPainter = new SvgLineOverlayPainter(cs, polyLineStrings);
 		svgLineOverlayPainter.paintToSvgDocument(doc, viewbox, options.outputDevice);
-		
+
 		super.afterCreate();
 	}
 

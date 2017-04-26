@@ -45,7 +45,7 @@ public class PointPlot {
 	public PointPlot(SvgDocument doc, PointPlotStyle style) {
 		this.style = style;
 		this.doc = doc;
-
+		
 		if (doc == null)
 			throw new IllegalArgumentException("You must supply an SvgDocument");
 		if (style == null)
@@ -56,6 +56,8 @@ public class PointPlot {
 
 	/**
 	 * Select a point symbol for the given id and places it at a given point.
+	 * May return null, if a borderless style is selected and an attempt to
+	 * create a border is made.
 	 * 
 	 * @param pointParent
 	 *            | the parent group of the point
@@ -70,6 +72,9 @@ public class PointPlot {
 	 */
 	public Element paintPoint(Element pointParent, PointType pointType, Point position, int index) {
 		Element pointElement = getPointSymbolForIndex(pointType, index);
+
+		if (pointElement == null)
+			return null;
 
 		// Get or create a defs section
 		Element defs = (Element) doc.defs;
@@ -143,12 +148,16 @@ public class PointPlot {
 		List<Element> elements = pointType == PointType.FG ? poiSymbolElements : poiSymbolBackgroundElements;
 		if (elements.size() > index)
 			return elements.get(index);
+		if (elements.isEmpty())
+			return null;
 		return elements.get(elements.size() - 1);
 	}
 
 	/**
 	 * Fills the poiSymbolElements list with the svg symbols. Has to add at
-	 * least one symbol in any case.
+	 * least one symbol in any case. For the borderless dot styles no border
+	 * elements are added.
+	 * 
 	 */
 	private void initSymbolArray() {
 		poiSymbolElements = new ArrayList<>();
@@ -157,9 +166,10 @@ public class PointPlot {
 		if (doc == null)
 			return;
 
-		if (style == PointPlotStyle.DOTS) {
-			poiSymbolElements.add(createCircleSymbol(PointType.FG));
-			poiSymbolBackgroundElements.add(createCircleSymbol(PointType.BG));
+		if (style == PointPlotStyle.DOTS || style == PointPlotStyle.DOTS_BORDERLESS) {
+			poiSymbolElements.add(createFilledCircleSymbol(PointType.FG));
+			if (style == PointPlotStyle.DOTS)
+				poiSymbolBackgroundElements.add(createFilledCircleSymbol(PointType.BG));
 		} else {
 			poiSymbolElements.add(createSquareSymbol(PointType.FG));
 			poiSymbolElements.add(createCrossSymbol(PointType.FG));
@@ -167,13 +177,14 @@ public class PointPlot {
 			poiSymbolElements.add(createPlusSymbol(PointType.FG));
 			poiSymbolElements.add(createFilledCircleSymbol(PointType.FG));
 			poiSymbolElements.add(createCircleSymbol(PointType.FG));
-
-			poiSymbolBackgroundElements.add(createSquareSymbol(PointType.BG));
-			poiSymbolBackgroundElements.add(createCrossSymbol(PointType.BG));
-			poiSymbolBackgroundElements.add(createRhombusSymbol(PointType.BG));
-			poiSymbolBackgroundElements.add(createPlusSymbol(PointType.BG));
-			poiSymbolBackgroundElements.add(createFilledCircleSymbol(PointType.BG));
-			poiSymbolBackgroundElements.add(createCircleSymbol(PointType.BG));
+			if (style == PointPlotStyle.MULTI_ROWS) {
+				poiSymbolBackgroundElements.add(createSquareSymbol(PointType.BG));
+				poiSymbolBackgroundElements.add(createCrossSymbol(PointType.BG));
+				poiSymbolBackgroundElements.add(createRhombusSymbol(PointType.BG));
+				poiSymbolBackgroundElements.add(createPlusSymbol(PointType.BG));
+				poiSymbolBackgroundElements.add(createFilledCircleSymbol(PointType.BG));
+				poiSymbolBackgroundElements.add(createCircleSymbol(PointType.BG));
+			}
 		}
 	}
 
