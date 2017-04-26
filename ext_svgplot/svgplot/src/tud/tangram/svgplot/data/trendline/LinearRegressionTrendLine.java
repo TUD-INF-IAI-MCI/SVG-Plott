@@ -57,8 +57,8 @@ public class LinearRegressionTrendLine implements TrendLineAlgorithm {
 		newPoints.setName(originalPoints.getName() != null ? "Linear Regression Trend Line: " + originalPoints.getName()
 				: "Linear Regression Trend Line");
 		
-		newPoints.add(new Point(fromX, fromY));
-		newPoints.add(new Point(toX, toY));
+		newPoints.insertSorted(new Point(fromX, fromY));
+		newPoints.insertSorted(new Point(toX, toY));
 
 		return newPoints;
 	}

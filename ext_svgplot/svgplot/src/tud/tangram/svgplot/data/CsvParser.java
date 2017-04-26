@@ -80,7 +80,7 @@ public class CsvParser {
 					continue;
 				}
 				Point newPoint = new Point(xValue.doubleValue(), yValue.doubleValue());
-				rowPoints.add(newPoint);
+				rowPoints.insertSorted(newPoint);
 			}
 
 			// If there were no points found, do not add the row to the list
@@ -171,6 +171,6 @@ public class CsvParser {
 			pointListList.add(new PointList());
 		}
 
-		pointListList.get(listIndex).add(point);
+		pointListList.get(listIndex).insertSorted(point);
 	}
 }

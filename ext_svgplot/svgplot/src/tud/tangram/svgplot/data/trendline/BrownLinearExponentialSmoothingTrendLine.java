@@ -47,13 +47,13 @@ public class BrownLinearExponentialSmoothingTrendLine implements TrendLineAlgori
 			s1 = getNewS1(y, s1);
 			s2 = getNewS2(y, s1, s2);
 
-			newPoints.add(new Point(x, getF(s1, s2, 1)));
+			newPoints.insertSorted(new Point(x, getF(s1, s2, 1)));
 		} while (it.hasNext());
 
 		x += distance;
 
 		for (int i = 2; i < forecast + 2; i++, x += distance) {
-			newPoints.add(new Point(x, getF(s1, s2, i)));
+			newPoints.insertSorted(new Point(x, getF(s1, s2, i)));
 		}
 
 		return newPoints;

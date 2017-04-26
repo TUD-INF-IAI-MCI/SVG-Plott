@@ -26,13 +26,13 @@ public class ExponentialSmoothingTrendline implements TrendLineAlgorithm {
 		Point currentPoint = it.next();
 		double sum = currentPoint.getY();
 
-		newPoints.add(new Point(currentPoint.getX(), sum));
+		newPoints.insertSorted(new Point(currentPoint.getX(), sum));
 
 		while (it.hasNext()) {
 			currentPoint = it.next();
 			sum = (1 - alpha) * sum + alpha * currentPoint.getY();
 
-			newPoints.add(new Point(currentPoint.getX(), sum));
+			newPoints.insertSorted(new Point(currentPoint.getX(), sum));
 		}
 
 		return newPoints;

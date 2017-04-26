@@ -1,6 +1,7 @@
 package tud.tangram.svgplot.data;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.beust.jcommander.IStringConverter;
@@ -106,7 +107,7 @@ public class PointListList extends ArrayList<PointListList.PointList> {
 		public PointList(List<Point> points) {
 			if (points != null && !points.isEmpty()) {
 				for (Point p : points) {
-					this.add(p);
+					this.insertSorted(p);
 				}
 			}
 		}
@@ -131,7 +132,7 @@ public class PointListList extends ArrayList<PointListList.PointList> {
 				for (String string : s) {
 					if (string != null && !string.isEmpty()) {
 						Point p = (new Point.Converter()).convert(string);
-						this.add(p);
+						this.insertSorted(p);
 					}
 				}
 			}
@@ -141,13 +142,27 @@ public class PointListList extends ArrayList<PointListList.PointList> {
 			this("");
 		}
 
-		@Override
-		public boolean add(Point p) {
+		public void insertSorted(Point p) {
 			maxX = Math.max(getMaxX(), p.getX());
 			maxY = Math.max(getMaxY(), p.getY());
 			minX = Math.min(getMinX(), p.getX());
 			minY = Math.min(getMinY(), p.getY());
-			return super.add(p);
+			super.add(p);
+			
+			Comparable<Point> cmp = (Comparable<Point>) p;
+	        for (int i = size()-1; i > 0 && cmp.compareTo(get(i-1)) < 0; i--)
+	            Collections.swap(this, i, i-1);
+		}
+		
+
+		@Deprecated
+		public void add(int index, Point element) {
+			throw new UnsupportedOperationException("Only insertions via insertSorted are allowed");
+		}
+
+		@Deprecated
+		public boolean add(Point e) {
+			throw new UnsupportedOperationException("Only insertions via insertSorted are allowed");
 		}
 
 		public double getMaxX() {

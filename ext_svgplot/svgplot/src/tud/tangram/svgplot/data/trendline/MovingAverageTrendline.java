@@ -62,7 +62,7 @@ public class MovingAverageTrendline implements TrendLineAlgorithm {
 
 			double currentX = points[arrayPos.getModDelta(-n - 1)].getX();
 			Point newPoint = new Point(currentX, ySum / avgCount);
-			newPoints.add(newPoint);
+			newPoints.insertSorted(newPoint);
 		}
 
 		return newPoints;
