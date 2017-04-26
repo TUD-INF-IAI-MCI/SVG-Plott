@@ -16,32 +16,32 @@ import tud.tangram.svgplot.xml.SvgDocument;
  * Paint overlays to the SVG document. Leaves the legend untouched.
  *
  */
-public class SvgOverlayPainter extends SvgPainter {
+public class SvgPointOverlayPainter extends SvgPainter {
 
 	CoordinateSystem cs;
 	OverlayList overlays;
 
-	public SvgOverlayPainter(CoordinateSystem cs, OverlayList overlays) {
+	public SvgPointOverlayPainter(CoordinateSystem cs, OverlayList overlays) {
 		this.overlays = overlays;
 		this.cs = cs;
 	}
-
-	@Override
-	protected String getPainterName() {
-		return "Overlay Painter";
-	}
-
+	
 	@Override
 	protected HashMap<OutputDevice, String> getDeviceCss() {
 		HashMap<OutputDevice, String> deviceCss = new HashMap<>();
 		
 		StringBuilder defaultOptions = new StringBuilder();
-		defaultOptions.append("#overlays { stroke: none; stroke-dasharray: none; fill: transparent; }")
+		defaultOptions.append("#overlayPoints { stroke: none; stroke-dasharray: none; fill: transparent; }")
 				.append(System.lineSeparator());
-
+	
 		deviceCss.put(OutputDevice.Default, defaultOptions.toString());
 		
 		return deviceCss;
+	}
+
+	@Override
+	protected String getPainterName() {
+		return "Point Overlay Painter";
 	}
 
 	@Override
@@ -49,12 +49,13 @@ public class SvgOverlayPainter extends SvgPainter {
 		super.paintToSvgDocument(doc, viewbox, device);
 
 		// Create an overlay node
-		Node overlaysElement = viewbox.appendChild(doc.createGroup("overlays"));
+		Element overlaysElement = doc.getOrCreateChildGroupById(viewbox, "overlays");
+		Element overlaysPointsElement = doc.getOrCreateChildGroupById(overlaysElement, "overlayPoints");
 
 		// Add the overlays -- TODO order by function
 		for (Overlay overlay : overlays) {
 			// if (overlay.getFunction() == null) {
-			overlaysElement.appendChild(createOverlay(doc, overlay));
+			overlaysPointsElement.appendChild(createOverlay(doc, overlay));
 			// }
 		}
 	}

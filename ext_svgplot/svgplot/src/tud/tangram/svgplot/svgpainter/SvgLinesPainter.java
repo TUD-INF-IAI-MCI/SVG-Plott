@@ -1,6 +1,8 @@
 package tud.tangram.svgplot.svgpainter;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import org.w3c.dom.Element;
 
@@ -18,6 +20,7 @@ public class SvgLinesPainter extends SvgPainter {
 
 	PointListList points;
 	CoordinateSystem cs;
+	Map<PointList, String> polyLinePoints;
 
 	public SvgLinesPainter(CoordinateSystem cs, PointListList pointListList) {
 		this.points = pointListList;
@@ -55,7 +58,9 @@ public class SvgLinesPainter extends SvgPainter {
 				.append(System.lineSeparator());
 		screenHighContrastCss.append("#linechart-3 { stroke-dasharray: 5.0, 5.0; stroke: #ff00ff;}")
 				.append(System.lineSeparator());
-		defaultCss.append(".linechart_bg { stroke: black; stroke-dasharray: none; stroke-width:3.0;  fill: transparent; stroke-linecap: round; }").append(System.lineSeparator());
+		defaultCss
+				.append(".linechart_bg { stroke: black; stroke-dasharray: none; stroke-width:3.0;  fill: transparent; stroke-linecap: round; }")
+				.append(System.lineSeparator());
 
 		deviceCss.put(OutputDevice.ScreenHighContrast, screenHighContrastCss.toString());
 
@@ -65,6 +70,8 @@ public class SvgLinesPainter extends SvgPainter {
 	@Override
 	public void paintToSvgDocument(SvgDocument doc, Element viewbox, OutputDevice device) {
 		super.paintToSvgDocument(doc, viewbox, device);
+
+		this.polyLinePoints = new LinkedHashMap<>();
 
 		if (points == null || points.isEmpty()) {
 			return;
@@ -93,12 +100,28 @@ public class SvgLinesPainter extends SvgPainter {
 				polyLinePointsBuilder.append(" ");
 			}
 
-			polyLine.setAttribute("points", polyLinePointsBuilder.toString());
-			polyLineBg.setAttribute("points", polyLinePointsBuilder.toString());
+			String polyLinePointsString = polyLinePointsBuilder.toString();
+
+			polyLinePoints.put(pointList, polyLinePointsString);
+
+			polyLine.setAttribute("points", polyLinePointsString);
+			polyLineBg.setAttribute("points", polyLinePointsString);
 
 			linechartGroup.appendChild(polyLineBg);
 			linechartGroup.appendChild(polyLine);
 		}
+	}
+
+	/**
+	 * Get the line data used for overlay creation. The data can be set as a the
+	 * {@code points} attribute of an SVG polyline. Call after
+	 * {@link paintToSvgDocument(SvgDocument, Element, OutputDevice)
+	 * paintToSvgDocument}.
+	 * 
+	 * @return SVG polyline data for overlay creation
+	 */
+	public Map<PointList, String> getLineDataForOverlayCreation() {
+		return polyLinePoints;
 	}
 
 	@Override

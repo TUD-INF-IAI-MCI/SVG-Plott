@@ -11,7 +11,7 @@ import tud.tangram.svgplot.plotting.ReferenceLine;
 import tud.tangram.svgplot.plotting.ReferenceLine.Direction;
 import tud.tangram.svgplot.styles.AxisStyle;
 import tud.tangram.svgplot.svgpainter.SvgGridPainter;
-import tud.tangram.svgplot.svgpainter.SvgOverlayPainter;
+import tud.tangram.svgplot.svgpainter.SvgPointOverlayPainter;
 import tud.tangram.svgplot.svgpainter.SvgReferenceLinesPainter;
 import tud.tangram.svgplot.svgpainter.SvgViewboxPainter;
 
@@ -80,8 +80,8 @@ public abstract class SvgGridCreator extends SvgCreator {
 	protected void afterCreate() {
 		super.afterCreate();
 
-		SvgOverlayPainter svgOverlayPainter = new SvgOverlayPainter(cs, overlays);
-		svgOverlayPainter.paintToSvgDocument(doc, viewbox, options.outputDevice);
+		SvgPointOverlayPainter svgPointOverlayPainter = new SvgPointOverlayPainter(cs, overlays);
+		svgPointOverlayPainter.paintToSvgDocument(doc, viewbox, options.outputDevice);
 	}
 
 	public CoordinateSystem getCs() {
