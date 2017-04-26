@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import org.apache.commons.collections.ExtendedProperties;
-
 import tud.tangram.svgplot.utils.Constants;
 
 /**

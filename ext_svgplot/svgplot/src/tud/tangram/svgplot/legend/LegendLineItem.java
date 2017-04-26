@@ -3,7 +3,6 @@ package tud.tangram.svgplot.legend;
 import org.w3c.dom.Element;
 
 import tud.tangram.svgplot.data.Point;
-import tud.tangram.svgplot.utils.SvgTools;
 import tud.tangram.svgplot.xml.SvgDocument;
 
 public class LegendLineItem extends LegendItem {

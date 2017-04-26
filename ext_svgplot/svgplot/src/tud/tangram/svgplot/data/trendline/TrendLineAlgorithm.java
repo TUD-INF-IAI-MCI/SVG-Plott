@@ -1,6 +1,5 @@
 package tud.tangram.svgplot.data.trendline;
 
-import tud.tangram.svgplot.data.PointListList;
 import tud.tangram.svgplot.data.PointListList.PointList;
 
 public interface TrendLineAlgorithm {

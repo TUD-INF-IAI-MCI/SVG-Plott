@@ -3,11 +3,8 @@ package tud.tangram.svgplot.svgcreator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import tud.tangram.svgplot.SvgPlot;
 import tud.tangram.svgplot.data.PointListList;
 import tud.tangram.svgplot.data.PointListList.PointList;
-import tud.tangram.svgplot.data.trendline.LinearRegressionTrendLine;
-import tud.tangram.svgplot.data.trendline.TrendLineAlgorithm;
 import tud.tangram.svgplot.options.SvgPlotOptions;
 import tud.tangram.svgplot.options.SvgScatterPlotOptions;
 import tud.tangram.svgplot.styles.AxisStyle;
@@ -35,18 +32,12 @@ public class SvgScatterPlotCreator extends SvgGridCreator {
 	
 	@Override
 	protected AxisStyle getXAxisStyle() {
-		if(getPointPlotStyle() == PointPlotStyle.DOTS)
-			return AxisStyle.BOX;
-		else
-			return AxisStyle.BOX;
+		return AxisStyle.BOX;
 	}
 
 	@Override
 	protected AxisStyle getYAxisStyle() {
-		if(getPointPlotStyle() == PointPlotStyle.DOTS)
-			return AxisStyle.BOX;
-		else
-			return AxisStyle.BOX;
+		return AxisStyle.BOX;
 	}
 
 	@Override

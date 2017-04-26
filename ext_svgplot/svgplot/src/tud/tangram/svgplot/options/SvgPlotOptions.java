@@ -13,7 +13,6 @@ import com.beust.jcommander.IStringConverterFactory;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
-import com.beust.jcommander.SubParameter;
 
 import tud.tangram.svgplot.coordinatesystem.Range;
 import tud.tangram.svgplot.data.CsvParser;
