@@ -38,7 +38,7 @@ public class SvgScatterPlotCreator extends SvgGridCreator {
 		if(getPointPlotStyle() == PointPlotStyle.DOTS)
 			return AxisStyle.BOX;
 		else
-			return AxisStyle.BOX_MIDDLE;
+			return AxisStyle.BOX;
 	}
 
 	@Override
@@ -46,7 +46,7 @@ public class SvgScatterPlotCreator extends SvgGridCreator {
 		if(getPointPlotStyle() == PointPlotStyle.DOTS)
 			return AxisStyle.BOX;
 		else
-			return AxisStyle.BOX_MIDDLE;
+			return AxisStyle.BOX;
 	}
 
 	@Override

@@ -139,8 +139,7 @@ public class SvgGridPainter extends SvgPainter {
 		Node grid = viewbox.appendChild(doc.createGroup("grid"));
 
 		// Skip the zero grid line in x direction if there is an axis line
-		boolean skipZeroX = xAxisStyle == AxisStyle.EDGE_MIDDLE || xAxisStyle == AxisStyle.BOX_MIDDLE
-				|| xAxisStyle == AxisStyle.GRAPH;
+		boolean skipZeroX = xAxisStyle == AxisStyle.GRAPH;
 		
 		if (gridStyle.showVertical()) {
 			Element xGrid = (Element) grid.appendChild(doc.createGroup("x-grid"));
@@ -158,8 +157,7 @@ public class SvgGridPainter extends SvgPainter {
 		}
 
 		// Skip the zero grid line in y direction if there is an axis line
-		boolean skipZeroY = yAxisStyle == AxisStyle.EDGE_MIDDLE || yAxisStyle == AxisStyle.BOX_MIDDLE
-				|| yAxisStyle == AxisStyle.GRAPH;
+		boolean skipZeroY = yAxisStyle == AxisStyle.GRAPH;
 		
 		if (gridStyle.showHorizontal()) {
 			Element yGrid = (Element) grid.appendChild(doc.createGroup("y-grid"));
@@ -218,13 +216,13 @@ public class SvgGridPainter extends SvgPainter {
 		Point toBigger = cs.convert(xRange.getTo(), yRange.getTo(), 0, 0);
 
 		// Create the x axis line
-		if (xAxisStyle == AxisStyle.BOX_MIDDLE || xAxisStyle == AxisStyle.EDGE_MIDDLE || xAxisStyle == AxisStyle.GRAPH)
+		if (xAxisStyle == AxisStyle.GRAPH)
 			createAxisLine(doc, axes, X_AXIS_ID, from, to);
 
 		if (xAxisStyle != AxisStyle.GRAPH)
 			createAxisLine(doc, axes, X_AXIS_SMALLER_ID, fromSmaller, toSmaller);
 
-		if (xAxisStyle == AxisStyle.BOX || xAxisStyle == AxisStyle.BOX_MIDDLE)
+		if (xAxisStyle == AxisStyle.BOX)
 			createAxisLine(doc, axes, X_AXIS_BIGGER, fromBigger, toBigger);
 
 		// Create the x arrow
@@ -252,14 +250,13 @@ public class SvgGridPainter extends SvgPainter {
 		}
 
 		// Create the x tics according to the axis style
-		boolean skipZero = yAxisStyle == AxisStyle.EDGE_MIDDLE || yAxisStyle == AxisStyle.BOX_MIDDLE
-				|| yAxisStyle == AxisStyle.GRAPH;
+		boolean skipZero = yAxisStyle == AxisStyle.GRAPH;
 		if (xAxisStyle == AxisStyle.GRAPH)
 			createXTics(doc, axes, TicStyle.BOTH_SIDES, X_TICS_ID, 0, skipZero);
 		else
 			createXTics(doc, axes, TicStyle.SMALLER_SIDE, X_TICS_ID, yRange.getFrom(), skipZero);
 
-		if (xAxisStyle == AxisStyle.BOX || xAxisStyle == AxisStyle.BOX_MIDDLE)
+		if (xAxisStyle == AxisStyle.BOX)
 			createXTics(doc, axes, TicStyle.BIGGER_SIDE, X_TICS_ID, yRange.getTo(), skipZero);
 	}
 
@@ -282,13 +279,13 @@ public class SvgGridPainter extends SvgPainter {
 		Point toBigger = cs.convert(xRange.getTo(), yRange.getTo(), 0, 0);
 
 		// Create the y axis line
-		if (yAxisStyle == AxisStyle.BOX_MIDDLE || yAxisStyle == AxisStyle.EDGE_MIDDLE || yAxisStyle == AxisStyle.GRAPH)
+		if (yAxisStyle == AxisStyle.GRAPH)
 			createAxisLine(doc, axes, Y_AXIS_ID, from, to);
 
 		if (yAxisStyle != AxisStyle.GRAPH)
 			createAxisLine(doc, axes, Y_AXIS_SMALLER_ID, fromSmaller, toSmaller);
 
-		if (yAxisStyle == AxisStyle.BOX || yAxisStyle == AxisStyle.BOX_MIDDLE)
+		if (yAxisStyle == AxisStyle.BOX)
 			createAxisLine(doc, axes, Y_AXIS_BIGGER, fromBigger, toBigger);
 
 		// Create the y arrow
@@ -316,14 +313,13 @@ public class SvgGridPainter extends SvgPainter {
 		}
 
 		// Create the y tics according to the axis style
-		boolean skipZero = xAxisStyle == AxisStyle.EDGE_MIDDLE || xAxisStyle == AxisStyle.BOX_MIDDLE
-				|| xAxisStyle == AxisStyle.GRAPH;
+		boolean skipZero = xAxisStyle == AxisStyle.GRAPH;
 		if (yAxisStyle == AxisStyle.GRAPH)
 			createYTics(doc, axes, TicStyle.BOTH_SIDES, Y_TICS_ID, 0, skipZero);
 		else
 			createYTics(doc, axes, TicStyle.SMALLER_SIDE, Y_TICS_ID, xRange.getFrom(), skipZero);
 
-		if (yAxisStyle == AxisStyle.BOX || yAxisStyle == AxisStyle.BOX_MIDDLE)
+		if (yAxisStyle == AxisStyle.BOX)
 			createYTics(doc, axes, TicStyle.BIGGER_SIDE, Y_TICS_ID, xRange.getTo(), skipZero);
 	}
 
