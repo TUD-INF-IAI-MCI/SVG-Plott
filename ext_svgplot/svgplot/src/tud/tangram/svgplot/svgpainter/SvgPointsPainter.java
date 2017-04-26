@@ -14,6 +14,7 @@ import tud.tangram.svgplot.options.OutputDevice;
 import tud.tangram.svgplot.plotting.Overlay;
 import tud.tangram.svgplot.plotting.OverlayList;
 import tud.tangram.svgplot.plotting.PointPlot;
+import tud.tangram.svgplot.plotting.PointPlot.PointType;
 import tud.tangram.svgplot.styles.PointPlotStyle;
 import tud.tangram.svgplot.utils.Constants;
 import tud.tangram.svgplot.utils.SvgTools;
@@ -79,31 +80,42 @@ public class SvgPointsPainter extends SvgPainter {
 		}
 
 		int j = 0;
+
+		Element backgroundGroup = doc.createElement("g", "points_bg");
+		viewbox.appendChild(backgroundGroup);
+
 		Element pointGroup = doc.createElement("g", "points");
 		viewbox.appendChild(pointGroup);
-		
+
 		PointPlot pointPlot = new PointPlot(doc, pointPlotStyle);
-		
+
 		for (PointList pl : points) {
 			if (pl == null || pl.isEmpty()) {
 				j++;
 				continue;
 			}
 
+			Element backgroundSubGroup = doc.createElement("g", "points_bg_" + j);
+			backgroundGroup.appendChild(backgroundSubGroup);
+
 			Element pointSubGroup = doc.createElement("g", "points_" + j);
 			pointGroup.appendChild(pointSubGroup);
-			
-			for (Point p : pl) {
-				Element paintedPoint = pointPlot.paintPoint(pointSubGroup, cs.convert(p), j);
-				paintedPoint.appendChild(doc.createTitle(SvgTools.formatForSpeech(cs, p)));
-				
-				// Add a description if the point list has a name. TODO refine this
-				if (pl.getName() != null && !pl.getName().isEmpty())
-					paintedPoint.appendChild(doc.createDesc(pl.getName()));
 
-				overlays.add(new Overlay(p), true);
+			for (Point p : pl) {
+				for (PointType pt : PointType.values()) {
+					Element paintedPoint = pointPlot.paintPoint(pt == PointType.BG ? backgroundSubGroup : pointSubGroup,
+							pt, cs.convert(p), j);
+					paintedPoint.appendChild(doc.createTitle(SvgTools.formatForSpeech(cs, p)));
+
+					// Add a description if the point list has a name. TODO
+					// refine this
+					if (pl.getName() != null && !pl.getName().isEmpty())
+						paintedPoint.appendChild(doc.createDesc(pl.getName()));
+
+					overlays.add(new Overlay(p), true);
+				}
 			}
-			
+
 			j++;
 		}
 	}
