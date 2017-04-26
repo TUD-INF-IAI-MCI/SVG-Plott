@@ -349,9 +349,9 @@ public class SvgPlotOptions {
 			points = (new PointListList.Converter()).convert(pts);
 		}
 		points.updateMinMax();
-		if (autoScale && !points.isEmpty() && points.hasValidMinMaxValues()) {
-			double xPointRangeMargin = 0.01 * (points.getMaxX() - points.getMinX());
-			double yPointRangeMargin = 0.01 * (points.getMaxY() - points.getMinY());
+		if (autoScale && !points.isEmpty() && points.hasValidMinMaxValues()) { // TODO add margin option
+			double xPointRangeMargin = 0; //0.01 * (points.getMaxX() - points.getMinX());
+			double yPointRangeMargin = 0; //0.01 * (points.getMaxY() - points.getMinY());
 			if (!xRangeSpecified || xRange.getFrom() > points.getMinX())
 				xRange.setFrom(points.getMinX() - xPointRangeMargin);
 			if (!xRangeSpecified || xRange.getTo() < points.getMaxX())
