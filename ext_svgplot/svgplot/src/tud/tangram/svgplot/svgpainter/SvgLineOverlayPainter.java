@@ -25,17 +25,18 @@ public class SvgLineOverlayPainter extends SvgPainter {
 		this.polyLineStrings = polyLineStrings;
 		this.cs = cs;
 	}
-	
+
 	@Override
 	protected HashMap<OutputDevice, String> getDeviceCss() {
 		HashMap<OutputDevice, String> deviceCss = new HashMap<>();
-		
+
 		StringBuilder defaultOptions = new StringBuilder();
-		defaultOptions.append("#overlayLines { stroke: transparent; stroke-dasharray: none; fill: none; stroke-width: 6.0}")
+		defaultOptions
+				.append("#overlayLines { stroke: transparent; stroke-dasharray: none; fill: none; stroke-width: 6.0; stroke-linecap: round; }")
 				.append(System.lineSeparator());
-	
+
 		deviceCss.put(OutputDevice.Default, defaultOptions.toString());
-		
+
 		return deviceCss;
 	}
 

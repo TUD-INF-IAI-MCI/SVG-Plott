@@ -1,5 +1,7 @@
 package tud.tangram.svgplot.svgcreator;
 
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -9,6 +11,7 @@ import tud.tangram.svgplot.options.SvgPlotOptions;
 import tud.tangram.svgplot.options.SvgScatterPlotOptions;
 import tud.tangram.svgplot.styles.AxisStyle;
 import tud.tangram.svgplot.styles.PointPlotStyle;
+import tud.tangram.svgplot.svgpainter.SvgLineOverlayPainter;
 import tud.tangram.svgplot.svgpainter.SvgLinesPainter;
 import tud.tangram.svgplot.svgpainter.SvgPointsPainter;
 
@@ -17,6 +20,7 @@ public class SvgScatterPlotCreator extends SvgGridCreator {
 	static final Logger log = LoggerFactory.getLogger(SvgScatterPlotCreator.class);
 
 	protected final SvgScatterPlotOptions options;
+	private Map<PointList, String> polyLineStrings;
 
 	public SvgScatterPlotCreator(SvgScatterPlotOptions options) {
 		super(options);
@@ -70,6 +74,24 @@ public class SvgScatterPlotCreator extends SvgGridCreator {
 			SvgLinesPainter svgLinesPainter = new SvgLinesPainter(cs, trendLinePoints);
 			svgLinesPainter.paintToSvgDocument(doc, viewbox, options.outputDevice);
 			svgLinesPainter.prepareLegendRenderer(legendRenderer, options.outputDevice);
+
+			// Save the neccessary data for creating trendline overlays
+			polyLineStrings = svgLinesPainter.getLineDataForOverlayCreation();
+		}
+	}
+
+	/**
+	 * Paint the line overlays
+	 */
+	@Override
+	protected void afterCreate() {
+		super.afterCreate();
+
+		// Paint the line overlays after the point overlays are painted in the
+		// super class, in order to give the line audio-labels priority
+		if (polyLineStrings != null) {
+			SvgLineOverlayPainter svgLineOverlayPainter = new SvgLineOverlayPainter(cs, polyLineStrings);
+			svgLineOverlayPainter.paintToSvgDocument(doc, viewbox, options.outputDevice);
 		}
 	}
 
