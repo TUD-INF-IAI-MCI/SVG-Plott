@@ -295,6 +295,17 @@ public class SvgPlotOptions {
 	public TrendLineAlgorithm getTrendLineAlgorithm() {
 		return trendLineAlgorithm;
 	}
+	
+	@Parameter(names = {"--hideoriginalpoints", "--hop"}, descriptionKey = "param.hideoriginalpoints")
+	private boolean hideOriginalPoints = false;
+	
+	public boolean isHideOriginalPoints() {
+		return hideOriginalPoints;
+	}
+	
+	public void setHideOriginalPoints(boolean hideOriginalPoints) {
+		this.hideOriginalPoints = hideOriginalPoints;
+	}
 
 	/**
 	 * Returns a converter for the special class-types of this project for

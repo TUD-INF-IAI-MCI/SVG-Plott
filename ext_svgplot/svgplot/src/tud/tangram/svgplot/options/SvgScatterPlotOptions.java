@@ -8,6 +8,7 @@ public class SvgScatterPlotOptions extends SvgGridOptions {
 
 	public PointListList points;
 	public TrendLineAlgorithm trendLineAlgorithm;
+	public boolean hideOriginalPoints;
 	
 	public SvgScatterPlotOptions(SvgPlotOptions options) {
 		super(options);
@@ -17,5 +18,7 @@ public class SvgScatterPlotOptions extends SvgGridOptions {
 		
 		if(gridStyle == null)
 			gridStyle = GridStyle.NONE;
+		
+		hideOriginalPoints = trendLineAlgorithm != null && options.isHideOriginalPoints();
 	}
 }
