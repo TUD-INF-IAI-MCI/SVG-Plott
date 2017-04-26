@@ -81,11 +81,14 @@ public class SvgPointsPainter extends SvgPainter {
 
 		int j = 0;
 
+		Element pointMainGroup = doc.createElement("g", "points");
+		viewbox.appendChild(pointMainGroup);
+		
 		Element backgroundGroup = doc.createElement("g", "points_bg");
-		viewbox.appendChild(backgroundGroup);
-
-		Element pointGroup = doc.createElement("g", "points");
-		viewbox.appendChild(pointGroup);
+		pointMainGroup.appendChild(backgroundGroup);
+		
+		Element pointGroup = doc.createElement("g", "points_fg");
+		pointMainGroup.appendChild(pointGroup);
 
 		PointPlot pointPlot = new PointPlot(doc, pointPlotStyle);
 
@@ -98,7 +101,7 @@ public class SvgPointsPainter extends SvgPainter {
 			Element backgroundSubGroup = doc.createElement("g", "points_bg_" + j);
 			backgroundGroup.appendChild(backgroundSubGroup);
 
-			Element pointSubGroup = doc.createElement("g", "points_" + j);
+			Element pointSubGroup = doc.createElement("g", "points_fg_" + j);
 			pointGroup.appendChild(pointSubGroup);
 
 			for (Point p : pl) {
