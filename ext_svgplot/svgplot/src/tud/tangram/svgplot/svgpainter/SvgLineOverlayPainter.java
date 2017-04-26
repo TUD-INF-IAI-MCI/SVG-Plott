@@ -1,19 +1,14 @@
 package tud.tangram.svgplot.svgpainter;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 
 import tud.tangram.svgplot.coordinatesystem.CoordinateSystem;
-import tud.tangram.svgplot.data.PointListList;
 import tud.tangram.svgplot.data.PointListList.PointList;
 import tud.tangram.svgplot.options.OutputDevice;
-import tud.tangram.svgplot.plotting.Overlay;
-import tud.tangram.svgplot.utils.SvgTools;
 import tud.tangram.svgplot.xml.SvgDocument;
 
 public class SvgLineOverlayPainter extends SvgPainter {

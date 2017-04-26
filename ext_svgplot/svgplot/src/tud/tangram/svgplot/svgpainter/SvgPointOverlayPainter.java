@@ -3,7 +3,6 @@ package tud.tangram.svgplot.svgpainter;
 import java.util.HashMap;
 
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 
 import tud.tangram.svgplot.coordinatesystem.CoordinateSystem;
 import tud.tangram.svgplot.options.OutputDevice;
