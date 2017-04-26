@@ -58,7 +58,7 @@ public class Axis {
 			dimension = Math.pow(10, dimensionExp);
 			factor = getFactorForIntervalAndDimension(interval, dimension);
 			finished = true;
-			interval = factor * dimension;
+			interval = factor * dimension * 2;
 			range.setFrom(((int) (axisRange.getFrom() / interval)) * interval);
 			range.setTo(((int) (axisRange.getTo() / interval)) * interval);
 			if (range.getFrom() > axisRange.getFrom()) {
