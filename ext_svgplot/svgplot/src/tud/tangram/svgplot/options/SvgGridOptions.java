@@ -16,6 +16,8 @@ public class SvgGridOptions extends SvgOptions {
 	
 	public boolean dotsBorderless;
 	
+	public DiagramType diagramType;
+	
 	public SvgGridOptions(SvgPlotOptions options) {
 		super(options);
 		createFromSvgPlotOptions(options);
@@ -34,6 +36,8 @@ public class SvgGridOptions extends SvgOptions {
 		this.showDoubleAxes = options.getShowDoubleAxes();
 		
 		this.dotsBorderless = options.isPointsBorderless();
+		
+		this.diagramType = options.getDiagramType();
 	}
 	
 }

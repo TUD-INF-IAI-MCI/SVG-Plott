@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.w3c.dom.Element;
 
 import tud.tangram.svgplot.coordinatesystem.CoordinateSystem;
+import tud.tangram.svgplot.options.DiagramType;
 import tud.tangram.svgplot.options.SvgGridOptions;
 import tud.tangram.svgplot.plotting.OverlayList;
 import tud.tangram.svgplot.plotting.ReferenceLine;
@@ -47,6 +48,13 @@ public abstract class SvgGridCreator extends SvgCreator {
 	protected void beforeCreate() {
 		super.beforeCreate();
 
+		// Add extra margins for label placing for all diagrams except function
+		// plots.
+		if (options.diagramType != DiagramType.FunctionPlot) {
+			diagramContentMargin.set(2, diagramContentMargin.get(2) + 10);
+			diagramContentMargin.set(3, diagramContentMargin.get(3) + 20);
+		}
+
 		cs = new CoordinateSystem(options.xRange, options.yRange, options.size, diagramContentMargin, options.pi);
 		overlays = new OverlayList(cs);
 
@@ -59,8 +67,7 @@ public abstract class SvgGridCreator extends SvgCreator {
 	protected void create() {
 		super.create();
 
-		SvgGridPainter svgGridPainter = new SvgGridPainter(cs, getXAxisStyle(),
-				getYAxisStyle(), options.gridStyle);
+		SvgGridPainter svgGridPainter = new SvgGridPainter(cs, getXAxisStyle(), getYAxisStyle(), options.gridStyle);
 
 		svgGridPainter.paintToSvgDocument(doc, viewbox, options.outputDevice);
 		svgGridPainter.prepareLegendRenderer(legendRenderer, options.outputDevice, Integer.MAX_VALUE);

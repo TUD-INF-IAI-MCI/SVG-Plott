@@ -85,6 +85,7 @@ public class SvgGridPainter extends SvgPainter {
 		super.paintToSvgDocument(doc, viewbox, device);
 		createGrid(doc, viewbox);
 		createAxes(doc, viewbox);
+		createAxisLabels(doc);
 	}
 
 	@Override
@@ -418,6 +419,37 @@ public class SvgGridPainter extends SvgPainter {
 		Element yAxisLine = doc.createLine(from, to);
 		parent.appendChild(yAxisLine);
 		yAxisLine.setAttribute("id", id);
+	}
+	
+	private void createAxisLabels(SvgDocument doc) {
+		if(xAxisStyle != AxisStyle.GRAPH) {
+			double yPos = yRange.getFrom();
+			boolean paint = false;
+			for (double pos : cs.xAxis.ticLines()) {
+				paint = !paint;
+				if(!paint)
+					continue;
+				Point newPoint = cs.convert(pos, yPos);
+				newPoint.translate(-5, 20);
+				Element text = doc.createText(newPoint, SvgTools.formatX(cs, pos));
+				doc.appendChild(text);
+			}
+		}
+		
+		if(yAxisStyle != AxisStyle.GRAPH) {
+			double xPos = xRange.getFrom();
+			boolean paint = false;
+			for (double pos : cs.yAxis.ticLines()) {
+				paint = !paint;
+				if(!paint)
+					continue;
+				Point newPoint = cs.convert(xPos, pos);
+				newPoint.translate(-10, 5);
+				Element text = doc.createText(newPoint, SvgTools.formatY(cs, pos));
+				text.setAttribute("text-anchor", "end");
+				doc.appendChild(text);
+			}
+		}
 	}
 
 }
