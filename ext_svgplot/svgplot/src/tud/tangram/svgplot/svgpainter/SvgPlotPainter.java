@@ -6,6 +6,7 @@ import java.util.List;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
+import tud.tangram.svgplot.coordinatesystem.MetricAxis;
 import tud.tangram.svgplot.coordinatesystem.CoordinateSystem;
 import tud.tangram.svgplot.data.Point;
 import tud.tangram.svgplot.legend.LegendFunctionLineItem;
@@ -78,11 +79,11 @@ public class SvgPlotPainter extends SvgPainter {
 		super.paintToSvgDocument(doc, viewbox, device);
 		Node plots = viewbox.appendChild(doc.createGroup("plots"));
 
-		gnuplot.setSample(cs.xAxis.atomCount);
+		gnuplot.setSample(((MetricAxis)cs.xAxis).atomCount);
 		// TODO why was this here?
 		//gnuplot.setSample(1300);
-		gnuplot.setXRange(cs.xAxis.range, cs.pi);
-		gnuplot.setYRange(cs.yAxis.range);
+		gnuplot.setXRange(cs.xAxis.getRange(), cs.pi);
+		gnuplot.setYRange(cs.yAxis.getRange());
 
 		// functions
 		int i = 0;
@@ -132,10 +133,10 @@ public class SvgPlotPainter extends SvgPainter {
 					&& integral.function2 != integral.function1)
 				p2 = plotList.get(integral.function2);
 			new IntegralPlot(cs).handlePlotIntegral(plotList.get(integral.function1), doc, parent,
-					integral.xRange != null ? Math.max(integral.xRange.getFrom(), cs.xAxis.range.getFrom())
-							: cs.xAxis.range.getFrom(),
-					integral.xRange != null ? Math.min(integral.xRange.getTo(), cs.xAxis.range.getTo())
-							: cs.xAxis.range.getTo(),
+					integral.xRange != null ? Math.max(integral.xRange.getFrom(), cs.xAxis.getRange().getFrom())
+							: cs.xAxis.getRange().getFrom(),
+					integral.xRange != null ? Math.min(integral.xRange.getTo(), cs.xAxis.getRange().getTo())
+							: cs.xAxis.getRange().getTo(),
 					p2);
 		}
 	}

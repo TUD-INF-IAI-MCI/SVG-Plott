@@ -44,13 +44,13 @@ public class LegendIntegralAreaItem extends LegendItem {
 		String text = "";
 		if (integral.function2 >= 0)
 			text = SvgTools.translate("legend.integral_1",
-					Math.max(cs.xAxis.range.getFrom(), integral.xRange.getFrom()),
-					Math.min(cs.xAxis.range.getTo(), integral.xRange.getTo()),
+					Math.max(cs.xAxis.getRange().getFrom(), integral.xRange.getFrom()),
+					Math.min(cs.xAxis.getRange().getTo(), integral.xRange.getTo()),
 					SvgTools.getFunctionName(integral.function1), SvgTools.getFunctionName(integral.function2));
 		else
 			text = SvgTools.translate("legend.integral_0",
-					Math.max(cs.xAxis.range.getFrom(), integral.xRange.getFrom()),
-					Math.min(cs.xAxis.range.getTo(), integral.xRange.getTo()),
+					Math.max(cs.xAxis.getRange().getFrom(), integral.xRange.getFrom()),
+					Math.min(cs.xAxis.getRange().getTo(), integral.xRange.getTo()),
 					SvgTools.getFunctionName(integral.function1));
 
 		currentPosition.translate(35, areaSymbolVerticalTextAlignment);

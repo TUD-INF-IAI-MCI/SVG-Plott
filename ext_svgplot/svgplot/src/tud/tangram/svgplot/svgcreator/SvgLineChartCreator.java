@@ -47,7 +47,7 @@ public class SvgLineChartCreator extends SvgGridCreator {
 		// Calculate whether it is possible to paint dots according to the
 		// minimal line section length and the point count. Only reliable for
 		// regular lines going from left to right.
-		double realWidth = cs.convertXDistance(cs.xAxis.range.distance());
+		double realWidth = cs.convertXDistance(cs.xAxis.getRange().distance());
 		double maxAllowedPointCount = realWidth / Constants.MIN_LINE_LENGTH;
 		double maxPointCount = Double.NEGATIVE_INFINITY;
 		for (PointList pointList : options.points) {

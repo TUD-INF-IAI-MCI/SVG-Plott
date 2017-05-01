@@ -13,8 +13,8 @@ import tud.tangram.svgplot.data.Point;
  */
 public class CoordinateSystem {
 	
-	public final Axis xAxis;
-	public final Axis yAxis;
+	public final AbstractAxis xAxis;
+	public final AbstractAxis yAxis;
 	
 	public final boolean pi;
 	
@@ -37,8 +37,8 @@ public class CoordinateSystem {
 //		this.size.x = Math.min(this.size.x, this.size.y);
 //		this.size.y = this.size.x;
 
-		xAxis = new Axis(xRange, this.size.getX());
-		yAxis = new Axis(yRange, this.size.getY());
+		xAxis = new MetricAxis(xRange, this.size.getX());
+		yAxis = new MetricAxis(yRange, this.size.getY());
 		
 		this.pi = pi;
 	}

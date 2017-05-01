@@ -51,8 +51,8 @@ public class SvgViewboxPainter extends SvgPainter {
 
 		Node clipPath = defs.appendChild(doc.createElement("clipPath", "plot-area"));
 		Element rect = (Element) clipPath.appendChild(doc.createElement("rect"));
-		Point topLeft = cs.convert(cs.xAxis.range.getFrom(), cs.yAxis.range.getTo());
-		Point bottomRight = cs.convert(cs.xAxis.range.getTo(), cs.yAxis.range.getFrom());
+		Point topLeft = cs.convert(cs.xAxis.getRange().getFrom(), cs.yAxis.getRange().getTo());
+		Point bottomRight = cs.convert(cs.xAxis.getRange().getTo(), cs.yAxis.getRange().getFrom());
 		rect.setAttribute("x", topLeft.x());
 		rect.setAttribute("y", topLeft.y());
 		rect.setAttribute("width", SvgTools.format2svg(bottomRight.getX() - topLeft.getX()));

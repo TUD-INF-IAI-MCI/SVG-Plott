@@ -1,9 +1,7 @@
 package tud.tangram.svgplot.coordinatesystem;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 import tud.tangram.svgplot.utils.Constants;
 
@@ -14,22 +12,12 @@ import tud.tangram.svgplot.utils.Constants;
  *         Universität Dresden / MCI 2014
  *
  */
-public class Axis {
-	public final double ticInterval;
-	public final Range ticRange;
-	public final double gridInterval;
-	public final Range range;
+public class MetricAxis extends AbstractAxis {
 	public final double atom;
 	public final int atomCount;
 	public final List<Double> intervalSteps;
 
-	private final DecimalFormat decimalFormat = (DecimalFormat) DecimalFormat.getInstance(Constants.locale);
-	// FIXME: use this for publications
-	// final private DecimalFormat decimalFormat = (DecimalFormat)
-	// DecimalFormat.getInstance(Locale.US);
-	// Now changed to use the locale specified in Constants. Kept for reference.
-
-	public Axis(Range axisRange, double size) {
+	public MetricAxis(Range axisRange, double size) {
 		boolean finished = false;
 		double interval = 0;
 		range = new Range(0, 0);
@@ -84,6 +72,17 @@ public class Axis {
 		calculateIntervalSteps(dimension, factor);
 	}
 
+	@Override
+	public String format(double value) {
+		String str = decimalFormat.format(value);
+		return "-0".equals(str) ? "0" : str;
+	}
+	
+	@Override
+	public String format(String value) {
+		return format(Double.valueOf(value));
+	}
+	
 	/**
 	 * @param dimension
 	 * @param factor
@@ -118,62 +117,6 @@ public class Axis {
 			factor = 0.5;
 		}
 		return factor;
-	}
-
-	public AxisIterator ticLines() {
-		return new AxisIterator(ticRange, ticInterval);
-	}
-
-	public AxisIterator gridLines() {
-		return new AxisIterator(range, gridInterval);
-	}
-
-	public String format(double value) {
-		String str = decimalFormat.format(value);
-		return "-0".equals(str) ? "0" : str;
-	}
-
-	protected static class AxisIterator implements java.util.Iterator<Double>, Iterable<Double> {
-
-		private Range range;
-		private double interval;
-		private double current;
-
-		protected AxisIterator(Range range, double interval) {
-			this.range = range;
-			this.interval = interval;
-			current = range.getFrom();
-		}
-
-		/**
-		 * Get the next axis value. There used to be a check for skipping the
-		 * zero value, but now it is not skipped anymore, because there are axis
-		 * configurations where the zero tics and gridlines are needed.
-		 */
-		@Override
-		public boolean hasNext() {
-			return current <= range.getTo();
-		}
-
-		@Override
-		public Double next() {
-			if (!hasNext())
-				throw new NoSuchElementException();
-			double nextCurrent = this.current;
-			this.current += interval;
-			return nextCurrent;
-		}
-
-		@Override
-		public void remove() {
-			throw new UnsupportedOperationException();
-		}
-
-		@Override
-		public AxisIterator iterator() {
-			return this;
-		}
-
 	}
 
 }

@@ -79,8 +79,8 @@ public class IntegralPlot {
 
 				// check if the path should start at the x axes
 				if (intersectionPlot == null && (zero == null || zero.size() < 2) && list.get(0) != null
-						&& (list.get(0).getX() > cs.xAxis.range.getFrom() || list.get(0).getY() != 0)) {
-					points += op + cs.convert(Math.max(cs.xAxis.range.getFrom(), from), 0) + " ";
+						&& (list.get(0).getX() > cs.xAxis.getRange().getFrom() || list.get(0).getY() != 0)) {
+					points += op + cs.convert(Math.max(cs.xAxis.getRange().getFrom(), from), 0) + " ";
 					op = "L";
 
 				}
@@ -186,8 +186,8 @@ public class IntegralPlot {
 
 				// check if the path should end at the x axes
 				if (intersectionPlot == null && (zero == null || zero.size() < 2) && list.get(list.size() - 1) != null
-						&& (list.get(list.size() - 1).getX() < cs.xAxis.range.getTo() || list.get(list.size() - 1).getY() != 0)) {
-					points += op + cs.convert(Math.min(cs.xAxis.range.getTo(), to), 0) + " ";
+						&& (list.get(list.size() - 1).getX() < cs.xAxis.getRange().getTo() || list.get(list.size() - 1).getY() != 0)) {
+					points += op + cs.convert(Math.min(cs.xAxis.getRange().getTo(), to), 0) + " ";
 				}
 				points += " Z";
 			}

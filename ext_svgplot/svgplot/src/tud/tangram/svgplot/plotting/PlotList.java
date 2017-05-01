@@ -2,6 +2,7 @@ package tud.tangram.svgplot.plotting;
 
 import java.util.ArrayList;
 
+import tud.tangram.svgplot.coordinatesystem.MetricAxis;
 import tud.tangram.svgplot.coordinatesystem.CoordinateSystem;
 /**
  * 
@@ -42,9 +43,9 @@ public class PlotList extends ArrayList<Plot> {
 		}
 
 		// Other points
-		for (double interval : cs.xAxis.intervalSteps) {
+		for (double interval : ((MetricAxis)cs.xAxis).intervalSteps) {
 			for (Plot plot : this) {
-				overlays.addAll(plot.getPoints(interval, cs.xAxis.range.getFrom()), plot.getFunction());
+				overlays.addAll(plot.getPoints(interval, cs.xAxis.getRange().getFrom()), plot.getFunction());
 			}
 		}
 

@@ -65,8 +65,8 @@ public class SvgGridPainter extends SvgPainter {
 			GridStyle gridStyle) {
 		super();
 		this.cs = cs;
-		this.xRange = cs.xAxis.range;
-		this.yRange = cs.yAxis.range;
+		this.xRange = cs.xAxis.getRange();
+		this.yRange = cs.yAxis.getRange();
 		this.gridStyle = gridStyle != null ? gridStyle : GridStyle.FULL;
 		this.yAxisStyle = yAxisStyle;
 		this.xAxisStyle = xAxisStyle;
@@ -144,15 +144,15 @@ public class SvgGridPainter extends SvgPainter {
 		
 		if (gridStyle.showVertical()) {
 			Element xGrid = (Element) grid.appendChild(doc.createGroup("x-grid"));
-			dotDistance = cs.convertYDistance(cs.yAxis.gridInterval);
+			dotDistance = cs.convertYDistance(cs.yAxis.getGridInterval());
 			factor = (int) (dotDistance / 2.3);
 			dotDistance = (dotDistance - factor * Constants.STROKE_WIDTH) / factor;
 			xGrid.setAttribute("stroke-dasharray", Constants.STROKE_WIDTH + ", " + SvgTools.format2svg(dotDistance));
 			for (double pos : cs.xAxis.gridLines()) {
 				if (skipZeroX && Math.abs(pos) < Constants.EPSILON)
 					continue;
-				Point from = cs.convert(pos, cs.yAxis.range.getTo(), 0, -Constants.STROKE_WIDTH / 2);
-				Point to = cs.convert(pos, cs.yAxis.range.getFrom(), 0, Constants.STROKE_WIDTH / 2);
+				Point from = cs.convert(pos, cs.yAxis.getRange().getTo(), 0, -Constants.STROKE_WIDTH / 2);
+				Point to = cs.convert(pos, cs.yAxis.getRange().getFrom(), 0, Constants.STROKE_WIDTH / 2);
 				xGrid.appendChild(doc.createLine(from, to));
 			}
 		}
@@ -162,15 +162,15 @@ public class SvgGridPainter extends SvgPainter {
 		
 		if (gridStyle.showHorizontal()) {
 			Element yGrid = (Element) grid.appendChild(doc.createGroup("y-grid"));
-			dotDistance = cs.convertXDistance(cs.xAxis.gridInterval);
+			dotDistance = cs.convertXDistance(cs.xAxis.getGridInterval());
 			factor = (int) (dotDistance / 2.3);
 			dotDistance = (dotDistance - factor * Constants.STROKE_WIDTH) / factor;
 			yGrid.setAttribute("stroke-dasharray", Constants.STROKE_WIDTH + ", " + SvgTools.format2svg(dotDistance));
 			for (double pos : cs.yAxis.gridLines()) {
 				if (skipZeroY && Math.abs(pos) < Constants.EPSILON)
 					continue;
-				Point from = cs.convert(cs.xAxis.range.getFrom(), pos, -Constants.STROKE_WIDTH / 2, 0);
-				Point to = cs.convert(cs.xAxis.range.getTo(), pos, Constants.STROKE_WIDTH / 2, 0);
+				Point from = cs.convert(cs.xAxis.getRange().getFrom(), pos, -Constants.STROKE_WIDTH / 2, 0);
+				Point to = cs.convert(cs.xAxis.getRange().getTo(), pos, Constants.STROKE_WIDTH / 2, 0);
 				yGrid.appendChild(doc.createLine(from, to));
 			}
 		}
@@ -329,14 +329,14 @@ public class SvgGridPainter extends SvgPainter {
 		super.prepareLegendRenderer(renderer, device, priority);
 
 		renderer.add(new LegendTextItem(priority,
-				SvgTools.translate("legend.xrange", SvgTools.formatX(cs, cs.xAxis.range.getFrom()),
-						SvgTools.formatX(cs, cs.xAxis.range.getTo()), SvgTools.formatName(cs.xAxis.range.getName())),
-				SvgTools.translate("legend.xtic", SvgTools.formatX(cs, cs.xAxis.ticInterval))));
+				SvgTools.translate("legend.xrange", SvgTools.formatX(cs, cs.xAxis.getRange().getFrom()),
+						SvgTools.formatX(cs, cs.xAxis.getRange().getTo()), SvgTools.formatName(cs.xAxis.getRange().getName())),
+				SvgTools.translate("legend.xtic", SvgTools.formatX(cs, cs.xAxis.getTicInterval()))));
 
 		renderer.add(new LegendTextItem(priority,
-				SvgTools.translate("legend.yrange", SvgTools.formatY(cs, cs.yAxis.range.getFrom()),
-						SvgTools.formatY(cs, cs.yAxis.range.getTo()), SvgTools.formatName(cs.yAxis.range.getName())),
-				SvgTools.translate("legend.ytic", SvgTools.formatY(cs, cs.yAxis.ticInterval))));
+				SvgTools.translate("legend.yrange", SvgTools.formatY(cs, cs.yAxis.getRange().getFrom()),
+						SvgTools.formatY(cs, cs.yAxis.getRange().getTo()), SvgTools.formatName(cs.yAxis.getRange().getName())),
+				SvgTools.translate("legend.ytic", SvgTools.formatY(cs, cs.yAxis.getTicInterval()))));
 	}
 
 	/**

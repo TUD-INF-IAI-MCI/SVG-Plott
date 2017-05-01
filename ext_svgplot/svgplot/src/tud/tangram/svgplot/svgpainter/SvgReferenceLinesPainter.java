@@ -63,8 +63,8 @@ public class SvgReferenceLinesPainter extends SvgPainter {
 
 		for (ReferenceLine line : lines) {
 			if (line.direction == Direction.X_LINE) {
-				Point from = cs.convert(line.position, cs.yAxis.range.getTo(), 0, -Constants.STROKE_WIDTH / 2);
-				Point to = cs.convert(line.position, cs.yAxis.range.getFrom(), 0, Constants.STROKE_WIDTH / 2);
+				Point from = cs.convert(line.position, cs.yAxis.getRange().getTo(), 0, -Constants.STROKE_WIDTH / 2);
+				Point to = cs.convert(line.position, cs.yAxis.getRange().getFrom(), 0, Constants.STROKE_WIDTH / 2);
 
 				xGroup = doc.getOrCreateChildGroupById(linesNode, "x-reference-lines");
 
@@ -74,8 +74,8 @@ public class SvgReferenceLinesPainter extends SvgPainter {
 					System.err.println("There exists already a non-group element with the id \"x-reference-lines\"");
 
 			} else if (line.direction == Direction.Y_LINE) {
-				Point from = cs.convert(cs.xAxis.range.getFrom(), line.position, -Constants.STROKE_WIDTH / 2, 0);
-				Point to = cs.convert(cs.xAxis.range.getTo(), line.position, Constants.STROKE_WIDTH / 2, 0);
+				Point from = cs.convert(cs.xAxis.getRange().getFrom(), line.position, -Constants.STROKE_WIDTH / 2, 0);
+				Point to = cs.convert(cs.xAxis.getRange().getTo(), line.position, Constants.STROKE_WIDTH / 2, 0);
 
 				yGroup = doc.getOrCreateChildGroupById(linesNode, "y-reference-lines");
 

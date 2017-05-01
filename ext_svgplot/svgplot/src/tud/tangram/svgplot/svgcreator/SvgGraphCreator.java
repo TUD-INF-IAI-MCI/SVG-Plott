@@ -54,9 +54,9 @@ public class SvgGraphCreator extends SvgGridCreator {
 			 * If the integral start and/or end is within the axis range, paint
 			 * reference lines for them
 			 */
-			if (options.integral.xRange.getFrom() > cs.xAxis.range.getFrom())
+			if (options.integral.xRange.getFrom() > cs.xAxis.getRange().getFrom())
 				lines.add(new ReferenceLine(Direction.X_LINE, options.integral.xRange.getFrom()));
-			if (options.integral.xRange.getTo() < cs.xAxis.range.getTo())
+			if (options.integral.xRange.getTo() < cs.xAxis.getRange().getTo())
 				lines.add(new ReferenceLine(Direction.X_LINE, options.integral.xRange.getTo()));
 
 			if (!lines.isEmpty()) {
@@ -135,11 +135,11 @@ public class SvgGraphCreator extends SvgGridCreator {
 
 		// general description
 		Node div = desc.appendBodyChild(desc.createDiv("functions"));
-		div.appendChild(desc.createP(SvgTools.translateN("desc.intro", SvgTools.formatX(cs, cs.xAxis.range.getFrom()),
-				SvgTools.formatX(cs, cs.xAxis.range.getTo()), SvgTools.formatX(cs, cs.xAxis.ticInterval),
-				SvgTools.formatY(cs, cs.yAxis.range.getFrom()), SvgTools.formatY(cs, cs.yAxis.range.getTo()),
-				SvgTools.formatY(cs, cs.yAxis.ticInterval), SvgTools.formatName(cs.xAxis.range.getName()),
-				SvgTools.formatName(cs.yAxis.range.getName()), options.functions.size())));
+		div.appendChild(desc.createP(SvgTools.translateN("desc.intro", SvgTools.formatX(cs, cs.xAxis.getRange().getFrom()),
+				SvgTools.formatX(cs, cs.xAxis.getRange().getTo()), SvgTools.formatX(cs, cs.xAxis.getTicInterval()),
+				SvgTools.formatY(cs, cs.yAxis.getRange().getFrom()), SvgTools.formatY(cs, cs.yAxis.getRange().getTo()),
+				SvgTools.formatY(cs, cs.yAxis.getTicInterval()), SvgTools.formatName(cs.xAxis.getRange().getName()),
+				SvgTools.formatName(cs.yAxis.getRange().getName()), options.functions.size())));
 
 		// functions
 		if (!options.functions.isEmpty()) {
@@ -217,14 +217,14 @@ public class SvgGraphCreator extends SvgGridCreator {
 			div = desc.appendBodyChild(desc.createDiv("integral-"));
 			if (options.integral.function2 >= 0)
 				div.appendChild(desc.createP(SvgTools.translate("desc.integral_1",
-						Math.max(cs.xAxis.range.getFrom(), options.integral.xRange.getFrom()),
-						Math.min(cs.xAxis.range.getTo(), options.integral.xRange.getTo()),
+						Math.max(cs.xAxis.getRange().getFrom(), options.integral.xRange.getFrom()),
+						Math.min(cs.xAxis.getRange().getTo(), options.integral.xRange.getTo()),
 						SvgTools.getFunctionName(options.integral.function1),
 						SvgTools.getFunctionName(options.integral.function2))));
 			else
 				div.appendChild(desc.createP(SvgTools.translate("desc.integral_0",
-						Math.max(cs.xAxis.range.getFrom(), options.integral.xRange.getFrom()),
-						Math.min(cs.xAxis.range.getTo(), options.integral.xRange.getTo()),
+						Math.max(cs.xAxis.getRange().getFrom(), options.integral.xRange.getFrom()),
+						Math.min(cs.xAxis.getRange().getTo(), options.integral.xRange.getTo()),
 						SvgTools.getFunctionName(options.integral.function1))));
 		}
 

@@ -41,7 +41,7 @@ public class OverlayList extends ArrayList<Overlay> {
 	 */
 	public boolean add(Overlay overlay, boolean overwrite) {
 		// Do not add the overlay if would not be shown anyway.
-		if (overlay.getY() < cs.yAxis.range.getFrom() || overlay.getY() > cs.yAxis.range.getTo()) {
+		if (overlay.getY() < cs.yAxis.getRange().getFrom() || overlay.getY() > cs.yAxis.getRange().getTo()) {
 			return false;
 		}
 
