@@ -1,36 +1,26 @@
 package tud.tangram.svgplot.data;
 
+import org.w3c.dom.Element;
+
 /**
- * A nominal date consisting of a name and value.
+ * A nominal point holding the same data as the {@link Point} class, having different behaviour.
  */
-public class Nominal implements Comparable<Nominal> {
+public class Nominal extends Point{
 
-	private final String name;
-	private final double value;
-	
-	public Nominal(String name, double value) {
-		this.name = name;
-		this.value = value;
+	public Nominal(double x, double y, String name, Element symbol) {
+		super(x, y, name, symbol);
+	}
+
+	public Nominal(double x, double y, String name) {
+		super(x, y, name);
 	}
 	
-	/**
-	 * Compare the values of two nominals.
-	 */
+	public Nominal(Nominal nominal) {
+		super(nominal);
+	}
+
 	@Override
-	public int compareTo(Nominal o) {
-		if(this.value < o.getValue())
-			return -1;
-		if(this.value > o.getValue())
-			return 1;
-		return 0;
-	}
-	
-	public String getName() {
+	public String x() {
 		return name;
-	}
-
-	public double getValue() {
-		return value;
-	}
-
+	}	
 }

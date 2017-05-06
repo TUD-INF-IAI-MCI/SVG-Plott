@@ -10,6 +10,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import tud.tangram.svgplot.data.Point;
+import tud.tangram.svgplot.utils.Constants;
 import tud.tangram.svgplot.utils.SvgTools;
 
 /**
@@ -21,7 +22,7 @@ import tud.tangram.svgplot.utils.SvgTools;
  */
 public class SvgDocument extends Document {
 
-	final public Node defs;
+	final public Element defs;
 	final protected double textEnd;
 	final protected Node titleNode;
 
@@ -36,7 +37,7 @@ public class SvgDocument extends Document {
 		root.setAttribute("width", SvgTools.format2svg(size.getX()) + "mm");
 		root.setAttribute("height", SvgTools.format2svg(size.getY()) + "mm");
 
-		defs = root.appendChild(doc.createElement("defs"));
+		defs = (Element) root.appendChild(doc.createElement("defs"));
 
 		titleNode = root.appendChild(createTitle(title));
 
@@ -181,7 +182,7 @@ public class SvgDocument extends Document {
 
 	public Element createText(Point point, String line1, String... lines) {
 		Element text = createElement("text");
-		int charLimit = (int) ((textEnd - point.getX()) / 6.5);
+		int charLimit = (int) ((textEnd - point.getX()) / Constants.CHAR_WIDTH);
 		if (lines.length == 0 && line1.length() <= charLimit) {
 			text.setAttribute("x", point.x() + "mm");
 			text.setAttribute("y", point.y() + "mm");

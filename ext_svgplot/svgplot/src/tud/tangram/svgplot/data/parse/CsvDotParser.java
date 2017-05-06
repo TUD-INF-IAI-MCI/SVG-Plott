@@ -1,53 +1,23 @@
-package tud.tangram.svgplot.data;
+package tud.tangram.svgplot.data.parse;
 
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.Reader;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 
-import com.opencsv.CSVReader;
-
+import tud.tangram.svgplot.data.Point;
+import tud.tangram.svgplot.data.PointListList;
 import tud.tangram.svgplot.data.PointListList.PointList;
 import tud.tangram.svgplot.utils.Constants;
 
-public class CsvParser {
-
-	private ArrayList<ArrayList<String>> csvData;
+public class CsvDotParser extends CsvParseAlgorithm {
 
 	/**
-	 * Initiates the parser. The parser reads from the specified {@code reader}
-	 * and populates {@link #csvData}.
-	 * 
-	 * @param reader
-	 *            a reader, like {@link FileReader}
-	 * @param separator
-	 * @param quoteChar
-	 * @throws IOException
-	 *             if the {@link CSVReader} has problems parsing
-	 */
-	public CsvParser(Reader reader, char separator, char quoteChar) throws IOException {
-		CSVReader csvReader = new CSVReader(reader, separator, quoteChar);
-
-		csvData = new ArrayList<>();
-
-		String[] nextLine;
-		while ((nextLine = csvReader.readNext()) != null) {
-			csvData.add(new ArrayList<String>(Arrays.asList(nextLine)));
-		}
-
-		csvReader.close();
-	}
-
-	/**
-	 * Parses scattered point data in horizontal rows, alternating x and y. The
+	 * Parses scattered point data in horizontal data sets, alternating x and y. The
 	 * first column contains the row name in the x row.
 	 * 
 	 * @return the parsed data
 	 */
-	public PointListList parseAsScatterDataHorizontalRows() {
+	public PointListList parseAsHorizontalDataSets(List<? extends List<String>> csvData) {
 		int row = 0;
 
 		PointListList pointListList = new PointListList();
@@ -91,7 +61,14 @@ public class CsvParser {
 		return pointListList;
 	}
 
-	public PointListList parseAsScatterDataVerticalRows() {
+	/**
+	 * Parses scattered point data in vertical data sets, alternating x and y. The
+	 * first row contains the column name in the x column.
+	 * 
+	 * @return the parsed data
+	 */
+	@Override
+	public PointListList parseAsVerticalDataSets(List<? extends List<String>> csvData) {
 		int row = 0;
 
 		PointListList pointListList = new PointListList();
@@ -114,7 +91,7 @@ public class CsvParser {
 
 		// Continue as long as there is at least one further rows left
 		while (csvData.size() >= row + 1) {
-			ArrayList<String> fields = csvData.get(row);
+			List<String> fields = csvData.get(row);
 			Iterator<String> fieldIterator = fields.iterator();
 
 			col = -1;
@@ -152,25 +129,5 @@ public class CsvParser {
 		}
 
 		return pointListList;
-	}
-
-	/**
-	 * Adds a {@code point} to a {@link PointList} in a {@link PointListList},
-	 * specified by {@code listIndex}. Adds more {@link PointList PointLists} if
-	 * needed.
-	 * 
-	 * @param pointListList
-	 *            the {@link PointListList} to which the point shall be added
-	 * @param listIndex
-	 *            the index of the list to which the point shall be added
-	 * @param point
-	 *            the point which shall be added
-	 */
-	private void addPointToPointListList(PointListList pointListList, int listIndex, Point point) {
-		while (pointListList.size() < listIndex) {
-			pointListList.add(new PointList());
-		}
-
-		pointListList.get(listIndex).insertSorted(point);
 	}
 }

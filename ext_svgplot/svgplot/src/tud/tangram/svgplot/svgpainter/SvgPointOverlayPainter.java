@@ -71,7 +71,7 @@ public class SvgPointOverlayPainter extends SvgPainter {
 	 */
 	protected Element createOverlay(SvgDocument doc, Overlay overlay) {
 		Element circle = doc.createCircle(cs.convert(overlay), Overlay.RADIUS);
-		circle.appendChild(doc.createTitle(SvgTools.formatForSpeech(cs, overlay)));
+		circle.appendChild(doc.createTitle(cs.formatForSpeech(overlay)));
 		if (overlay.getFunction() != null) {
 			circle.appendChild(doc.createDesc(overlay.getFunction().toString()));
 		}

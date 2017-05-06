@@ -7,6 +7,16 @@ import tud.tangram.svgplot.utils.Constants;
 
 public abstract class AbstractAxis {
 
+	// The following offsets can and shall be overwritten by child classes
+	/** X offset of horizontal axis labels */
+	public final double labelOffsetHorizontalX;
+	/** Y offset of horizontal axis labels */
+	public final double labelOffsetHorizontalY;
+	/** X offset of vertical axis labels */
+	public final double labelOffsetVerticalX;
+	/** Y offset of vertical axis labels */
+	public final double labelOffsetVerticalY;
+
 	protected double ticInterval;
 	protected Range ticRange;
 	protected double gridInterval;
@@ -14,6 +24,26 @@ public abstract class AbstractAxis {
 	protected double labelInterval;
 	protected Range labelRange;
 	protected final DecimalFormat decimalFormat = (DecimalFormat) DecimalFormat.getInstance(Constants.locale);
+	
+	/** How much the point position shall be shifted - used for categorial axes.*/
+	protected final double pointOffset;
+	
+	/**
+	 * Constructor setting the label and point offsets.
+	 * @param labelOffsetHorizontalX
+	 * @param labelOffsetHorizontalY
+	 * @param labelOffsetVerticalX
+	 * @param labelOffsetVerticalY
+	 * @param pointOffset
+	 */
+	public AbstractAxis(double labelOffsetHorizontalX, double labelOffsetHorizontalY, double labelOffsetVerticalX,
+			double labelOffsetVerticalY, double pointOffset) {
+		this.labelOffsetHorizontalX = labelOffsetHorizontalX;
+		this.labelOffsetHorizontalY = labelOffsetHorizontalY;
+		this.labelOffsetVerticalX = labelOffsetVerticalX;
+		this.labelOffsetVerticalY = labelOffsetVerticalY;
+		this.pointOffset = pointOffset;
+	}
 
 	public AxisIterator ticLines() {
 		return new AxisIterator(ticRange, ticInterval);
@@ -22,31 +52,33 @@ public abstract class AbstractAxis {
 	public AxisIterator gridLines() {
 		return new AxisIterator(range, gridInterval);
 	}
-	
+
 	public AxisIterator labelPositions() {
 		return new AxisIterator(labelRange, labelInterval);
 	}
 
-	public abstract String format(double value);
+	public abstract String formatForAxisLabel(double value);
+
+	public abstract String formatForAxisAudioLabel(double value);
 	
-	public abstract String format(String value);
+	public abstract String formatForSymbolAudioLabel(double value);
 
 	protected static class AxisIterator implements java.util.Iterator<Double>, Iterable<Double> {
-		
+
 		private Range range;
 		private double interval;
 		private double current;
-	
+
 		protected AxisIterator(Range range, double interval) {
 			this(range, interval, 0);
 		}
-		
+
 		protected AxisIterator(Range range, double interval, double offset) {
 			this.range = range;
 			this.interval = interval;
 			current = range.getFrom() + offset;
 		}
-	
+
 		/**
 		 * Get the next axis value. There used to be a check for skipping the
 		 * zero value, but now it is not skipped anymore, because there are axis
@@ -56,7 +88,7 @@ public abstract class AbstractAxis {
 		public boolean hasNext() {
 			return current <= range.getTo();
 		}
-	
+
 		@Override
 		public Double next() {
 			if (!hasNext())
@@ -65,19 +97,19 @@ public abstract class AbstractAxis {
 			this.current += interval;
 			return nextCurrent;
 		}
-	
+
 		@Override
 		public void remove() {
 			throw new UnsupportedOperationException();
 		}
-	
+
 		@Override
 		public AxisIterator iterator() {
 			return this;
 		}
-	
+
 	}
-	
+
 	public double getTicInterval() {
 		return ticInterval;
 	}
@@ -93,7 +125,7 @@ public abstract class AbstractAxis {
 	public Range getRange() {
 		return range;
 	}
-	
+
 	public double getLabelInterval() {
 		return labelInterval;
 	}

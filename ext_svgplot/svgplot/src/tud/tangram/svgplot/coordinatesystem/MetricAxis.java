@@ -18,6 +18,10 @@ public class MetricAxis extends AbstractAxis {
 	public final List<Double> intervalSteps;
 
 	public MetricAxis(Range axisRange, double size) {
+		
+		// Set the label offsets
+		super(-5, 20, -10, 5, 0);
+		
 		boolean finished = false;
 		double interval = 0;
 		range = new Range(0, 0);
@@ -62,6 +66,9 @@ public class MetricAxis extends AbstractAxis {
 		ticInterval = interval; // TODO set this to 2 * interval if needed, maybe create an option
 		ticRange = new Range(Math.ceil(range.getFrom() / ticInterval) * ticInterval,
 				Math.floor(range.getTo() / ticInterval) * ticInterval);
+		
+		labelRange = ticRange;
+		labelInterval = ticInterval * 2;
 
 		decimalFormat.setMaximumFractionDigits(Math.max(0, -dimensionExp + 2));
 
@@ -73,14 +80,19 @@ public class MetricAxis extends AbstractAxis {
 	}
 
 	@Override
-	public String format(double value) {
+	public String formatForAxisLabel(double value) {
 		String str = decimalFormat.format(value);
 		return "-0".equals(str) ? "0" : str;
 	}
 	
 	@Override
-	public String format(String value) {
-		return format(Double.valueOf(value));
+	public String formatForAxisAudioLabel(double value) {
+		return formatForAxisLabel(value);
+	}
+	
+	@Override
+	public String formatForSymbolAudioLabel(double value) {
+		return formatForAxisLabel(value);
 	}
 	
 	/**

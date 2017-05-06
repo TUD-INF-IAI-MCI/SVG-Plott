@@ -1,4 +1,4 @@
-package tud.tangram.svgplot.options;
+package tud.tangram.svgplot.data.parse;
 
 import com.beust.jcommander.IStringConverter;
 

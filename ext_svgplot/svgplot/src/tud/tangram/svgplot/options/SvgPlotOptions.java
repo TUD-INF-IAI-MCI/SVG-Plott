@@ -15,9 +15,11 @@ import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
 
 import tud.tangram.svgplot.coordinatesystem.Range;
-import tud.tangram.svgplot.data.CsvParser;
 import tud.tangram.svgplot.data.Point;
 import tud.tangram.svgplot.data.PointListList;
+import tud.tangram.svgplot.data.parse.CsvOrientation;
+import tud.tangram.svgplot.data.parse.CsvParser;
+import tud.tangram.svgplot.data.parse.CsvType;
 import tud.tangram.svgplot.data.trendline.BrownLinearExponentialSmoothingTrendLine;
 import tud.tangram.svgplot.data.trendline.ExponentialSmoothingTrendline;
 import tud.tangram.svgplot.data.trendline.LinearRegressionTrendLine;
@@ -25,6 +27,7 @@ import tud.tangram.svgplot.data.trendline.MovingAverageTrendline;
 import tud.tangram.svgplot.data.trendline.TrendLineAlgorithm;
 import tud.tangram.svgplot.plotting.Function;
 import tud.tangram.svgplot.plotting.IntegralPlotSettings;
+import tud.tangram.svgplot.styles.BarAccumulationStyle;
 
 @Parameters(separators = "=", resourceBundle = "Bundle")
 public class SvgPlotOptions {
@@ -225,6 +228,17 @@ public class SvgPlotOptions {
 		this.csvPath = csvPath;
 	}
 
+	@Parameter(names = { "--csvtype", "--csvt" }, descriptionKey = "param.csvtype")
+	private CsvType csvType = CsvType.DOTS;
+
+	public CsvType getCsvType() {
+		return csvType;
+	}
+
+	public void setCsvType(CsvType csvType) {
+		this.csvType = csvType;
+	}
+	
 	@Parameter(names = { "--csvorientation", "--csvo" }, descriptionKey = "param.csvorientation")
 	private CsvOrientation csvOrientation = CsvOrientation.HORIZONTAL;
 
@@ -234,6 +248,17 @@ public class SvgPlotOptions {
 
 	public void setCsvOrientation(CsvOrientation csvOrientation) {
 		this.csvOrientation = csvOrientation;
+	}
+	
+	@Parameter(names = { "--baraccumulation", "--ba" }, descriptionKey = "param.baraccumulation")
+	private BarAccumulationStyle barAccumulationStyle = BarAccumulationStyle.GROUPED;
+
+	public BarAccumulationStyle getBarAccumulationStyle() {
+		return barAccumulationStyle;
+	}
+
+	public void setBarAccumulationStyle(BarAccumulationStyle barAccumulationStyle) {
+		this.barAccumulationStyle = barAccumulationStyle;
 	}
 
 	/**
@@ -361,8 +386,12 @@ public class SvgPlotOptions {
 				return IntegralPlotSettings.Converter.class;
 			else if (forType.equals(CsvOrientation.class))
 				return CsvOrientation.CsvOrientationConverter.class;
+			else if (forType.equals(CsvType.class))
+				return CsvType.CsvTypeConverter.class;
 			else if (forType.equals(DiagramType.class))
 				return DiagramType.DiagramTypeConverter.class;
+			else if (forType.equals(BarAccumulationStyle.class))
+				return BarAccumulationStyle.BarAccumulationStyleConverter.class;
 			else
 				return null;
 		}
@@ -382,10 +411,7 @@ public class SvgPlotOptions {
 		if (csvPath != null) {
 			try {
 				CsvParser parser = new CsvParser(new FileReader(csvPath), ',', '"');
-				if (csvOrientation == CsvOrientation.VERTICAL)
-					points = parser.parseAsScatterDataVerticalRows();
-				else
-					points = parser.parseAsScatterDataHorizontalRows();
+				points = parser.parse(csvType, csvOrientation);
 
 			} catch (IOException e) {
 				points = (new PointListList.Converter()).convert(pts);
@@ -393,8 +419,9 @@ public class SvgPlotOptions {
 		} else {
 			points = (new PointListList.Converter()).convert(pts);
 		}
-		points.updateMinMax();
-		if (autoScale && !points.isEmpty() && points.hasValidMinMaxValues()) { // TODO
+		if (points != null && !points.isEmpty())
+			points.updateMinMax();
+		if (autoScale && points != null && !points.isEmpty() && points.hasValidMinMaxValues()) { // TODO
 																				// add
 																				// margin
 																				// option

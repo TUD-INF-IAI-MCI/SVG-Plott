@@ -70,52 +70,6 @@ public class SvgTools {
 	}
 
 	/**
-	 * Formats the x value of a point with respect to if Pi is set in the
-	 * coordinate system.
-	 * 
-	 * @param cs
-	 *            the coordinate system
-	 * @param x
-	 *            x-value
-	 * @return formated string for the point
-	 */
-	public static String formatX(CoordinateSystem cs, double x) {
-		String str = cs.xAxis.format(x);
-		if (cs.pi && !"0".equals(str)) {
-			str += " pi";
-		}
-		return str;
-	}
-
-	/**
-	 * Formats the y value of a point.
-	 * 
-	 * @param cs
-	 *            the coordinate system
-	 * @param y
-	 *            y-value
-	 * @return formated string for the point
-	 */
-	public static String formatY(CoordinateSystem cs, double y) {
-		return cs.yAxis.format(y);
-	}
-
-	/**
-	 * Formats a Point that it is optimized for speech output. E.g. (x / y)
-	 * 
-	 * @param cs
-	 *            the coordinate system
-	 * @param point
-	 *            The point that should be transformed into a textual
-	 *            representation
-	 * @return formated string for the point with '/' as delimiter
-	 */
-	public static String formatForSpeech(CoordinateSystem cs, Point point) {
-		return ((point.getName() != null && !point.getName().isEmpty()) ? point.getName() + " " : "") + formatX(cs, point.getX()) + " / "
-				+ formatY(cs, point.getY());
-	}
-
-	/**
 	 * Formats a Point that it is optimized for textual output and packed into
 	 * the caption with brackets. E.g. E(x | y)
 	 * 
@@ -131,7 +85,7 @@ public class SvgTools {
 	 *         the '|' as delimiter
 	 */
 	public static String formatForText(CoordinateSystem cs, Point point, String cap) {
-		String p = formatX(cs, point.getX()) + " | " + formatY(cs, point.getY());
+		String p = cs.formatX(point.getX()) + " | " + cs.formatY(point.getY());
 		String capTrimmed = cap.trim();
 		return (capTrimmed != null && !capTrimmed.isEmpty()) ? capTrimmed + "(" + p + ")" : p;
 	}

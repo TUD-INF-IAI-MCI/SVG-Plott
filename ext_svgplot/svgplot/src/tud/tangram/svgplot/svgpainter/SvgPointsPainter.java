@@ -109,7 +109,7 @@ public class SvgPointsPainter extends SvgPainter {
 					Element paintedPoint = pointPlot.paintPoint(pt == PointType.BG ? backgroundSubGroup : pointSubGroup,
 							pt, cs.convert(p), j);
 					if (paintedPoint != null) {
-						paintedPoint.appendChild(doc.createTitle(SvgTools.formatForSpeech(cs, p)));
+						paintedPoint.appendChild(doc.createTitle(cs.formatForSpeech(p)));
 
 						// Add a description if the point list has a name. TODO
 						// refine this

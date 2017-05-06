@@ -20,6 +20,11 @@ public class SvgScatterPlotCreator extends SvgGridCreator {
 	static final Logger log = LoggerFactory.getLogger(SvgScatterPlotCreator.class);
 
 	protected final SvgScatterPlotOptions options;
+
+	/**
+	 * Used for caching the string for the line generation in order to reuse
+	 * them for audio labels
+	 */
 	private Map<PointList, String> polyLineStrings;
 
 	public SvgScatterPlotCreator(SvgScatterPlotOptions options) {
@@ -29,16 +34,22 @@ public class SvgScatterPlotCreator extends SvgGridCreator {
 
 	public static final SvgCreatorInstantiator INSTANTIATOR = new SvgCreatorInstantiator() {
 		public SvgCreator instantiateCreator(SvgPlotOptions rawOptions) {
-			SvgScatterPlotOptions msOptions = new SvgScatterPlotOptions(rawOptions);
-			return new SvgScatterPlotCreator(msOptions);
+			SvgScatterPlotOptions spOptions = new SvgScatterPlotOptions(rawOptions);
+			return new SvgScatterPlotCreator(spOptions);
 		}
 	};
 
+	/**
+	 * Default: show box axis, overridable with options.
+	 */
 	@Override
 	protected AxisStyle getXAxisStyle() {
 		return options.showDoubleAxes == null || "on".equals(options.showDoubleAxes) ? AxisStyle.BOX : AxisStyle.EDGE;
 	}
 
+	/**
+	 * Default: show box axis, overridable with options.
+	 */
 	@Override
 	protected AxisStyle getYAxisStyle() {
 		return options.showDoubleAxes == null || "on".equals(options.showDoubleAxes) ? AxisStyle.BOX : AxisStyle.EDGE;
@@ -101,8 +112,7 @@ public class SvgScatterPlotCreator extends SvgGridCreator {
 				return PointPlotStyle.DOTS_BORDERLESS;
 			else
 				return PointPlotStyle.DOTS;
-		}
-		else {
+		} else {
 			if (options.dotsBorderless)
 				return PointPlotStyle.MULTI_ROWS_BORDERLESS;
 			else

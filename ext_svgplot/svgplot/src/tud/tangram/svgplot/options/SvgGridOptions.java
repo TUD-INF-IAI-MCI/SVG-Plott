@@ -1,6 +1,10 @@
 package tud.tangram.svgplot.options;
 
+import java.util.List;
+
 import tud.tangram.svgplot.coordinatesystem.Range;
+import tud.tangram.svgplot.data.CategorialPointListList;
+import tud.tangram.svgplot.data.XType;
 import tud.tangram.svgplot.styles.GridStyle;
 
 public class SvgGridOptions extends SvgOptions {
@@ -10,6 +14,8 @@ public class SvgGridOptions extends SvgOptions {
 	
 	public String xLines;
 	public String yLines;
+	
+	public List<String> xCategories;
 	
 	public GridStyle gridStyle;
 	public String showDoubleAxes;
@@ -31,6 +37,9 @@ public class SvgGridOptions extends SvgOptions {
 		
 		this.xLines = options.getxLines();
 		this.yLines = options.getyLines();
+		
+		if(options.getPoints().getXType() == XType.CATEGORIAL)
+			this.xCategories = ((CategorialPointListList) options.getPoints()).getCategoryNames();
 		
 		this.gridStyle = GridStyle.fromStrings(options.getShowHorizontalGrid(), options.getShowVerticalGrid());
 		this.showDoubleAxes = options.getShowDoubleAxes();

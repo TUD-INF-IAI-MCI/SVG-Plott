@@ -55,7 +55,11 @@ public abstract class SvgGridCreator extends SvgCreator {
 			diagramContentMargin.set(3, diagramContentMargin.get(3) + 20);
 		}
 
-		cs = new CoordinateSystem(options.xRange, options.yRange, options.size, diagramContentMargin, options.pi);
+		// Prepare either a coordinate system with metric or with categorial x axis
+		if(options.xCategories == null)
+			cs = new CoordinateSystem(options.xRange, options.yRange, options.size, diagramContentMargin, options.pi);
+		else
+			cs = new CoordinateSystem(options.xCategories, options.yRange, options.size, diagramContentMargin);
 		overlays = new OverlayList(cs);
 
 		SvgViewboxPainter svgViewboxPainter = new SvgViewboxPainter(cs, options.size);

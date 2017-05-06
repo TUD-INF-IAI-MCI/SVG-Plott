@@ -20,12 +20,17 @@ public class PointListList extends ArrayList<PointListList.PointList> {
 	private Double maxY = Double.NEGATIVE_INFINITY;
 	private Double minX = Double.POSITIVE_INFINITY;
 	private Double minY = Double.POSITIVE_INFINITY;
+	
+	public XType getXType() {
+		return XType.METRIC;
+	}
 
 	public PointListList() {
 		this("");
 	}
 
 	public PointListList(String pointLists) {
+		
 		if (pointLists == null || pointLists.isEmpty())
 			return;
 
@@ -40,7 +45,7 @@ public class PointListList extends ArrayList<PointListList.PointList> {
 			}
 		}
 	}
-
+	
 	@Override
 	public boolean add(PointListList.PointList pl) {
 		boolean success = super.add(pl);

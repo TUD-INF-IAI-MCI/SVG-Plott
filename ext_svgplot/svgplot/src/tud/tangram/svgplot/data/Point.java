@@ -19,10 +19,10 @@ import tud.tangram.svgplot.utils.SvgTools;
  */
 public class Point implements Comparable<Point> {
 
-	private double x;
-	private double y;
-	private String name;
-	private Element symbol;
+	protected double x;
+	protected double y;
+	protected String name;
+	protected Element symbol;
 
 	/**
 	 * Copy constructor

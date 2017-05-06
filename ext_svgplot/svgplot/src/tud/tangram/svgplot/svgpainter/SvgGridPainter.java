@@ -329,14 +329,14 @@ public class SvgGridPainter extends SvgPainter {
 		super.prepareLegendRenderer(renderer, device, priority);
 
 		renderer.add(new LegendTextItem(priority,
-				SvgTools.translate("legend.xrange", SvgTools.formatX(cs, cs.xAxis.getRange().getFrom()),
-						SvgTools.formatX(cs, cs.xAxis.getRange().getTo()), SvgTools.formatName(cs.xAxis.getRange().getName())),
-				SvgTools.translate("legend.xtic", SvgTools.formatX(cs, cs.xAxis.getTicInterval()))));
+				SvgTools.translate("legend.xrange", cs.formatX(cs.xAxis.getRange().getFrom()),
+						cs.formatX(cs.xAxis.getRange().getTo()), SvgTools.formatName(cs.xAxis.getRange().getName())),
+				SvgTools.translate("legend.xtic", cs.formatX(cs.xAxis.getTicInterval()))));
 
 		renderer.add(new LegendTextItem(priority,
-				SvgTools.translate("legend.yrange", SvgTools.formatY(cs, cs.yAxis.getRange().getFrom()),
-						SvgTools.formatY(cs, cs.yAxis.getRange().getTo()), SvgTools.formatName(cs.yAxis.getRange().getName())),
-				SvgTools.translate("legend.ytic", SvgTools.formatY(cs, cs.yAxis.getTicInterval()))));
+				SvgTools.translate("legend.yrange", cs.formatY(cs.yAxis.getRange().getFrom()),
+						cs.formatY(cs.yAxis.getRange().getTo()), SvgTools.formatName(cs.yAxis.getRange().getName())),
+				SvgTools.translate("legend.ytic", cs.formatY(cs.yAxis.getTicInterval()))));
 	}
 
 	/**
@@ -424,28 +424,20 @@ public class SvgGridPainter extends SvgPainter {
 	private void createAxisLabels(SvgDocument doc) {
 		if(xAxisStyle != AxisStyle.GRAPH) {
 			double yPos = yRange.getFrom();
-			boolean paint = false;
-			for (double pos : cs.xAxis.ticLines()) {
-				paint = !paint;
-				if(!paint)
-					continue;
+			for (double pos : cs.xAxis.labelPositions()) {
 				Point newPoint = cs.convert(pos, yPos);
-				newPoint.translate(-5, 20);
-				Element text = doc.createText(newPoint, SvgTools.formatX(cs, pos));
+				newPoint.translate(cs.xAxis.labelOffsetHorizontalX, cs.xAxis.labelOffsetHorizontalY);
+				Element text = doc.createText(newPoint, cs.formatX(pos));
 				doc.appendChild(text);
 			}
 		}
 		
 		if(yAxisStyle != AxisStyle.GRAPH) {
 			double xPos = xRange.getFrom();
-			boolean paint = false;
-			for (double pos : cs.yAxis.ticLines()) {
-				paint = !paint;
-				if(!paint)
-					continue;
+			for (double pos : cs.yAxis.labelPositions()) {
 				Point newPoint = cs.convert(xPos, pos);
-				newPoint.translate(-10, 5);
-				Element text = doc.createText(newPoint, SvgTools.formatY(cs, pos));
+				newPoint.translate(cs.yAxis.labelOffsetVerticalX, cs.yAxis.labelOffsetVerticalY);
+				Element text = doc.createText(newPoint, cs.formatY(pos));
 				text.setAttribute("text-anchor", "end");
 				doc.appendChild(text);
 			}

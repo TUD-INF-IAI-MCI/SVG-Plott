@@ -7,6 +7,7 @@ import java.util.Map;
 
 import com.beust.jcommander.IStringConverter;
 
+import tud.tangram.svgplot.svgcreator.SvgBarChartCreator;
 import tud.tangram.svgplot.svgcreator.SvgCreator;
 import tud.tangram.svgplot.svgcreator.SvgCreatorInstantiator;
 import tud.tangram.svgplot.svgcreator.SvgGraphCreator;
@@ -22,8 +23,13 @@ import tud.tangram.svgplot.svgcreator.SvgScatterPlotCreator;
  *
  */
 public enum DiagramType {
-	FunctionPlot(SvgGraphCreator.INSTANTIATOR, "fp", "function", "f"), ScatterPlot(SvgScatterPlotCreator.INSTANTIATOR, "scatter", "scatterplot", "s", "sp")
-	, LineChart(SvgLineChartCreator.INSTANTIATOR, "lc", "linechart", "l");
+	/**
+	 * All the enum values together with their instantiators and synonyms.
+	 */
+	FunctionPlot(SvgGraphCreator.INSTANTIATOR, "fp", "function", "f", "functions"),
+	ScatterPlot(SvgScatterPlotCreator.INSTANTIATOR, "scatter", "scatterplot", "s", "sp", "point", "points", "pointchart"),
+	LineChart(SvgLineChartCreator.INSTANTIATOR, "lc", "linechart", "l", "lines", "line"),
+	BarChart(SvgBarChartCreator.INSTANTIATOR, "bc", "b", "barchart", "bar", "bars");
 
 	/**
 	 * A map for easy retrieval of the right {@link DiagramType} belonging to
@@ -59,10 +65,14 @@ public enum DiagramType {
 		this.synonyms = Arrays.asList(synonyms);
 		this.instantiator = instantiator;
 	}
-	
+
 	/**
-	 * Get an {@link SvgCreator} instance fitting to create the current {@link DiagramType}.
-	 * @param rawOptions the raw options used by the {@link SvgOptions} instance of the {@link SvgCreator}
+	 * Get an {@link SvgCreator} instance fitting to create the current
+	 * {@link DiagramType}.
+	 * 
+	 * @param rawOptions
+	 *            the raw options used by the {@link SvgOptions} instance of the
+	 *            {@link SvgCreator}
 	 * @return
 	 */
 	public SvgCreator getInstance(SvgPlotOptions rawOptions) {

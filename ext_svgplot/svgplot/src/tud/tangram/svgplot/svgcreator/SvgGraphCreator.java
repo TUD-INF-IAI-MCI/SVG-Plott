@@ -135,10 +135,10 @@ public class SvgGraphCreator extends SvgGridCreator {
 
 		// general description
 		Node div = desc.appendBodyChild(desc.createDiv("functions"));
-		div.appendChild(desc.createP(SvgTools.translateN("desc.intro", SvgTools.formatX(cs, cs.xAxis.getRange().getFrom()),
-				SvgTools.formatX(cs, cs.xAxis.getRange().getTo()), SvgTools.formatX(cs, cs.xAxis.getTicInterval()),
-				SvgTools.formatY(cs, cs.yAxis.getRange().getFrom()), SvgTools.formatY(cs, cs.yAxis.getRange().getTo()),
-				SvgTools.formatY(cs, cs.yAxis.getTicInterval()), SvgTools.formatName(cs.xAxis.getRange().getName()),
+		div.appendChild(desc.createP(SvgTools.translateN("desc.intro", cs.formatX(cs.xAxis.getRange().getFrom()),
+				cs.formatX(cs.xAxis.getRange().getTo()), cs.formatX(cs.xAxis.getTicInterval()),
+				cs.formatY(cs.yAxis.getRange().getFrom()), cs.formatY(cs.yAxis.getRange().getTo()),
+				cs.formatY(cs.yAxis.getTicInterval()), SvgTools.formatName(cs.xAxis.getRange().getName()),
 				SvgTools.formatName(cs.yAxis.getRange().getName()), options.functions.size())));
 
 		// functions

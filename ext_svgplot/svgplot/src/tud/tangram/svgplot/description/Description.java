@@ -60,7 +60,7 @@ public class Description extends HtmlDocument{
 			if (cap != null && !cap.isEmpty()) {
 				list.appendChild(createTextElement("li", SvgTools.formatForText(cs, point, cap + "_" + ++i)));
 			} else {
-				list.appendChild(createTextElement("li", SvgTools.formatForSpeech(cs, point)));
+				list.appendChild(createTextElement("li", cs.formatForSpeech(point)));
 			}
 		}
 		return list;
@@ -107,9 +107,9 @@ public class Description extends HtmlDocument{
 		int i = offset;
 		for (Point point : points) {
 			if (cap != null && !cap.isEmpty()) {
-				list.appendChild(createTextElement("li", cap + "_" + ++i + " = " + SvgTools.formatX(cs, point.getX())));
+				list.appendChild(createTextElement("li", cap + "_" + ++i + " = " + cs.formatX(point.getX())));
 			} else {
-				list.appendChild(createTextElement("li", SvgTools.formatX(cs, point.getX())));
+				list.appendChild(createTextElement("li", cs.formatX(point.getX())));
 			}
 		}
 		return list;
