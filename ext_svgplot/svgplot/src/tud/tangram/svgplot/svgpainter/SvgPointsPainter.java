@@ -1,6 +1,9 @@
 package tud.tangram.svgplot.svgpainter;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
 
 import org.w3c.dom.Element;
 
@@ -15,9 +18,9 @@ import tud.tangram.svgplot.plotting.Overlay;
 import tud.tangram.svgplot.plotting.OverlayList;
 import tud.tangram.svgplot.plotting.PointPlot;
 import tud.tangram.svgplot.plotting.PointPlot.PointType;
+import tud.tangram.svgplot.styles.Color;
 import tud.tangram.svgplot.styles.PointPlotStyle;
 import tud.tangram.svgplot.utils.Constants;
-import tud.tangram.svgplot.utils.SvgTools;
 import tud.tangram.svgplot.xml.SvgDocument;
 
 /**
@@ -29,11 +32,14 @@ public class SvgPointsPainter extends SvgPainter {
 	PointListList points;
 	OverlayList overlays;
 	PointPlotStyle pointPlotStyle;
+	List<Color> colors;
 
-	public SvgPointsPainter(CoordinateSystem cs, PointListList points, PointPlotStyle pointPlotStyle) {
+	public SvgPointsPainter(CoordinateSystem cs, PointListList points, PointPlotStyle pointPlotStyle,
+			LinkedHashSet<Color> colors) {
 		this.cs = cs;
 		this.points = points;
 		this.pointPlotStyle = pointPlotStyle;
+		this.colors = new ArrayList<>(colors);
 	}
 
 	@Override
@@ -65,6 +71,16 @@ public class SvgPointsPainter extends SvgPainter {
 				.append(System.lineSeparator());
 
 		deviceCss.put(OutputDevice.ScreenHighContrast, screenHighContrastOptions.toString());
+
+		StringBuilder screenColorCss = new StringBuilder();
+
+		for (int i = 0; i < points.size(); i++) {
+			screenColorCss.append("#points_fg_" + i + " .poi_symbol { stroke: " + colors.get(i).getRgbColor() + "; fill: "
+					+ colors.get(i).getRgbColor() + ";}").append(System.lineSeparator());
+		}
+		screenColorCss.append(".linechart_bg { stroke: none; }").append(System.lineSeparator());
+
+		deviceCss.put(OutputDevice.ScreenColor, screenColorCss.toString());
 
 		return deviceCss;
 	}
@@ -117,7 +133,7 @@ public class SvgPointsPainter extends SvgPainter {
 							paintedPoint.appendChild(doc.createDesc(pl.getName()));
 					}
 				}
-				
+
 				overlays.add(new Overlay(p), true);
 			}
 

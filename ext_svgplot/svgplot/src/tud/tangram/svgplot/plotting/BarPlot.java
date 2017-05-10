@@ -3,6 +3,8 @@ package tud.tangram.svgplot.plotting;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
 
 import tud.tangram.svgplot.data.Point;
@@ -16,6 +18,8 @@ import tud.tangram.svgplot.xml.SvgDocument;
 
 public class BarPlot {
 
+	static final Logger log = LoggerFactory.getLogger(BarPlot.class);
+	
 	private List<String> textureIds;
 	private OutputDevice device;
 	private SvgDocument doc;
@@ -69,7 +73,11 @@ public class BarPlot {
 		String baseClass = "bar-" + dataSetId;
 		group.setAttribute("class", baseClass + " bar");
 
-		if (height - 2 * Constants.TEXTURE_BORDER_DISTANCE >= Constants.TEXTURE_MIN_SIZE) {
+		Element border = doc.createRectangle(position, width, height);
+		border.setAttribute("class", baseClass + "-border  bar-border");
+		group.appendChild(border);
+		
+		if (height - 2 * Constants.TEXTURE_BORDER_DISTANCE >= Constants.TEXTURE_MIN_HEIGHT) {
 			Point fillingPosition = new Point(position.getX() + Constants.TEXTURE_BORDER_DISTANCE,
 					position.getY() + Constants.TEXTURE_BORDER_DISTANCE);
 			Element filling = doc.createRectangle(fillingPosition, width - 2 * Constants.TEXTURE_BORDER_DISTANCE,
@@ -78,10 +86,7 @@ public class BarPlot {
 			filling.setAttribute("fill", "url(#" + getTextureId(dataSetId) + ")");
 			group.appendChild(filling);
 		}
-		
-		Element border = doc.createRectangle(position, width, height);
-		border.setAttribute("class", baseClass + "-border  bar-border");
-		group.appendChild(border);
+
 		return group;
 	}
 }

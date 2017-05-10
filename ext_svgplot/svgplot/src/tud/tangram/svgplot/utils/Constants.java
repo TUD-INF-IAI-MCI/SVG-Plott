@@ -32,7 +32,8 @@ public class Constants {
 	public static final Point titlePosition = new Point(Constants.MARGIN.get(3), Constants.MARGIN.get(0) + 10);
 	public static final double CHAR_WIDTH = 6.5;
 	public static final double TEXTURE_BORDER_DISTANCE = 2;
-	public static final double TEXTURE_MIN_SIZE = 13;
+	public static final double TEXTURE_MIN_HEIGHT = 13;
+	public static final double TEXTURE_MIN_WIDTH = 20;
 	public static final double HALF_BAR_DISTANCE = 3;
 	
 	// Used for double comparisons

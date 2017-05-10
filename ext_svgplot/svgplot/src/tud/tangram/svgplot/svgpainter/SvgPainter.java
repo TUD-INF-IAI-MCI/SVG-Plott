@@ -10,7 +10,6 @@ import tud.tangram.svgplot.xml.SvgDocument;
 
 public abstract class SvgPainter {
 	public SvgPainter() {
-		deviceCss = getDeviceCss();
 	}
 
 	/**
@@ -68,6 +67,8 @@ public abstract class SvgPainter {
 	 * @param device
 	 */
 	public void paintToSvgDocument(SvgDocument doc, Element viewbox, OutputDevice device) {
+		if(this.deviceCss == null)
+			this.deviceCss = getDeviceCss();
 		String deviceCss = composeDeviceSpecificCss(device);
 		doc.appendCss(deviceCss);
 	}
@@ -92,6 +93,8 @@ public abstract class SvgPainter {
 	 * @param priority
 	 */
 	public void prepareLegendRenderer(LegendRenderer renderer, OutputDevice device, int priority) {
+		if(this.deviceCss == null)
+			this.deviceCss = getDeviceCss();
 		String deviceCss = composeDeviceSpecificCss(device);
 		renderer.appendCss(deviceCss);
 	}

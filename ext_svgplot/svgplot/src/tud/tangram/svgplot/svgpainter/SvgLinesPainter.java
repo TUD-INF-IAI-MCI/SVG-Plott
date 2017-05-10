@@ -1,7 +1,10 @@
 package tud.tangram.svgplot.svgpainter;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 
 import org.w3c.dom.Element;
@@ -13,18 +16,21 @@ import tud.tangram.svgplot.data.PointListList.PointList;
 import tud.tangram.svgplot.legend.LegendLineItem;
 import tud.tangram.svgplot.legend.LegendRenderer;
 import tud.tangram.svgplot.options.OutputDevice;
+import tud.tangram.svgplot.styles.Color;
 import tud.tangram.svgplot.utils.Constants;
 import tud.tangram.svgplot.xml.SvgDocument;
 
 public class SvgLinesPainter extends SvgPainter {
 
-	PointListList points;
-	CoordinateSystem cs;
-	Map<PointList, String> polyLinePoints;
+	private PointListList points;
+	private CoordinateSystem cs;
+	private Map<PointList, String> polyLinePoints;
+	private final List<Color> colors;
 
-	public SvgLinesPainter(CoordinateSystem cs, PointListList pointListList) {
+	public SvgLinesPainter(CoordinateSystem cs, PointListList pointListList, LinkedHashSet<Color> colors) {
 		this.points = pointListList;
 		this.cs = cs;
+		this.colors = new ArrayList<>(colors);
 	}
 
 	@Override
@@ -58,11 +64,21 @@ public class SvgLinesPainter extends SvgPainter {
 				.append(System.lineSeparator());
 		screenHighContrastCss.append("#linechart-3 { stroke-dasharray: 5.0, 5.0; stroke: #ff00ff;}")
 				.append(System.lineSeparator());
-		defaultCss
+		screenHighContrastCss
 				.append(".linechart_bg { stroke: black; stroke-dasharray: none; stroke-width:3.0;  fill: transparent; stroke-linecap: round; }")
 				.append(System.lineSeparator());
 
 		deviceCss.put(OutputDevice.ScreenHighContrast, screenHighContrastCss.toString());
+
+		StringBuilder screenColorCss = new StringBuilder();
+
+		for (int i = 0; i < points.size(); i++) {
+			screenColorCss.append("#linechart-" + (i + 1) + " { stroke: " + colors.get(i).getRgbColor() + ";}")
+					.append(System.lineSeparator());
+		}
+		screenColorCss.append(".linechart_bg { stroke: none; }").append(System.lineSeparator());
+
+		deviceCss.put(OutputDevice.ScreenColor, screenColorCss.toString());
 
 		return deviceCss;
 	}

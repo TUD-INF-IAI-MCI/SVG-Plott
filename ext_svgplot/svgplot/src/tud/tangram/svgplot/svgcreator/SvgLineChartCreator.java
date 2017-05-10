@@ -37,7 +37,7 @@ public class SvgLineChartCreator extends SvgGridCreator {
 		super.create();
 
 		// Paint the lines into the svg file
-		SvgLinesPainter svgLinesPainter = new SvgLinesPainter(cs, options.points);
+		SvgLinesPainter svgLinesPainter = new SvgLinesPainter(cs, options.points, options.colors);
 		svgLinesPainter.paintToSvgDocument(doc, viewbox, options.outputDevice);
 		svgLinesPainter.prepareLegendRenderer(getLegendRenderer(), options.outputDevice);
 
@@ -58,7 +58,7 @@ public class SvgLineChartCreator extends SvgGridCreator {
 		// Paint the scatter plot points to the SVG file if possible.
 		if ((drawPoints || "on".equals(options.showLinePoints)) && !"off".equals(options.showLinePoints)) {
 			SvgPointsPainter svgPointsPainter = new SvgPointsPainter(cs, options.points,
-					options.dotsBorderless ? PointPlotStyle.DOTS_BORDERLESS : PointPlotStyle.DOTS);
+					options.dotsBorderless ? PointPlotStyle.DOTS_BORDERLESS : PointPlotStyle.DOTS, options.colors);
 			svgPointsPainter.paintToSvgDocument(doc, viewbox, options.outputDevice);
 			svgPointsPainter.addOverlaysToList(overlays);
 

@@ -66,7 +66,8 @@ public class SvgScatterPlotCreator extends SvgGridCreator {
 
 		if (!options.hideOriginalPoints) {
 			// Paint the scatter plot points to the SVG file
-			SvgPointsPainter svgPointsPainter = new SvgPointsPainter(cs, options.points, getPointPlotStyle());
+			SvgPointsPainter svgPointsPainter = new SvgPointsPainter(cs, options.points, getPointPlotStyle(),
+					options.colors);
 			svgPointsPainter.paintToSvgDocument(doc, viewbox, options.outputDevice);
 			svgPointsPainter.addOverlaysToList(overlays);
 
@@ -82,7 +83,7 @@ public class SvgScatterPlotCreator extends SvgGridCreator {
 				trendLinePoints.add(trendLine);
 			}
 
-			SvgLinesPainter svgLinesPainter = new SvgLinesPainter(cs, trendLinePoints);
+			SvgLinesPainter svgLinesPainter = new SvgLinesPainter(cs, trendLinePoints, options.colors);
 			svgLinesPainter.paintToSvgDocument(doc, viewbox, options.outputDevice);
 			svgLinesPainter.prepareLegendRenderer(legendRenderer, options.outputDevice);
 

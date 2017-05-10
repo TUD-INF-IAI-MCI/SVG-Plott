@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -15,6 +16,7 @@ import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
 
 import tud.tangram.svgplot.coordinatesystem.Range;
+import tud.tangram.svgplot.data.CategorialPointListList;
 import tud.tangram.svgplot.data.Point;
 import tud.tangram.svgplot.data.PointListList;
 import tud.tangram.svgplot.data.parse.CsvOrientation;
@@ -28,6 +30,7 @@ import tud.tangram.svgplot.data.trendline.TrendLineAlgorithm;
 import tud.tangram.svgplot.plotting.Function;
 import tud.tangram.svgplot.plotting.IntegralPlotSettings;
 import tud.tangram.svgplot.styles.BarAccumulationStyle;
+import tud.tangram.svgplot.styles.Color;
 
 @Parameters(separators = "=", resourceBundle = "Bundle")
 public class SvgPlotOptions {
@@ -238,7 +241,7 @@ public class SvgPlotOptions {
 	public void setCsvType(CsvType csvType) {
 		this.csvType = csvType;
 	}
-	
+
 	@Parameter(names = { "--csvorientation", "--csvo" }, descriptionKey = "param.csvorientation")
 	private CsvOrientation csvOrientation = CsvOrientation.HORIZONTAL;
 
@@ -249,7 +252,7 @@ public class SvgPlotOptions {
 	public void setCsvOrientation(CsvOrientation csvOrientation) {
 		this.csvOrientation = csvOrientation;
 	}
-	
+
 	@Parameter(names = { "--baraccumulation", "--ba" }, descriptionKey = "param.baraccumulation")
 	private BarAccumulationStyle barAccumulationStyle = BarAccumulationStyle.GROUPED;
 
@@ -327,16 +330,33 @@ public class SvgPlotOptions {
 	public void setShowLinePoints(String showLinePoints) {
 		this.showLinePoints = showLinePoints;
 	}
-	
-	@Parameter(names = { "--pointsborderless", "--dbl"}, descriptionKey = "param.pointsborderless")
+
+	@Parameter(names = { "--pointsborderless", "--dbl" }, descriptionKey = "param.pointsborderless")
 	private boolean pointsBorderless = false;
-	
+
 	public boolean isPointsBorderless() {
 		return pointsBorderless;
 	}
-	
+
 	public void setPointsBorderless(boolean pointsBorderless) {
 		this.pointsBorderless = pointsBorderless;
+	}
+	
+	@Parameter(names = { "--color", "--col" }, descriptionKey = "param.colors", variableArity = true )
+	private List<String> customColors = new ArrayList<>();
+
+	public List<String> getCustomColors() {
+		return customColors;
+	}
+
+	public void setCustomColors(List<String> customColors) {
+		this.customColors = customColors;
+	}
+	
+	private LinkedHashSet<Color> colors;
+
+	public LinkedHashSet<Color> getColors() {
+		return colors;
 	}
 
 	@Parameter(names = "--trendline", descriptionKey = "param.trendline", variableArity = true)
@@ -398,6 +418,8 @@ public class SvgPlotOptions {
 	}
 
 	public void finalizeOptions() {
+		setColorOrder();
+		
 		boolean xRangeSpecified = true;
 		boolean yRangeSpecified = true;
 		if (xRange == null) {
@@ -422,23 +444,36 @@ public class SvgPlotOptions {
 		if (points != null && !points.isEmpty())
 			points.updateMinMax();
 		if (autoScale && points != null && !points.isEmpty() && points.hasValidMinMaxValues()) { // TODO
-																				// add
-																				// margin
-																				// option
+			// add
+			// margin
+			// option
 			double xPointRangeMargin = 0; // 0.01 * (points.getMaxX() -
 											// points.getMinX());
 			double yPointRangeMargin = 0; // 0.01 * (points.getMaxY() -
 											// points.getMinY());
+
+			boolean isBarChart = diagramType == DiagramType.BarChart;
+
 			if (!xRangeSpecified || xRange.getFrom() > points.getMinX())
 				xRange.setFrom(points.getMinX() - xPointRangeMargin);
 			if (!xRangeSpecified || xRange.getTo() < points.getMaxX())
 				xRange.setTo(points.getMaxX() + xPointRangeMargin);
-			if (!yRangeSpecified || yRange.getFrom() > points.getMinY())
+			if(isBarChart)
+				yRange.setFrom(0);
+			else if (!yRangeSpecified || yRange.getFrom() > points.getMinY())
 				yRange.setFrom(points.getMinY() - yPointRangeMargin);
-			if (!yRangeSpecified || yRange.getTo() < points.getMaxY())
-				yRange.setTo(points.getMaxY() + yPointRangeMargin);
+
+			boolean isStackedBarChart = isBarChart && barAccumulationStyle == BarAccumulationStyle.STACKED;
+			double maxY = isStackedBarChart ? ((CategorialPointListList) points).getMaxYSum() : points.getMaxY();
+			if (!yRangeSpecified || yRange.getTo() < maxY)
+				yRange.setTo(maxY + yPointRangeMargin);
 		}
 		parseTrendLine();
+	}
+	
+	private void setColorOrder() {
+		LinkedHashSet<Color> parsedColors = Color.fromStrings(customColors);
+		this.colors = Color.getColorOrder(parsedColors);
 	}
 
 	private void parseTrendLine() {

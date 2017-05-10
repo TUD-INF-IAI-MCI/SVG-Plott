@@ -1,8 +1,10 @@
 package tud.tangram.svgplot.options;
 
 import java.io.File;
+import java.util.LinkedHashSet;
 
 import tud.tangram.svgplot.data.Point;
+import tud.tangram.svgplot.styles.Color;
 import tud.tangram.svgplot.utils.SvgTools;
 
 public abstract class SvgOptions {
@@ -13,6 +15,7 @@ public abstract class SvgOptions {
 	public String descTitle;
 	public Point size;
 	public OutputDevice outputDevice;
+	public LinkedHashSet<Color> colors;
 
 	public SvgOptions(SvgPlotOptions options) {
 		createFromSvgPlotOptions(options);
@@ -26,5 +29,6 @@ public abstract class SvgOptions {
 		this.descTitle = SvgTools.translate("desc") + ": " + options.getTitle();
 		this.size = options.getSize();
 		this.outputDevice = options.getOutputDevice();
+		this.colors = options.getColors();
 	};
 }
