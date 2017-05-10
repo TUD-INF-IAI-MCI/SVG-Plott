@@ -5,7 +5,7 @@ import tud.tangram.svgplot.data.Point;
 public class Overlay extends Point {
 	public static final double RADIUS = 2.9;
 
-	private Function function = null;
+	private String description;
 
 	public Overlay(Point p){
 		super(p.getX(), p.getY(), p.getName(), p.getSymbol());
@@ -14,13 +14,21 @@ public class Overlay extends Point {
 	public Overlay(double x, double y) {
 		super(x, y);
 	}
-
-	public Overlay(Point point, Function function) {
-		this(point.getX(), point.getY());
-		this.function = function;
+	
+	public Overlay(Point point, String dataSetName) {
+		this(point);
+		this.description = dataSetName;
 	}
-
-	public Function getFunction() {
-		return function;
+	
+	public Overlay(Point point, String dataSetName, String color) {
+		this(point);
+		if(color == null)
+			this.description = dataSetName;
+		else
+			this.description = dataSetName + ", " + color;
+	}
+	
+	public String getDescription() {
+		return description;
 	}
 }

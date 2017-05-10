@@ -8,7 +8,6 @@ import tud.tangram.svgplot.coordinatesystem.CoordinateSystem;
 import tud.tangram.svgplot.options.OutputDevice;
 import tud.tangram.svgplot.plotting.Overlay;
 import tud.tangram.svgplot.plotting.OverlayList;
-import tud.tangram.svgplot.utils.SvgTools;
 import tud.tangram.svgplot.xml.SvgDocument;
 
 /**
@@ -72,8 +71,8 @@ public class SvgPointOverlayPainter extends SvgPainter {
 	protected Element createOverlay(SvgDocument doc, Overlay overlay) {
 		Element circle = doc.createCircle(cs.convert(overlay), Overlay.RADIUS);
 		circle.appendChild(doc.createTitle(cs.formatForSpeech(overlay)));
-		if (overlay.getFunction() != null) {
-			circle.appendChild(doc.createDesc(overlay.getFunction().toString()));
+		if (overlay.getDescription() != null) {
+			circle.appendChild(doc.createDesc(overlay.getDescription()));
 		}
 		return circle;
 	}

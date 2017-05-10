@@ -3,7 +3,6 @@ package tud.tangram.svgplot.svgpainter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 
@@ -93,18 +92,12 @@ public class SvgBarPainter extends SvgPainter {
 		
 		int dataSetNumber = 0;
 		for(PointList pointList : barPointListList) {
-			Iterator<String> categoryNames = barPointListList.getCategoryNames().iterator();
 			
 			int categoryNumber = 0;
 			
 			Element group = doc.getOrCreateChildGroupById(viewbox, "barchart-" + dataSetNumber);
 			
-			for(Point point : pointList) {
-				// TODO Audio label
-				String categoryName = "";
-				if(categoryNames.hasNext())
-					categoryName = categoryNames.next();
-				
+			for(Point point : pointList) {		
 				double height = point.getY();
 				double convertedHeight = cs.convertYDistance(height);
 				
@@ -131,8 +124,10 @@ public class SvgBarPainter extends SvgPainter {
 				Element bar = barPlot.getSingleBar(group, convertedPosition, convertedWidth, convertedHeight, dataSetNumber);
 				Element title = doc.createElement("title");
 				title.setTextContent(pointList.getName() + ": " + cs.formatForSpeech(point));
-				
 				bar.appendChild(title);
+				
+				Element description = doc.createDesc(pointList.getName() + ", " + colors.get(dataSetNumber));
+				bar.appendChild(description);
 				
 				group.appendChild(bar);
 				

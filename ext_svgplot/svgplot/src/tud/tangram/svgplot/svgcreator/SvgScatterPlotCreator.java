@@ -1,7 +1,6 @@
 package tud.tangram.svgplot.svgcreator;
 
-import java.util.Map;
-
+import java.util.LinkedHashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,7 +24,7 @@ public class SvgScatterPlotCreator extends SvgGridCreator {
 	 * Used for caching the string for the line generation in order to reuse
 	 * them for audio labels
 	 */
-	private Map<PointList, String> polyLineStrings;
+	private LinkedHashMap<PointList, String> polyLineStrings;
 
 	public SvgScatterPlotCreator(SvgScatterPlotOptions options) {
 		super(options);
@@ -102,7 +101,7 @@ public class SvgScatterPlotCreator extends SvgGridCreator {
 		// Paint the line overlays after the point overlays are painted in the
 		// super class, in order to give the line audio-labels priority
 		if (polyLineStrings != null) {
-			SvgLineOverlayPainter svgLineOverlayPainter = new SvgLineOverlayPainter(cs, polyLineStrings);
+			SvgLineOverlayPainter svgLineOverlayPainter = new SvgLineOverlayPainter(cs, polyLineStrings, options.colors);
 			svgLineOverlayPainter.paintToSvgDocument(doc, viewbox, options.outputDevice);
 		}
 	}

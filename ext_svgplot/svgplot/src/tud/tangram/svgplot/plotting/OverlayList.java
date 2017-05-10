@@ -9,7 +9,7 @@ import tud.tangram.svgplot.data.Point;
 public class OverlayList extends ArrayList<Overlay> {
 
 	private static final long serialVersionUID = -1031062986430320978L;
-	final private CoordinateSystem cs;
+	private final CoordinateSystem cs;
 
 	public OverlayList(CoordinateSystem cs) {
 		super();
@@ -90,55 +90,58 @@ public class OverlayList extends ArrayList<Overlay> {
 	}
 
 	/**
-	 * Add a new overlay created from a point and a function. Same as calling
-	 * {@link OverlayList#add(Point, Function, boolean) add(point, function, false)}.
+	 * Add a new overlay created from a point. Same as calling
+	 * {@link OverlayList#add(Point, String, String, boolean) add(point,
+	 * dataSetName, color, false)}.
 	 * 
 	 * @param point
-	 * @param function
+	 * @param dataSetName
+	 * @param color
 	 * @return
 	 */
-	public boolean add(Point point, Function function) {
-		return add(new Overlay(point, function));
+	public boolean add(Point point, String dataSetName, String color) {
+		return add(new Overlay(point, dataSetName, color));
 	}
 
 	/**
-	 * Add a new overlay created from a point and a function. If overwrite is
-	 * true, remove overlays intersecting with the new overlay and then add it.
+	 * Add a new overlay created from a point. If overwrite is true, remove
+	 * overlays intersecting with the new overlay and then add it.
 	 * 
 	 * @param point
-	 * @param function
+	 * @param dataSetName
+	 * @param color
 	 * @param overwrite
 	 *            whether to overwrite intersecting overlays
 	 * @return
 	 */
-	public boolean add(Point point, Function function, boolean overwrite) {
-		return add(new Overlay(point, function), overwrite);
+	public boolean add(Point point, String dataSetName, String color, boolean overwrite) {
+		return add(new Overlay(point, dataSetName, color), overwrite);
 	}
 
 	/**
-	 * Add a list of points together with a function. Same as calling
-	 * {@link OverlayList#addAll(List, Function, boolean) add(points, function,
-	 * false)}.
+	 * Add a list of points. Same as calling
+	 * {@link OverlayList#addAll(List, String, String, boolean) add(points,
+	 * dataSetName, color false)}.
 	 * 
 	 * @param points
 	 * @param function
 	 */
-	public void addAll(List<Point> points, Function function) {
-		addAll(points, function, false);
+	public void addAll(List<Point> points, String dataSetName, String color) {
+		addAll(points, dataSetName, color, false);
 	}
 
 	/**
-	 * Add a list of points together with a function. If overwrite is true,
-	 * remove overlays intersecting with each new overlay and then add it.
+	 * Add a list of points. If overwrite is true, remove overlays intersecting
+	 * with each new overlay and then add it.
 	 * 
 	 * @param points
 	 * @param function
 	 * @param overwrite
 	 *            whether to overwrite intersecting overlays
 	 */
-	public void addAll(List<Point> points, Function function, boolean overwrite) {
+	public void addAll(List<Point> points, String dataSetName, String color, boolean overwrite) {
 		for (Point point : points) {
-			add(point, function, overwrite);
+			add(point, dataSetName, color, overwrite);
 		}
 	}
 

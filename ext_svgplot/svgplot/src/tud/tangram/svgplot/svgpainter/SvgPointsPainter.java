@@ -134,7 +134,7 @@ public class SvgPointsPainter extends SvgPainter {
 					}
 				}
 
-				overlays.add(new Overlay(p), true);
+				overlays.add(new Overlay(p, pl.getName(), colors.get(j).toString()), true);
 			}
 
 			j++;

@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
-
 import org.w3c.dom.Element;
 
 import tud.tangram.svgplot.coordinatesystem.CoordinateSystem;
@@ -24,7 +22,7 @@ public class SvgLinesPainter extends SvgPainter {
 
 	private PointListList points;
 	private CoordinateSystem cs;
-	private Map<PointList, String> polyLinePoints;
+	private LinkedHashMap<PointList, String> polyLinePoints;
 	private final List<Color> colors;
 
 	public SvgLinesPainter(CoordinateSystem cs, PointListList pointListList, LinkedHashSet<Color> colors) {
@@ -136,7 +134,7 @@ public class SvgLinesPainter extends SvgPainter {
 	 * 
 	 * @return SVG polyline data for overlay creation
 	 */
-	public Map<PointList, String> getLineDataForOverlayCreation() {
+	public LinkedHashMap<PointList, String> getLineDataForOverlayCreation() {
 		return polyLinePoints;
 	}
 

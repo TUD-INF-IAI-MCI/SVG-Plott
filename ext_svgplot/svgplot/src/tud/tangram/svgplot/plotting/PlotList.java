@@ -28,24 +28,24 @@ public class PlotList extends ArrayList<Plot> {
 		for (int i = 0; i < size() - 1; i++) {
 			Plot plot1 = get(i);
 			for (int k = i + 1; k < size(); k++) {
-				overlays.addAll(plot1.getIntersections(get(k)), plot1.getFunction());
+				overlays.addAll(plot1.getIntersections(get(k)), plot1.getFunction().toString(), null);
 			}
 		}
 
 		// Extrema
 		for (Plot plot : this) {
-			overlays.addAll(plot.getExtrema(), plot.getFunction());
+			overlays.addAll(plot.getExtrema(), plot.getFunction().toString(), null);
 		}
 
 		// Roots
 		for (Plot plot : this) {
-			overlays.addAll(plot.getRoots(), plot.getFunction());
+			overlays.addAll(plot.getRoots(), plot.getFunction().toString(), null);
 		}
 
 		// Other points
 		for (double interval : ((MetricAxis)cs.xAxis).intervalSteps) {
 			for (Plot plot : this) {
-				overlays.addAll(plot.getPoints(interval, cs.xAxis.getRange().getFrom()), plot.getFunction());
+				overlays.addAll(plot.getPoints(interval, cs.xAxis.getRange().getFrom()), plot.getFunction().toString(), null);
 			}
 		}
 

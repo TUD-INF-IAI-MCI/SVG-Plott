@@ -1,6 +1,6 @@
 package tud.tangram.svgplot.svgcreator;
 
-import java.util.Map;
+import java.util.LinkedHashMap;
 
 import tud.tangram.svgplot.data.Point;
 import tud.tangram.svgplot.data.PointListList.PointList;
@@ -17,7 +17,7 @@ import tud.tangram.svgplot.utils.Constants;
 public class SvgLineChartCreator extends SvgGridCreator {
 
 	private SvgLineChartOptions options;
-	private Map<PointList, String> polyLineStrings;
+	private LinkedHashMap<PointList, String> polyLineStrings;
 
 	public SvgLineChartCreator(SvgLineChartOptions options) {
 		super(options);
@@ -81,7 +81,7 @@ public class SvgLineChartCreator extends SvgGridCreator {
 	protected void afterCreate() {
 		// Paint the line overlays before the point overlays are painted in the
 		// super class
-		SvgLineOverlayPainter svgLineOverlayPainter = new SvgLineOverlayPainter(cs, polyLineStrings);
+		SvgLineOverlayPainter svgLineOverlayPainter = new SvgLineOverlayPainter(cs, polyLineStrings, options.colors);
 		svgLineOverlayPainter.paintToSvgDocument(doc, viewbox, options.outputDevice);
 
 		super.afterCreate();
