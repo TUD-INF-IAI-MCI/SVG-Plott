@@ -19,9 +19,15 @@ import tud.tangram.svgplot.coordinatesystem.Range;
 import tud.tangram.svgplot.data.CategorialPointListList;
 import tud.tangram.svgplot.data.Point;
 import tud.tangram.svgplot.data.PointListList;
+import tud.tangram.svgplot.data.XType;
 import tud.tangram.svgplot.data.parse.CsvOrientation;
 import tud.tangram.svgplot.data.parse.CsvParser;
 import tud.tangram.svgplot.data.parse.CsvType;
+import tud.tangram.svgplot.data.sorting.AlphabeticalSorter;
+import tud.tangram.svgplot.data.sorting.CategorialPointListListSorter;
+import tud.tangram.svgplot.data.sorting.CategorialSumSorter;
+import tud.tangram.svgplot.data.sorting.MaxFirstDataSetSorter;
+import tud.tangram.svgplot.data.sorting.SortingType;
 import tud.tangram.svgplot.data.trendline.BrownLinearExponentialSmoothingTrendLine;
 import tud.tangram.svgplot.data.trendline.ExponentialSmoothingTrendline;
 import tud.tangram.svgplot.data.trendline.LinearRegressionTrendLine;
@@ -341,8 +347,8 @@ public class SvgPlotOptions {
 	public void setPointsBorderless(boolean pointsBorderless) {
 		this.pointsBorderless = pointsBorderless;
 	}
-	
-	@Parameter(names = { "--color", "--col" }, descriptionKey = "param.colors", variableArity = true )
+
+	@Parameter(names = { "--color", "--col" }, descriptionKey = "param.colors", variableArity = true)
 	private List<String> customColors = new ArrayList<>();
 
 	public List<String> getCustomColors() {
@@ -352,7 +358,7 @@ public class SvgPlotOptions {
 	public void setCustomColors(List<String> customColors) {
 		this.customColors = customColors;
 	}
-	
+
 	private LinkedHashSet<Color> colors;
 
 	public LinkedHashSet<Color> getColors() {
@@ -387,6 +393,28 @@ public class SvgPlotOptions {
 		this.hideOriginalPoints = hideOriginalPoints;
 	}
 
+	@Parameter(names = { "--sorting" }, descriptionKey = "param.sorting")
+	private SortingType sortingType = SortingType.None;
+
+	public SortingType getSortingType() {
+		return sortingType;
+	}
+
+	public void setSortingType(SortingType sortingType) {
+		this.sortingType = sortingType;
+	}
+
+	@Parameter(names = { "--sortdescending", "--desc" }, descriptionKey = "param.sortdescending")
+	private boolean sortDescending = false;
+
+	public boolean isSortDescending() {
+		return sortDescending;
+	}
+
+	public void setSortDescending(boolean sortDescending) {
+		this.sortDescending = sortDescending;
+	}
+
 	/**
 	 * Returns a converter for the special class-types of this project for
 	 * JCommander interpretation.
@@ -412,6 +440,8 @@ public class SvgPlotOptions {
 				return DiagramType.DiagramTypeConverter.class;
 			else if (forType.equals(BarAccumulationStyle.class))
 				return BarAccumulationStyle.BarAccumulationStyleConverter.class;
+			else if (forType.equals(SortingType.class))
+				return SortingType.SortingTypeConverter.class;
 			else
 				return null;
 		}
@@ -419,7 +449,7 @@ public class SvgPlotOptions {
 
 	public void finalizeOptions() {
 		setColorOrder();
-		
+
 		boolean xRangeSpecified = true;
 		boolean yRangeSpecified = true;
 		if (xRange == null) {
@@ -435,6 +465,9 @@ public class SvgPlotOptions {
 				CsvParser parser = new CsvParser(new FileReader(csvPath), ',', '"');
 				points = parser.parse(csvType, csvOrientation);
 
+				// Sort the points if categorial
+				sortPoints();
+
 			} catch (IOException e) {
 				points = (new PointListList.Converter()).convert(pts);
 			}
@@ -444,9 +477,8 @@ public class SvgPlotOptions {
 		if (points != null && !points.isEmpty())
 			points.updateMinMax();
 		if (autoScale && points != null && !points.isEmpty() && points.hasValidMinMaxValues()) { // TODO
-			// add
-			// margin
-			// option
+			// add option allowing the user to select whether there should be a
+			// margin around the data
 			double xPointRangeMargin = 0; // 0.01 * (points.getMaxX() -
 											// points.getMinX());
 			double yPointRangeMargin = 0; // 0.01 * (points.getMaxY() -
@@ -458,7 +490,7 @@ public class SvgPlotOptions {
 				xRange.setFrom(points.getMinX() - xPointRangeMargin);
 			if (!xRangeSpecified || xRange.getTo() < points.getMaxX())
 				xRange.setTo(points.getMaxX() + xPointRangeMargin);
-			if(isBarChart)
+			if (isBarChart)
 				yRange.setFrom(0);
 			else if (!yRangeSpecified || yRange.getFrom() > points.getMinY())
 				yRange.setFrom(points.getMinY() - yPointRangeMargin);
@@ -470,7 +502,16 @@ public class SvgPlotOptions {
 		}
 		parseTrendLine();
 	}
-	
+
+	/**
+	 * Sort categorial points.
+	 */
+	private void sortPoints() {
+		if (csvType.xType == XType.CATEGORIAL) {
+			CategorialPointListListSorter.getSorter(sortingType, (CategorialPointListList) points).sort(sortDescending);
+		}
+	}
+
 	private void setColorOrder() {
 		LinkedHashSet<Color> parsedColors = Color.fromStrings(customColors);
 		this.colors = Color.getColorOrder(parsedColors);

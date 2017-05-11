@@ -39,6 +39,10 @@ public class CategorialPointListList extends PointListList {
 		return categoryNames.size();
 	}
 	
+	public void setCategoryNames(List<String> categoryNames) {
+		this.categoryNames = categoryNames;
+	}
+
 	public List<String> getCategoryNames() {
 		return categoryNames;
 	}
