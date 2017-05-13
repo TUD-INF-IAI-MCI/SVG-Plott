@@ -60,6 +60,10 @@ public class SvgBarChartCreator extends SvgGridCreator {
 		desc.appendBodyChild(desc.createAxisPositionDescription(options.diagramType, cs, getXAxisStyle(), getYAxisStyle()));
 		
 		desc.appendBodyChild(desc.createAxisDetailDescription(cs, options.gridStyle));
+		
+		desc.appendBodyChild(desc.createBarSortingDescription(options.points, options.sortingType, options.descending));
+	
+		desc.appendBodyChild(desc.createBarDatasetDescription(options.points));
 	}
 
 }

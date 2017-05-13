@@ -4,6 +4,7 @@ import java.util.Iterator;
 
 import tud.tangram.svgplot.data.Point;
 import tud.tangram.svgplot.data.PointListList.PointList;
+import tud.tangram.svgplot.utils.SvgTools;
 
 /**
  * Calculates a trend line using the moving average filter. The average is
@@ -66,5 +67,15 @@ public class MovingAverageTrendline implements TrendLineAlgorithm {
 		}
 
 		return newPoints;
+	}
+
+	@Override
+	public String getAlgorithmName() {
+		return "MovingAverage";
+	}
+
+	@Override
+	public String getAlgorithmParams() {
+		return "(n=" + SvgTools.format2svg(n) + ")";
 	}
 }

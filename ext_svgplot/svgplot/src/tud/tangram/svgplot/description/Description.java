@@ -10,9 +10,12 @@ import org.w3c.dom.Node;
 import tud.tangram.svgplot.coordinatesystem.CoordinateSystem;
 import tud.tangram.svgplot.coordinatesystem.MetricAxis;
 import tud.tangram.svgplot.coordinatesystem.Range;
+import tud.tangram.svgplot.data.CategorialPointListList;
 import tud.tangram.svgplot.data.Point;
 import tud.tangram.svgplot.data.PointListList;
 import tud.tangram.svgplot.data.PointListList.PointList;
+import tud.tangram.svgplot.data.sorting.SortingType;
+import tud.tangram.svgplot.data.trendline.TrendLineAlgorithm;
 import tud.tangram.svgplot.options.DiagramType;
 import tud.tangram.svgplot.plotting.Function;
 import tud.tangram.svgplot.plotting.PlotList;
@@ -54,7 +57,7 @@ public class Description extends HtmlDocument {
 			String typeAndTitleText = SvgTools.translate("desc.diagramtype_title",
 					SvgTools.translate("desc.diagramtype." + diagramType), title);
 			if (diagramType == DiagramType.BarChart) {
-				typeAndTitleText += " " + SvgTools.translate("desc.diagramtype_barcharttype", SvgTools.translate(
+				typeAndTitleText += TAB + SvgTools.translate("desc.diagramtype_barcharttype", SvgTools.translate(
 						"desc.diagramtype_barcharttype." + (dataSetCount < 2 ? "single" : barAccumulationStyle)));
 			}
 			typeAndTitle = createP(typeAndTitleText);
@@ -80,14 +83,14 @@ public class Description extends HtmlDocument {
 		String axisText = SvgTools.translate("desc.axis_position_first");
 		if (diagramType != DiagramType.BarChart) {
 			Point intersect = new Point(cs.xAxis.getRange().getFrom(), cs.yAxis.getRange().getFrom());
-			axisText += " " + SvgTools.translate("desc.axis_position_first.intersect", cs.formatForSpeech(intersect));
+			axisText += TAB + SvgTools.translate("desc.axis_position_first.intersect", cs.formatForSpeech(intersect));
 		}
 		axisText += ".";
 
 		if (yAxisStyle == AxisStyle.BOX) {
-			String axisSecondSelection = yAxisStyle == AxisStyle.BOX ? "both" : "vertical";
-			axisText += " ";
-			axisText += SvgTools.translate("desc.axis_position_second_start." + axisSecondSelection);
+			String axisSecondSelection = xAxisStyle == AxisStyle.BOX ? "both" : "vertical";
+			axisText += TAB;
+			axisText += SvgTools.translate("desc.axis_position_second_start." + axisSecondSelection) + TAB;
 			axisText += SvgTools.translate("desc.axis_position_second");
 		}
 
@@ -105,11 +108,11 @@ public class Description extends HtmlDocument {
 
 			String xUnit = cs.xAxis.getUnit();
 			String xAxisUnit = xUnit != null && xUnit.length() > 0
-					? " " + SvgTools.translate("desc.axis_detail_unit", xUnit) : "";
+					? TAB + SvgTools.translate("desc.axis_detail_unit", xUnit) : "";
 
 			String xTitle = cs.xAxis.getTitle();
-			String xAxisTitle = xUnit != null && xUnit.length() > 0
-					? " " + SvgTools.translate("desc.axis_detail_title", xTitle) : "";
+			String xAxisTitle = xTitle != null && xTitle.length() > 0
+					? TAB + SvgTools.translate("desc.axis_detail_title", xTitle) : "";
 
 			String xAxisDetails = SvgTools.translate("desc.axis_detail", horizontal, xAxisTitle, xAxisUnit,
 					cs.formatX(cs.xAxis.getRange().getFrom()), cs.formatX(cs.xAxis.getRange().getTo()),
@@ -117,7 +120,7 @@ public class Description extends HtmlDocument {
 
 			horizontal = SvgTools.translate("desc.horizontal_neutral");
 			if (gridStyle == GridStyle.HORIZONTAL || gridStyle == GridStyle.FULL)
-				xAxisDetails += " " + SvgTools.translate("desc.axis_grid", horizontal);
+				xAxisDetails += TAB + SvgTools.translate("desc.axis_grid", horizontal);
 
 			axisDetails.appendChild(createP(xAxisDetails));
 		}
@@ -127,11 +130,11 @@ public class Description extends HtmlDocument {
 
 		String yUnit = cs.yAxis.getUnit();
 		String yAxisUnit = yUnit != null && yUnit.length() > 0
-				? " " + SvgTools.translate("desc.axis_detail_unit", yUnit) : "";
+				? TAB + SvgTools.translate("desc.axis_detail_unit", yUnit) : "";
 
 		String yTitle = cs.yAxis.getTitle();
-		String yAxisTitle = yUnit != null && yUnit.length() > 0
-				? " " + SvgTools.translate("desc.axis_detail_title", yTitle) : "";
+		String yAxisTitle = yTitle != null && yTitle.length() > 0
+				? TAB + SvgTools.translate("desc.axis_detail_title", yTitle) : "";
 
 		String yAxisDetails = SvgTools.translate("desc.axis_detail", vertical, yAxisTitle, yAxisUnit,
 				cs.formatY(cs.yAxis.getRange().getFrom()), cs.formatY(cs.yAxis.getRange().getTo()),
@@ -139,11 +142,207 @@ public class Description extends HtmlDocument {
 
 		vertical = SvgTools.translate("desc.vertical_neutral");
 		if (gridStyle == GridStyle.VERTICAL || gridStyle == GridStyle.FULL)
-			yAxisDetails += " " + SvgTools.translate("desc.axis_grid", vertical);
+			yAxisDetails += TAB + SvgTools.translate("desc.axis_grid", vertical);
 
 		axisDetails.appendChild(createP(yAxisDetails));
 
 		return axisDetails;
+	}
+
+	/**
+	 * Describe a point data set, including the point counts for each subset.
+	 * 
+	 * @param points
+	 * @return
+	 */
+	public Node createPointDataSetDescription(PointListList points) {
+		Node pointDataSet = createDiv("pointdataset");
+
+		// If no data are displayed, only create a text stating this fact.
+		if (points == null || points.isEmpty()) {
+			pointDataSet.appendChild(createP(SvgTools.translate("desc.datacount_0")));
+			return pointDataSet;
+		}
+
+		// Data set count
+		if (points.size() == 1)
+			pointDataSet.appendChild(createP(SvgTools.translate("desc.datacount_1", points.size()) + ":"));
+		else
+			pointDataSet.appendChild(createP(SvgTools.translate("desc.datacount_n", points.size()) + ":"));
+
+		// Data sets with their point counts
+		Node ul = createElement("ul");
+
+		for (PointList pl : points) {
+			Node li = createElement("li");
+
+			li.appendChild(createTextElement("strong", pl.getName() + ":"));
+
+			String text;
+			if (pl.size() < 2)
+				text = pl.isEmpty() ? SvgTools.translate("desc.data_0") : SvgTools.translate("desc.data_1");
+			else
+				text = SvgTools.translate("desc.data_n", pl.size());
+			li.appendChild(createTextElement("span", " " + text));
+
+			ul.appendChild(li);
+		}
+
+		pointDataSet.appendChild(ul);
+
+		return pointDataSet;
+	}
+
+	/**
+	 * Describe a line data set including maxima and minima for each subset.
+	 * 
+	 * @param points
+	 * @return
+	 */
+	public Node createLineDataSetDescription(CoordinateSystem cs, PointListList points) {
+		Node lineDataSet = createDiv("linedataset");
+
+		// If no data are displayed, only create a text stating this fact.
+		if (points == null || points.isEmpty()) {
+			lineDataSet.appendChild(createP(SvgTools.translate("desc.datacount_0")));
+			return lineDataSet;
+		}
+
+		// Data set count and description of minima and maxima format
+		if (points.size() == 1)
+			lineDataSet.appendChild(
+					createP(SvgTools.translate("desc.datacount_1") + ". " + SvgTools.translate("desc.line.minmax")));
+		else
+			lineDataSet.appendChild(createP(SvgTools.translate("desc.datacount_n", points.size()) + ". "
+					+ SvgTools.translate("desc.line.minmax")));
+
+		// Data sets with their maxima and minima
+		Node ul = createElement("ul");
+
+		for (PointList pl : points) {
+			Node li = createElement("li");
+
+			li.appendChild(createTextElement("strong", pl.getName() + ":"));
+
+			if (pl.isEmpty()) {
+				li.appendChild(createTextElement("span", " " + SvgTools.translate("desc.data_0")));
+			} else if (pl.size() == 1) {
+				li.appendChild(createTextElement("span",
+						" " + SvgTools.translate("desc.data_1") + ": " + cs.formatForSpeech(pl.get(0))));
+			} else {
+				// TODO support multiple maxima and minima
+				Point max = pl.getFirstMaximum();
+				Point min = pl.getFirstMinimum();
+
+				StringBuilder textBuilder = new StringBuilder(" ");
+				textBuilder.append(SvgTools.formatForText(cs, max, "max"));
+				textBuilder.append("; ");
+				textBuilder.append(SvgTools.formatForText(cs, min, "min"));
+
+				li.appendChild(createTextElement("span", " " + textBuilder));
+			}
+
+			ul.appendChild(li);
+		}
+
+		lineDataSet.appendChild(ul);
+
+		return lineDataSet;
+	}
+
+	public Node createBarSortingDescription(CategorialPointListList points, SortingType sortingType,
+			boolean descending) {
+		Node barSorting = createDiv("barsorting");
+
+		// Initial sorting description
+		String sortingText;
+		if (sortingType == SortingType.None)
+			sortingText = SvgTools.translate("desc.barchart.sorting.notsorted");
+		else
+			sortingText = SvgTools.translate("desc.barchart.sorting.sortingstring",
+					SvgTools.translate("desc.barchart.sorting." + sortingType),
+					SvgTools.translate("desc.barchart.sorting." + (descending ? "desc" : "asc")),
+					SvgTools.translate("desc.barchart.sorting.sorted"));
+
+		barSorting.appendChild(createP(SvgTools.translate("desc.barchart.sorting", sortingText)));
+
+		Node ul = createElement("ul");
+
+		for (String name : points.getCategoryNames()) {
+			Node li = createElement("li");
+
+			li.setTextContent(name);
+
+			ul.appendChild(li);
+		}
+
+		barSorting.appendChild(ul);
+
+		return barSorting;
+	}
+
+	public Node createBarDatasetDescription(PointListList points) {
+		Node barDataSet = createDiv("bardataset");
+
+		// If no data are displayed, only create a text stating this fact.
+		if (points == null || points.isEmpty()) {
+			barDataSet.appendChild(createP(SvgTools.translate("desc.datacount_0")));
+			return barDataSet;
+		}
+
+		// Data set count
+		if (points.size() == 1)
+			barDataSet.appendChild(createP(SvgTools.translate("desc.datacount_1") + ":"));
+		else
+			barDataSet.appendChild(createP(SvgTools.translate("desc.datacount_n", points.size()) + ":"));
+
+		Node ul = createElement("ul");
+
+		for (PointList pl : points) {
+			Node li = createElement("li");
+			li.appendChild(createTextNode(pl.getName()));
+			ul.appendChild(li);
+		}
+
+		barDataSet.appendChild(ul);
+
+		return barDataSet;
+	}
+
+	public Node createTrendlinePointsDescription(PointListList points, TrendLineAlgorithm trendLineAlgorithm) {
+		Node trendlineDescription = createDiv("trendlinedescription");
+
+		trendlineDescription.appendChild(createP(SvgTools.translate("desc.trendline_points",
+				SvgTools.translate("desc.trendline_points_" + (points.size() == 1 ? "1" : "n")),
+				SvgTools.translate("desc.trendline_algorithm." + trendLineAlgorithm.getAlgorithmName()),
+				trendLineAlgorithm.getAlgorithmParams())));
+
+		return trendlineDescription;
+	}
+
+	public Node createTrendlineOnlyDescription(PointListList points, TrendLineAlgorithm trendLineAlgorithm) {
+		Node trendlineDescription = createDiv("trendlinedescription");
+
+		if (points.size() == 1) {
+			trendlineDescription.appendChild(createP(SvgTools.translate("desc.trendline_only_1",
+					SvgTools.translate("desc.trendline_algorithm." + trendLineAlgorithm.getAlgorithmName()),
+					trendLineAlgorithm.getAlgorithmParams(), points.get(0).getName())));
+		}
+		else {
+			trendlineDescription.appendChild(createP(SvgTools.translate("desc.trendline_only_n",
+					SvgTools.translate("desc.trendline_algorithm." + trendLineAlgorithm.getAlgorithmName()),
+					trendLineAlgorithm.getAlgorithmParams(), points.size())));
+			
+			Node ul = createElement("ul");
+			
+			for(PointList pl : points) {
+				ul.appendChild(createTextElement("li", pl.getName()));
+			}
+			
+			trendlineDescription.appendChild(ul);
+		}
+
+		return trendlineDescription;
 	}
 
 	/**

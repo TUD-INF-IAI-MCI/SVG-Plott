@@ -8,6 +8,10 @@ import java.util.Map;
 import com.beust.jcommander.IStringConverter;
 
 public enum SortingType {
+	/**
+	 * Important: The description keys {@code desc.barchart.sorting.*} rely on the enum key.
+	 * If the enum key change, the descriptions keys have to change as well.
+	 */
 	MaxFirstDataSet("mf", "maxfirst", "maxfirstdataset"),
 	Alphabetical("a", "alpha", "alphabetical"),
 	CategorialSum("cs", "sum", "categorialsum"),

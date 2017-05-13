@@ -97,6 +97,8 @@ public class SvgLineChartCreator extends SvgGridCreator {
 				desc.createAxisPositionDescription(options.diagramType, cs, getXAxisStyle(), getYAxisStyle()));
 
 		desc.appendBodyChild(desc.createAxisDetailDescription(cs, options.gridStyle));
+		
+		desc.appendBodyChild(desc.createLineDataSetDescription(cs, options.points));
 	}
 
 	@Override

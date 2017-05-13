@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 
 import tud.tangram.svgplot.data.PointListList;
 import tud.tangram.svgplot.data.PointListList.PointList;
+import tud.tangram.svgplot.options.DiagramType;
 import tud.tangram.svgplot.options.SvgPlotOptions;
 import tud.tangram.svgplot.options.SvgScatterPlotOptions;
 import tud.tangram.svgplot.styles.AxisStyle;
@@ -63,7 +64,7 @@ public class SvgScatterPlotCreator extends SvgGridCreator {
 			return;
 		}
 
-		if (!options.hideOriginalPoints) {
+		if (!options.hideOriginalPoints || options.trendLineAlgorithm == null) {
 			// Paint the scatter plot points to the SVG file
 			SvgPointsPainter svgPointsPainter = new SvgPointsPainter(cs, options.points, getPointPlotStyle(),
 					options.colors);
@@ -101,20 +102,38 @@ public class SvgScatterPlotCreator extends SvgGridCreator {
 		// Paint the line overlays after the point overlays are painted in the
 		// super class, in order to give the line audio-labels priority
 		if (polyLineStrings != null) {
-			SvgLineOverlayPainter svgLineOverlayPainter = new SvgLineOverlayPainter(cs, polyLineStrings, options.colors);
+			SvgLineOverlayPainter svgLineOverlayPainter = new SvgLineOverlayPainter(cs, polyLineStrings,
+					options.colors);
 			svgLineOverlayPainter.paintToSvgDocument(doc, viewbox, options.outputDevice);
 		}
-		
+
 		createDesc();
 	}
-	
+
 	protected void createDesc() {
-		desc.appendBodyChild(desc.createDiagramTypeDescription(options.diagramType, null,
-				options.title, options.points.size()));
-		
-		desc.appendBodyChild(desc.createAxisPositionDescription(options.diagramType, cs, getXAxisStyle(), getYAxisStyle()));
-		
+		boolean linesOnly = options.hideOriginalPoints && options.trendLineAlgorithm != null;
+		if (!linesOnly) {
+			desc.appendBodyChild(
+					desc.createDiagramTypeDescription(options.diagramType, null, options.title, options.points.size()));
+		} else {
+			desc.appendBodyChild(desc.createDiagramTypeDescription(DiagramType.LineChart, null, options.title,
+					options.points.size()));
+		}
+
+		desc.appendBodyChild(
+				desc.createAxisPositionDescription(options.diagramType, cs, getXAxisStyle(), getYAxisStyle()));
+
 		desc.appendBodyChild(desc.createAxisDetailDescription(cs, options.gridStyle));
+
+		if(!linesOnly)
+			desc.appendBodyChild(desc.createPointDataSetDescription(options.points));
+
+		if (!options.points.isEmpty() && options.trendLineAlgorithm != null) {
+			if (linesOnly)
+				desc.appendBodyChild(desc.createTrendlineOnlyDescription(options.points, options.trendLineAlgorithm));
+			else
+				desc.appendBodyChild(desc.createTrendlinePointsDescription(options.points, options.trendLineAlgorithm));
+		}
 	}
 
 	private PointPlotStyle getPointPlotStyle() {

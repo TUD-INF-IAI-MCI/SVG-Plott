@@ -25,6 +25,8 @@ import tud.tangram.svgplot.svgcreator.SvgScatterPlotCreator;
 public enum DiagramType {
 	/**
 	 * All the enum values together with their instantiators and synonyms.
+	 * Important: The description keys {@code desc.diagramtype.*} rely on the enum key.
+	 * If the enum key change, the descriptions keys have to change as well.
 	 */
 	FunctionPlot(SvgGraphCreator.INSTANTIATOR, "fp", "function", "f", "functions"),
 	ScatterPlot(SvgScatterPlotCreator.INSTANTIATOR, "scatter", "scatterplot", "s", "sp", "point", "points", "pointchart"),

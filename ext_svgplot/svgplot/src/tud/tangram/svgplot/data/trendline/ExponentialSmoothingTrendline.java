@@ -4,6 +4,7 @@ import java.util.Iterator;
 
 import tud.tangram.svgplot.data.Point;
 import tud.tangram.svgplot.data.PointListList.PointList;
+import tud.tangram.svgplot.utils.SvgTools;
 
 public class ExponentialSmoothingTrendline implements TrendLineAlgorithm {
 
@@ -36,6 +37,16 @@ public class ExponentialSmoothingTrendline implements TrendLineAlgorithm {
 		}
 
 		return newPoints;
+	}
+
+	@Override
+	public String getAlgorithmName() {
+		return "ExponentialSmoothing";
+	}
+
+	@Override
+	public String getAlgorithmParams() {
+		return "(alpha=" + SvgTools.format2svg(alpha) + ")";
 	}
 
 }

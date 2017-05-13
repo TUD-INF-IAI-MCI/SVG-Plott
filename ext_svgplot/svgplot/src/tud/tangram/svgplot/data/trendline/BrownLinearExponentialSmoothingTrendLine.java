@@ -4,6 +4,7 @@ import java.util.Iterator;
 
 import tud.tangram.svgplot.data.Point;
 import tud.tangram.svgplot.data.PointListList.PointList;
+import tud.tangram.svgplot.utils.SvgTools;
 
 public class BrownLinearExponentialSmoothingTrendLine implements TrendLineAlgorithm {
 
@@ -71,5 +72,15 @@ public class BrownLinearExponentialSmoothingTrendLine implements TrendLineAlgori
 		double a = 2 * s1 - s2;
 		double b = alpha / (1 - alpha) * (s1 - s2);
 		return a + currentForecast * b;
+	}
+
+	@Override
+	public String getAlgorithmName() {
+		return "BrownLES";
+	}
+
+	@Override
+	public String getAlgorithmParams() {
+		return  "(alpha=" + SvgTools.format2svg(alpha) + ";forecast=" + forecast + ")";
 	}
 }

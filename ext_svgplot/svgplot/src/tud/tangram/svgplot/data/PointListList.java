@@ -194,6 +194,44 @@ public class PointListList extends ArrayList<PointListList.PointList> {
 			this.name = name;
 		}
 
+		/**
+		 * Gets the first maximum of the data set.
+		 * TODO implement multiple maxima with a proper string representation
+		 * @return first maximum point
+		 */
+		public Point getFirstMaximum() {
+			if(this.isEmpty())
+				return null;
+			
+			Point maxPoint = get(0);
+			
+			for(Point p : this) {
+				if(maxPoint.getY() < p.getY())
+					maxPoint = p;
+			}
+			
+			return maxPoint;
+		}
+		
+		/**
+		 * Gets the first minimum of the data set.
+		 * TODO implement multiple minimum with a proper string representation
+		 * @return first minimum point
+		 */
+		public Point getFirstMinimum() {
+			if(this.isEmpty())
+				return null;
+			
+			Point minPoint = get(0);
+			
+			for(Point p : this) {
+				if(minPoint.getY() > p.getY())
+					minPoint = p;
+			}
+			
+			return minPoint;
+		}
+		
 		public class Converter implements IStringConverter<PointList> {
 			@Override
 			public PointList convert(String value) {
