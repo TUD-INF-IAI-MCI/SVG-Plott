@@ -85,6 +85,18 @@ public class SvgLineChartCreator extends SvgGridCreator {
 		svgLineOverlayPainter.paintToSvgDocument(doc, viewbox, options.outputDevice);
 
 		super.afterCreate();
+
+		createDesc();
+	}
+
+	protected void createDesc() {
+		desc.appendBodyChild(
+				desc.createDiagramTypeDescription(options.diagramType, null, options.title, options.points.size()));
+
+		desc.appendBodyChild(
+				desc.createAxisPositionDescription(options.diagramType, cs, getXAxisStyle(), getYAxisStyle()));
+
+		desc.appendBodyChild(desc.createAxisDetailDescription(cs, options.gridStyle));
 	}
 
 	@Override

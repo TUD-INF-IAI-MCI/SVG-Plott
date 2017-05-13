@@ -24,6 +24,9 @@ public class SvgTitlePainter extends SvgPainter {
 	private String legendTitle;
 	private List<Integer> diagramContentMargin;
 	private Point diagramTitleLowerEnd;
+	private String xAxisTitle;
+	private String yAxisTitle;
+	private Point size;
 
 	/**
 	 * 
@@ -31,11 +34,18 @@ public class SvgTitlePainter extends SvgPainter {
 	 *            | the title of the graphics document
 	 * @param legendTitle
 	 *            | the title of the legend document
+	 * @param xAxisTitle
+	 *            | the title for a potential x axis
+	 * @param yAxisTitle
+	 *            |the title for a potential y axis
 	 */
-	public SvgTitlePainter(String title, String legendTitle) {
+	public SvgTitlePainter(Point size, String title, String legendTitle, String xAxisTitle, String yAxisTitle) {
 		this.title = title;
 		this.legendTitle = legendTitle;
 		this.diagramContentMargin = new ArrayList<>(Constants.MARGIN);
+		this.xAxisTitle = xAxisTitle;
+		this.yAxisTitle = yAxisTitle;
+		this.size = size;
 	}
 
 	@Override
@@ -84,10 +94,30 @@ public class SvgTitlePainter extends SvgPainter {
 		doc.paintBackground();
 
 		diagramTitleLowerEnd = doc.createTitleText(title, Constants.titlePosition);
+		diagramTitleLowerEnd.translate(0, 8);
+
+		// Create the yAxisTitle further moving the lower end
+		if (yAxisTitle != null && yAxisTitle.length() > 0)
+			doc.appendChild(doc.createText(diagramTitleLowerEnd, yAxisTitle));
+
+		// Create the xAxisTitle
+		int lowerEndShift = 0;
+		if (xAxisTitle != null && xAxisTitle.length() > 0) {
+			Point xAxisTitlePosition = new Point(diagramTitleLowerEnd);
+			xAxisTitlePosition.translate(25, 0);
+			xAxisTitlePosition.setY(size.getY() - diagramContentMargin.get(3));
+
+			doc.appendChild(doc.createText(xAxisTitlePosition, xAxisTitle));
+
+			// TODO calculate multi line title size, place it appropriately and
+			// calculate the right shift
+			lowerEndShift = 18;
+		}
 
 		// Set the new margins according to the title
-		diagramContentMargin.set(0, (int) diagramTitleLowerEnd.getY() + 17);
+		diagramContentMargin.set(0, (int) diagramTitleLowerEnd.getY() + 9);
 		diagramContentMargin.set(1, diagramContentMargin.get(1) + 20);
+		diagramContentMargin.set(2, diagramContentMargin.get(2) + lowerEndShift);
 		diagramContentMargin.set(3, diagramContentMargin.get(3) + 10);
 	}
 

@@ -15,6 +15,9 @@ public class SvgGridOptions extends SvgOptions {
 	public String xLines;
 	public String yLines;
 	
+	public String xUnit;
+	public String yUnit;
+	
 	public List<String> xCategories;
 	
 	public GridStyle gridStyle;
@@ -37,6 +40,9 @@ public class SvgGridOptions extends SvgOptions {
 		
 		this.xLines = options.getxLines();
 		this.yLines = options.getyLines();
+		
+		this.xUnit = options.getxUnit();
+		this.yUnit = options.getyUnit();
 		
 		if(options.getPoints().getXType() == XType.CATEGORIAL)
 			this.xCategories = ((CategorialPointListList) options.getPoints()).getCategoryNames();

@@ -48,18 +48,21 @@ public abstract class SvgGridCreator extends SvgCreator {
 	protected void beforeCreate() {
 		super.beforeCreate();
 
-		// Add extra margins for label placing for all diagrams except function
-		// plots.
+		// Add extra margins for label placement for all diagrams except
+		// function plots.
 		if (options.diagramType != DiagramType.FunctionPlot) {
 			diagramContentMargin.set(2, diagramContentMargin.get(2) + 10);
 			diagramContentMargin.set(3, diagramContentMargin.get(3) + 20);
 		}
 
-		// Prepare either a coordinate system with metric or with categorial x axis
-		if(options.xCategories == null)
-			cs = new CoordinateSystem(options.xRange, options.yRange, options.size, diagramContentMargin, options.pi);
+		// Prepare either a coordinate system with a metric or categorial x
+		// axis
+		if (options.xCategories == null)
+			cs = new CoordinateSystem(options.xRange, options.yRange, options.size, diagramContentMargin, options.pi,
+					options.xUnit, options.yUnit);
 		else
-			cs = new CoordinateSystem(options.xCategories, options.yRange, options.size, diagramContentMargin);
+			cs = new CoordinateSystem(options.xCategories, options.yRange, options.size, diagramContentMargin,
+					options.xUnit, options.yUnit);
 		overlays = new OverlayList(cs);
 
 		SvgViewboxPainter svgViewboxPainter = new SvgViewboxPainter(cs, options.size);
@@ -71,13 +74,15 @@ public abstract class SvgGridCreator extends SvgCreator {
 	protected void create() {
 		super.create();
 
+		// Paint the grid to the document
 		SvgGridPainter svgGridPainter = new SvgGridPainter(cs, getXAxisStyle(), getYAxisStyle(), options.gridStyle);
-
 		svgGridPainter.paintToSvgDocument(doc, viewbox, options.outputDevice);
 		svgGridPainter.prepareLegendRenderer(legendRenderer, options.outputDevice, Integer.MAX_VALUE);
 
+		// Store the audio overlays of the grid for future use
 		svgGridPainter.addOverlaysToList(overlays);
 
+		// Paint reference lines if requested
 		if (options.xLines != null || options.yLines != null) {
 			ArrayList<ReferenceLine> lines = ReferenceLine.fromString(Direction.X_LINE, options.xLines);
 			lines.addAll(ReferenceLine.fromString(Direction.Y_LINE, options.yLines));
@@ -97,6 +102,16 @@ public abstract class SvgGridCreator extends SvgCreator {
 
 	public CoordinateSystem getCs() {
 		return cs;
+	}
+
+	@Override
+	protected String getxAxisTitle() {
+		return options.xRange.getName();
+	}
+
+	@Override
+	protected String getyAxisTitle() {
+		return options.yRange.getName();
 	}
 
 }

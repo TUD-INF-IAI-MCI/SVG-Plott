@@ -122,6 +122,28 @@ public class SvgPlotOptions {
 	public void setyRange(Range yRange) {
 		this.yRange = yRange;
 	}
+	
+	@Parameter(names = { "--xunit", "--xu" }, descriptionKey = "param.xunit")
+	private String xUnit;
+	
+	public String getxUnit() {
+		return xUnit;
+	}
+
+	public void setxUnit(String xUnit) {
+		this.xUnit = xUnit;
+	}
+
+	@Parameter(names = { "--yunit", "--yu" }, descriptionKey = "param.yunit")
+	private String yUnit;
+
+	public String getyUnit() {
+		return yUnit;
+	}
+
+	public void setyUnit(String yUnit) {
+		this.yUnit = yUnit;
+	}
 
 	@Parameter(names = { "--pi", "-p" }, descriptionKey = "param.pi")
 	private boolean pi = false;

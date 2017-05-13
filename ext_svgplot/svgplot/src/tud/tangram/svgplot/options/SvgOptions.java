@@ -30,5 +30,5 @@ public abstract class SvgOptions {
 		this.size = options.getSize();
 		this.outputDevice = options.getOutputDevice();
 		this.colors = options.getColors();
-	};
+	}
 }

@@ -104,6 +104,17 @@ public class SvgScatterPlotCreator extends SvgGridCreator {
 			SvgLineOverlayPainter svgLineOverlayPainter = new SvgLineOverlayPainter(cs, polyLineStrings, options.colors);
 			svgLineOverlayPainter.paintToSvgDocument(doc, viewbox, options.outputDevice);
 		}
+		
+		createDesc();
+	}
+	
+	protected void createDesc() {
+		desc.appendBodyChild(desc.createDiagramTypeDescription(options.diagramType, null,
+				options.title, options.points.size()));
+		
+		desc.appendBodyChild(desc.createAxisPositionDescription(options.diagramType, cs, getXAxisStyle(), getYAxisStyle()));
+		
+		desc.appendBodyChild(desc.createAxisDetailDescription(cs, options.gridStyle));
 	}
 
 	private PointPlotStyle getPointPlotStyle() {

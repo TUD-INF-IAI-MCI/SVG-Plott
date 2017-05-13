@@ -33,7 +33,7 @@ public class HtmlDocument extends Document {
 		appendChild(body);
 	}
 
-	public Node appendBodyChild(Element child) {
+	public Node appendBodyChild(Node child) {
 		return body.appendChild(child);
 	}
 

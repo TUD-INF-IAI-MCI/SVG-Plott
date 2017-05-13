@@ -17,7 +17,7 @@ public class Constants {
 	public static final NumberFormat numberFormat = NumberFormat.getInstance(locale);
 	public static final ResourceBundle bundle = ResourceBundle.getBundle("Bundle");
 	public static final double STROKE_WIDTH = 0.5;
-	public static final List<Integer> MARGIN = Collections.unmodifiableList(Arrays.asList(20, 10, 20, 10));
+	public static final List<Integer> MARGIN = Collections.unmodifiableList(Arrays.asList(15, 10, 15, 10));
 	/** List of letters for function naming */
 	public static final List<String> FN_LIST = Collections
 			.unmodifiableList(Arrays.asList("f", "g", "h", "i", "j", "k", "l", "m", "o", "p", "q", "r"));

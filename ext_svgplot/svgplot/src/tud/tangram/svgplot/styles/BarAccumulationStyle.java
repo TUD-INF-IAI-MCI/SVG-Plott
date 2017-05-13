@@ -23,4 +23,9 @@ public enum BarAccumulationStyle {
 		}
 		
 	}
+	@Override
+	public String toString() {
+		return super.toString().toLowerCase();
+	}
+	
 }

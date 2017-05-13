@@ -129,89 +129,29 @@ public class SvgGraphCreator extends SvgGridCreator {
 	 *            | ???
 	 */
 	private void createDesc(PlotList plotList) {
-		String tab = "    ";
-		String nl = "\n" + tab + tab;
-		int s = 0; // intersection offset counter
-		int e = 0; // extreme point offset counter
-		int r = 0; // root point offset counter
+		
 
-		// general description
 		Node div = desc.appendBodyChild(desc.createDiv("functions"));
-		div.appendChild(desc.createP(SvgTools.translateN("desc.intro", cs.formatX(cs.xAxis.getRange().getFrom()),
-				cs.formatX(cs.xAxis.getRange().getTo()), cs.formatX(cs.xAxis.getTicInterval()),
-				cs.formatY(cs.yAxis.getRange().getFrom()), cs.formatY(cs.yAxis.getRange().getTo()),
-				cs.formatY(cs.yAxis.getTicInterval()), SvgTools.formatName(cs.xAxis.getRange().getName()),
-				SvgTools.formatName(cs.yAxis.getRange().getName()), options.functions.size())));
+		
+		// general description
+		div.appendChild(desc.createFunctionIntro(cs, options.functions.size()));
 
 		// functions
 		if (!options.functions.isEmpty()) {
-			Node ol = div.appendChild(desc.createElement("ul"));
-			int f = 0;
-			for (Function function : options.functions) {
-				Element li = (Element) ol.appendChild(desc.createElement("li"));
-				li.appendChild(desc.createTextElement("span", SvgTools.getFunctionName(f++) + "(x) = "));
-				if (function.hasTitle()) {
-					li.appendChild(desc.createTextElement("strong", function.getTitle() + ":"));
-					li.appendChild(desc.createTextNode(" " + function.getFunction() + nl + tab + tab));
-				} else {
-					li.appendChild(desc.createTextElement("span", function.getFunction()));
-				}
-			}
+			div.appendChild(desc.createFunctionList(options.functions));
 
 			// intersections between functions
-			if (options.functions.size() > 1) {
-				div = desc.appendBodyChild(desc.createDiv("intersections"));
-				boolean hasIntersections = false;
-				for (int i = 0; i < plotList.size() - 1; i++) {
-					for (int k = i + 1; k < plotList.size(); k++) {
-						List<Point> intersections = plotList.get(i).getIntersections(plotList.get(k));
-						if (!intersections.isEmpty()) {
-							hasIntersections = true;
-							div.appendChild(desc.createP(SvgTools.translateN("desc.intersections",
-									SvgTools.getFunctionName(i), SvgTools.getFunctionName(k), intersections.size())));
-							div.appendChild(desc.createPointList(cs, intersections, "S", s));
-							s += intersections.size();
-						}
-					}
-				}
-				if (!hasIntersections) {
-					div.appendChild(desc.createP(SvgTools.translate("desc.intersections_0")));
-				}
+			if (plotList.size() > 1) {
+				desc.appendBodyChild(desc.createFunctionIntersectionList(cs, plotList));
 			}
 		}
 
 		// extreme points & zero
-		for (int i = 0; i < plotList.size(); i++) {
-			div = desc.appendBodyChild(desc.createDiv("function-" + SvgTools.getFunctionName(i)));
-			List<Point> extrema = plotList.get(i).getExtrema();
-			String f = plotList.size() == 1 ? "" : " " + SvgTools.getFunctionName(i);
-			div.appendChild(desc.createP(SvgTools.translateN("desc.extrema", f, extrema.size())));
-			if (!extrema.isEmpty()) {
-				div.appendChild(desc.createPointList(cs, extrema, "E", e));
-				e += extrema.size();
-			}
-			List<Point> roots = plotList.get(i).getRoots();
-			div.appendChild(desc.createP(SvgTools.translateN("desc.roots", roots.size())));
-			if (!roots.isEmpty()) {
-				div.appendChild(desc.createXPointList(cs, roots, r));
-				r += roots.size();
-			}
-		}
+		desc.appendBodyChild(desc.createFunctionExtremaAndZero(cs, plotList));
 
+		// points
 		if (options.points != null && options.points.size() > 0) {
-			div = desc.appendBodyChild(desc.createDiv("points"));
-			div.appendChild(desc.createP(SvgTools.translateN("legend.poi.intro", options.points.size())));
-
-			int j = 0;
-			for (PointList pts : options.points) {
-				if (pts != null && pts.size() > 0) {
-					String text = pts.getName().isEmpty() ? SvgTools.getPointName(j) : pts.getName();
-					div.appendChild(desc.createP(SvgTools.translateN("legend.poi.list", text, pts.size())));
-
-					div.appendChild(desc.createPointList(cs, pts, SvgTools.getPointName(j), 0));
-					j++;
-				}
-			}
+			desc.appendBodyChild(desc.createFunctionPointsDescription(cs, options.points));
 		}
 
 		// integral

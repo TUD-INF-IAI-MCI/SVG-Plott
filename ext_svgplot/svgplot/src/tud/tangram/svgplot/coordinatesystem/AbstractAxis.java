@@ -25,6 +25,9 @@ public abstract class AbstractAxis {
 	protected Range labelRange;
 	protected final DecimalFormat decimalFormat = (DecimalFormat) DecimalFormat.getInstance(Constants.locale);
 	
+	protected String unit;
+	protected String title;
+	
 	/** How much the point position shall be shifted - used for categorial axes.*/
 	protected final double pointOffset;
 	
@@ -37,12 +40,14 @@ public abstract class AbstractAxis {
 	 * @param pointOffset
 	 */
 	public AbstractAxis(double labelOffsetHorizontalX, double labelOffsetHorizontalY, double labelOffsetVerticalX,
-			double labelOffsetVerticalY, double pointOffset) {
+			double labelOffsetVerticalY, double pointOffset, String title, String unit) {
 		this.labelOffsetHorizontalX = labelOffsetHorizontalX;
 		this.labelOffsetHorizontalY = labelOffsetHorizontalY;
 		this.labelOffsetVerticalX = labelOffsetVerticalX;
 		this.labelOffsetVerticalY = labelOffsetVerticalY;
 		this.pointOffset = pointOffset;
+		this.title = title;
+		this.unit = unit;
 	}
 
 	public AxisIterator ticLines() {
@@ -132,5 +137,13 @@ public abstract class AbstractAxis {
 	
 	public Range getLabelRange() {
 		return labelRange;
+	}
+
+	public String getUnit() {
+		return unit;
+	}
+
+	public String getTitle() {
+		return title;
 	}
 }

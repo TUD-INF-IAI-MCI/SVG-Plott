@@ -17,10 +17,10 @@ public class MetricAxis extends AbstractAxis {
 	public final int atomCount;
 	public final List<Double> intervalSteps;
 
-	public MetricAxis(Range axisRange, double size) {
+	public MetricAxis(Range axisRange, double size, String title, String unit) {
 		
 		// Set the label offsets
-		super(-5, 20, -10, 5, 0);
+		super(-5, 20, -10, 5, 0, title, unit);
 		
 		boolean finished = false;
 		double interval = 0;

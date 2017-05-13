@@ -33,7 +33,7 @@ public class CoordinateSystem {
 	 * @param size
 	 * @param diagramContentMargin
 	 */
-	public CoordinateSystem(List<String> xCategories, Range yRange, Point size, List<Integer> diagramContentMargin) {
+	public CoordinateSystem(List<String> xCategories, Range yRange, Point size, List<Integer> diagramContentMargin, String xUnit, String yUnit) {
 		origin = new Point(diagramContentMargin.get(3), diagramContentMargin.get(0));
 
 		this.size = new Point(size);
@@ -42,14 +42,14 @@ public class CoordinateSystem {
 		// this.size.x = Math.min(this.size.x, this.size.y);
 		// this.size.y = this.size.x;
 
-		xAxis = new NominalAxis(xCategories, this.size.getX());
-		yAxis = new MetricAxis(yRange, this.size.getY());
+		xAxis = new NominalAxis(xCategories, this.size.getX(), xUnit);
+		yAxis = new MetricAxis(yRange, this.size.getY(), yRange.getName(), yUnit);
 
 		this.pi = false;
 	}
 
-	public CoordinateSystem(Range xRange, Range yRange, Point size, List<Integer> margin) {
-		this(xRange, yRange, size, margin, false);
+	public CoordinateSystem(Range xRange, Range yRange, Point size, List<Integer> margin, String xUnit, String yUnit) {
+		this(xRange, yRange, size, margin, false, xUnit, yUnit);
 	}
 
 	/**
@@ -62,7 +62,7 @@ public class CoordinateSystem {
 	 * @param diagramContentMargin
 	 * @param pi
 	 */
-	public CoordinateSystem(Range xRange, Range yRange, Point size, List<Integer> diagramContentMargin, boolean pi) {
+	public CoordinateSystem(Range xRange, Range yRange, Point size, List<Integer> diagramContentMargin, boolean pi, String xUnit, String yUnit) {
 		origin = new Point(diagramContentMargin.get(3), diagramContentMargin.get(0));
 
 		this.size = new Point(size);
@@ -71,8 +71,8 @@ public class CoordinateSystem {
 		// this.size.x = Math.min(this.size.x, this.size.y);
 		// this.size.y = this.size.x;
 
-		xAxis = new MetricAxis(xRange, this.size.getX());
-		yAxis = new MetricAxis(yRange, this.size.getY());
+		xAxis = new MetricAxis(xRange, this.size.getX(), xRange.getName(), xUnit);
+		yAxis = new MetricAxis(yRange, this.size.getY(), yRange.getName(), yUnit);
 
 		this.pi = pi;
 	}

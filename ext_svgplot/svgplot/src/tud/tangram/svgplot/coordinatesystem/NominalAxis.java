@@ -25,11 +25,12 @@ public class NominalAxis extends AbstractAxis {
 	 * 
 	 * @param categories
 	 * @param size
+	 * @param unit
 	 */
-	public NominalAxis(List<String> categories, double size) {
+	public NominalAxis(List<String> categories, double size, String unit) {
 		// TODO: upon implementation of vertical nominal axes set the values
 		// correctly
-		super(Constants.CHAR_WIDTH, 15, -10, -Constants.CHAR_WIDTH, 0.5);
+		super(Constants.CHAR_WIDTH, 15, -10, -Constants.CHAR_WIDTH, 0.5, null, unit);
 
 		this.categories = categories;
 

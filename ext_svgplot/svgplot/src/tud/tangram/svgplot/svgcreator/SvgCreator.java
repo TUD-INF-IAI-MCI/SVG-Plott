@@ -30,7 +30,7 @@ import tud.tangram.svgplot.xml.SvgDocument;
  *
  */
 public abstract class SvgCreator {
-	
+
 	protected final SvgOptions options;
 
 	protected Point diagramTitleLowerEnd;
@@ -43,18 +43,18 @@ public abstract class SvgCreator {
 
 	/** key to the diagram */
 	protected SvgDocument legend;
-	
+
 	protected LegendRenderer legendRenderer;
 
 	/** description of the diagram in html format */
 	protected Description desc;
-	
+
 	private static final Logger log = LoggerFactory.getLogger(SvgCreator.class);
-	
+
 	public SvgCreator(SvgOptions options) {
 		this.options = options;
 	}
-	
+
 	/**
 	 * Final diagram svg
 	 * 
@@ -63,7 +63,7 @@ public abstract class SvgCreator {
 	public SvgDocument getDoc() {
 		return doc;
 	}
-	
+
 	/**
 	 * key to the diagram
 	 * 
@@ -72,19 +72,20 @@ public abstract class SvgCreator {
 	public SvgDocument getLegend() {
 		return legend;
 	}
-	
+
 	public LegendRenderer getLegendRenderer() {
 		return legendRenderer;
 	}
-	
+
 	/**
 	 * Add an item to the legend.
+	 * 
 	 * @param item
 	 */
 	public void addLegendItem(LegendItem item) {
 		legendRenderer.offer(item);
 	}
-	
+
 	/**
 	 * description of the diagram in html format
 	 * 
@@ -102,7 +103,7 @@ public abstract class SvgCreator {
 	public void setDesc(Description desc) {
 		this.desc = desc;
 	}
-	
+
 	/**
 	 * Main function. Combine all the elements and create all the output files.
 	 * 
@@ -126,8 +127,9 @@ public abstract class SvgCreator {
 		create();
 		afterCreate();
 
-		// TODO do not write to any file here, support getting the results and provide file writing in main
-		
+		// TODO do not write to any file here, support getting the results and
+		// provide file writing in main
+
 		if (options.output != null) {
 			doc.writeTo(new FileOutputStream(options.output));
 			// TODO fix path bug
@@ -147,7 +149,8 @@ public abstract class SvgCreator {
 	 * anything is printed.
 	 */
 	protected void beforeCreate() {
-		SvgTitlePainter svgTitlePainter = new SvgTitlePainter(options.title, options.legendTitle);
+		SvgTitlePainter svgTitlePainter = new SvgTitlePainter(options.size, options.title, options.legendTitle,
+				getxAxisTitle(), getyAxisTitle());
 
 		svgTitlePainter.paintToSvgDocument(doc, null, options.outputDevice);
 		svgTitlePainter.prepareLegendRenderer(legendRenderer, options.outputDevice);
@@ -177,21 +180,36 @@ public abstract class SvgCreator {
 		if (options.css != null) {
 			css += "\n\n/* custom */\n";
 			if (new File(options.css).isFile()) {
-				try{
+				try {
 					options.css = new String(Files.readAllBytes(Paths.get(options.css)));
-				}
-				catch (IOException e) {
-					log.warn("Die CSS-Datei {} kann nicht gelesen werden. Fahre ohne zusätzliche CSS-Inhalte fort.", options.css);
+				} catch (IOException e) {
+					log.warn("Die CSS-Datei {} kann nicht gelesen werden. Fahre ohne zusätzliche CSS-Inhalte fort.",
+							options.css);
 					log.debug("Stacktrace", e);
 				}
-			}
-			else {
+			} else {
 				log.warn("Die CSS-Datei {} existiert nicht. Fahre ohne zusätzliche CSS-Inhalte fort.", options.css);
 			}
 			css += options.css;
 		}
-		for(SvgDocument document : documents)
+		for (SvgDocument document : documents)
 			document.appendCss(css);
 	}
-	
+
+	/**
+	 * Get the title of the x axis. FIXME: It is not semantically correct to
+	 * have it here, but it's a requirement of {@link SvgTitlePainter} for now
+	 * 
+	 * @return
+	 */
+	protected abstract String getxAxisTitle();
+
+	/**
+	 * Get the title of the y axis. FIXME: It is not semantically correct to
+	 * have it here, but it's a requirement of {@link SvgTitlePainter} for now
+	 * 
+	 * @return
+	 */
+	protected abstract String getyAxisTitle();
+
 }
