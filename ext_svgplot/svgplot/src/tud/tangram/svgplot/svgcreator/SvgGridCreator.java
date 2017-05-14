@@ -105,13 +105,13 @@ public abstract class SvgGridCreator extends SvgCreator {
 	}
 
 	@Override
-	protected String getxAxisTitle() {
-		return options.xRange.getName();
+	protected String getxAxisLabel() {
+		return options.xRange.getName() + (options.xUnit != null && options.xUnit != "" ? " (" + options.xUnit + ")" : "");
 	}
 
 	@Override
-	protected String getyAxisTitle() {
-		return options.yRange.getName();
+	protected String getyAxisLabel() {
+		return options.yRange.getName() + (options.yUnit != null && options.yUnit != "" ? " (" + options.yUnit + ")" : "");
 	}
 
 }

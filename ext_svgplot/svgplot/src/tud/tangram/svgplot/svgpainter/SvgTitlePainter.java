@@ -24,8 +24,8 @@ public class SvgTitlePainter extends SvgPainter {
 	private String legendTitle;
 	private List<Integer> diagramContentMargin;
 	private Point diagramTitleLowerEnd;
-	private String xAxisTitle;
-	private String yAxisTitle;
+	private String xAxisLabel;
+	private String yAxislabel;
 	private Point size;
 
 	/**
@@ -34,17 +34,17 @@ public class SvgTitlePainter extends SvgPainter {
 	 *            | the title of the graphics document
 	 * @param legendTitle
 	 *            | the title of the legend document
-	 * @param xAxisTitle
-	 *            | the title for a potential x axis
-	 * @param yAxisTitle
-	 *            |the title for a potential y axis
+	 * @param xAxisLabel
+	 *            | the label for a potential x axis
+	 * @param yAxislabel
+	 *            |the label for a potential y axis
 	 */
-	public SvgTitlePainter(Point size, String title, String legendTitle, String xAxisTitle, String yAxisTitle) {
+	public SvgTitlePainter(Point size, String title, String legendTitle, String xAxisLabel, String yAxisLabel) {
 		this.title = title;
 		this.legendTitle = legendTitle;
 		this.diagramContentMargin = new ArrayList<>(Constants.MARGIN);
-		this.xAxisTitle = xAxisTitle;
-		this.yAxisTitle = yAxisTitle;
+		this.xAxisLabel = xAxisLabel;
+		this.yAxislabel = yAxisLabel;
 		this.size = size;
 	}
 
@@ -96,18 +96,18 @@ public class SvgTitlePainter extends SvgPainter {
 		diagramTitleLowerEnd = doc.createTitleText(title, Constants.titlePosition);
 		diagramTitleLowerEnd.translate(0, 8);
 
-		// Create the yAxisTitle further moving the lower end
-		if (yAxisTitle != null && yAxisTitle.length() > 0)
-			doc.appendChild(doc.createText(diagramTitleLowerEnd, yAxisTitle));
+		// Create the yAxislabel further moving the lower end
+		if (yAxislabel != null && yAxislabel.length() > 0)
+			doc.appendChild(doc.createText(diagramTitleLowerEnd, yAxislabel));
 
-		// Create the xAxisTitle
+		// Create the xAxisLabel
 		int lowerEndShift = 0;
-		if (xAxisTitle != null && xAxisTitle.length() > 0) {
+		if (xAxisLabel != null && xAxisLabel.length() > 0) {
 			Point xAxisTitlePosition = new Point(diagramTitleLowerEnd);
 			xAxisTitlePosition.translate(25, 0);
 			xAxisTitlePosition.setY(size.getY() - diagramContentMargin.get(3));
 
-			doc.appendChild(doc.createText(xAxisTitlePosition, xAxisTitle));
+			doc.appendChild(doc.createText(xAxisTitlePosition, xAxisLabel));
 
 			// TODO calculate multi line title size, place it appropriately and
 			// calculate the right shift

@@ -150,7 +150,7 @@ public abstract class SvgCreator {
 	 */
 	protected void beforeCreate() {
 		SvgTitlePainter svgTitlePainter = new SvgTitlePainter(options.size, options.title, options.legendTitle,
-				getxAxisTitle(), getyAxisTitle());
+				getxAxisLabel(), getyAxisLabel());
 
 		svgTitlePainter.paintToSvgDocument(doc, null, options.outputDevice);
 		svgTitlePainter.prepareLegendRenderer(legendRenderer, options.outputDevice);
@@ -197,19 +197,19 @@ public abstract class SvgCreator {
 	}
 
 	/**
-	 * Get the title of the x axis. FIXME: It is not semantically correct to
+	 * Get the label of the x axis. FIXME: It is not semantically correct to
 	 * have it here, but it's a requirement of {@link SvgTitlePainter} for now
 	 * 
 	 * @return
 	 */
-	protected abstract String getxAxisTitle();
+	protected abstract String getxAxisLabel();
 
 	/**
-	 * Get the title of the y axis. FIXME: It is not semantically correct to
+	 * Get the label of the y axis. FIXME: It is not semantically correct to
 	 * have it here, but it's a requirement of {@link SvgTitlePainter} for now
 	 * 
 	 * @return
 	 */
-	protected abstract String getyAxisTitle();
+	protected abstract String getyAxisLabel();
 
 }
