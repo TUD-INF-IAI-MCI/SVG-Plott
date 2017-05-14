@@ -68,7 +68,7 @@ public class BarPlot {
 	 * @param dataSetId
 	 * @return
 	 */
-	public Element getSingleBar(Element parentGroup, Point position, double width, double height, int dataSetId) {
+	public Element getSingleBar(Point position, double width, double height, int dataSetId) {
 		Element group = doc.createGroup();
 		String baseClass = "bar-" + dataSetId;
 		group.setAttribute("class", baseClass + " bar");

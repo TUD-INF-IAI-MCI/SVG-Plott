@@ -6,6 +6,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 import tud.tangram.svgplot.coordinatesystem.CoordinateSystem;
+import tud.tangram.svgplot.coordinatesystem.MetricAxis;
 import tud.tangram.svgplot.coordinatesystem.Range;
 import tud.tangram.svgplot.data.Point;
 import tud.tangram.svgplot.legend.LegendRenderer;
@@ -61,8 +62,7 @@ public class SvgGridPainter extends SvgPainter {
 	 * @param gridStyle
 	 *            may be <code>null</code>
 	 */
-	public SvgGridPainter(CoordinateSystem cs, AxisStyle xAxisStyle, AxisStyle yAxisStyle,
-			GridStyle gridStyle) {
+	public SvgGridPainter(CoordinateSystem cs, AxisStyle xAxisStyle, AxisStyle yAxisStyle, GridStyle gridStyle) {
 		super();
 		this.cs = cs;
 		this.xRange = cs.xAxis.getRange();
@@ -114,8 +114,8 @@ public class SvgGridPainter extends SvgPainter {
 	 */
 	public void addOverlaysToList(OverlayList overlays) {
 		overlays.add(new Overlay(0, 0));
-		for(double x : new double[]{xRange.getFrom(), xRange.getTo()}) {
-			for(double y : new double[]{yRange.getFrom(), yRange.getTo()})
+		for (double x : new double[] { xRange.getFrom(), xRange.getTo() }) {
+			for (double y : new double[] { yRange.getFrom(), yRange.getTo() })
 				overlays.add(new Overlay(x, y));
 		}
 		for (double tic : cs.xAxis.ticLines()) {
@@ -141,7 +141,7 @@ public class SvgGridPainter extends SvgPainter {
 
 		// Skip the zero grid line in x direction if there is an axis line
 		boolean skipZeroX = xAxisStyle == AxisStyle.GRAPH;
-		
+
 		if (gridStyle.showVertical()) {
 			Element xGrid = (Element) grid.appendChild(doc.createGroup("x-grid"));
 			dotDistance = cs.convertYDistance(cs.yAxis.getGridInterval());
@@ -159,7 +159,7 @@ public class SvgGridPainter extends SvgPainter {
 
 		// Skip the zero grid line in y direction if there is an axis line
 		boolean skipZeroY = yAxisStyle == AxisStyle.GRAPH;
-		
+
 		if (gridStyle.showHorizontal()) {
 			Element yGrid = (Element) grid.appendChild(doc.createGroup("y-grid"));
 			dotDistance = cs.convertXDistance(cs.xAxis.getGridInterval());
@@ -201,12 +201,12 @@ public class SvgGridPainter extends SvgPainter {
 	private void createXAxis(SvgDocument doc, Element axes) {
 		double offsetFrom = 0;
 		double offsetTo = 0;
-		
-		if(xAxisStyle == AxisStyle.GRAPH) {
+
+		if (xAxisStyle == AxisStyle.GRAPH) {
 			offsetFrom = -15;
 			offsetTo = 10;
 		}
-		
+
 		Point from = cs.convert(xRange.getFrom(), 0, offsetFrom, 0);
 		Point to = cs.convert(xRange.getTo(), 0, offsetTo, 0);
 
@@ -264,12 +264,12 @@ public class SvgGridPainter extends SvgPainter {
 	private void createYAxis(SvgDocument doc, Element axes) {
 		double offsetFrom = 0;
 		double offsetTo = 0;
-		
-		if(yAxisStyle == AxisStyle.GRAPH) {
+
+		if (yAxisStyle == AxisStyle.GRAPH) {
 			offsetFrom = 15;
 			offsetTo = -10;
 		}
-		
+
 		Point from = cs.convert(0, yRange.getFrom(), 0, offsetFrom);
 		Point to = cs.convert(0, yRange.getTo(), 0, offsetTo);
 
@@ -328,10 +328,12 @@ public class SvgGridPainter extends SvgPainter {
 	public void prepareLegendRenderer(LegendRenderer renderer, OutputDevice device, int priority) {
 		super.prepareLegendRenderer(renderer, device, priority);
 
-		renderer.add(new LegendTextItem(priority,
-				SvgTools.translate("legend.xrange", cs.formatX(cs.xAxis.getRange().getFrom()),
-						cs.formatX(cs.xAxis.getRange().getTo()), SvgTools.formatName(cs.xAxis.getRange().getName())),
-				SvgTools.translate("legend.xtic", cs.formatX(cs.xAxis.getTicInterval()))));
+		if (cs.xAxis instanceof MetricAxis)
+			renderer.add(new LegendTextItem(priority,
+					SvgTools.translate("legend.xrange", cs.formatX(cs.xAxis.getRange().getFrom()),
+							cs.formatX(cs.xAxis.getRange().getTo()),
+							SvgTools.formatName(cs.xAxis.getRange().getName())),
+					SvgTools.translate("legend.xtic", cs.formatX(cs.xAxis.getTicInterval()))));
 
 		renderer.add(new LegendTextItem(priority,
 				SvgTools.translate("legend.yrange", cs.formatY(cs.yAxis.getRange().getFrom()),
@@ -420,9 +422,9 @@ public class SvgGridPainter extends SvgPainter {
 		parent.appendChild(yAxisLine);
 		yAxisLine.setAttribute("id", id);
 	}
-	
+
 	private void createAxisLabels(SvgDocument doc) {
-		if(xAxisStyle != AxisStyle.GRAPH) {
+		if (xAxisStyle != AxisStyle.GRAPH) {
 			double yPos = yRange.getFrom();
 			for (double pos : cs.xAxis.labelPositions()) {
 				Point newPoint = cs.convert(pos, yPos);
@@ -431,8 +433,8 @@ public class SvgGridPainter extends SvgPainter {
 				doc.appendChild(text);
 			}
 		}
-		
-		if(yAxisStyle != AxisStyle.GRAPH) {
+
+		if (yAxisStyle != AxisStyle.GRAPH) {
 			double xPos = xRange.getFrom();
 			for (double pos : cs.yAxis.labelPositions()) {
 				Point newPoint = cs.convert(xPos, pos);

@@ -14,6 +14,9 @@ import tud.tangram.svgplot.coordinatesystem.CoordinateSystem;
 import tud.tangram.svgplot.data.CategorialPointListList;
 import tud.tangram.svgplot.data.Point;
 import tud.tangram.svgplot.data.PointListList.PointList;
+import tud.tangram.svgplot.legend.LegendBarAreaItem;
+import tud.tangram.svgplot.legend.LegendLineItem;
+import tud.tangram.svgplot.legend.LegendRenderer;
 import tud.tangram.svgplot.options.OutputDevice;
 import tud.tangram.svgplot.plotting.BarPlot;
 import tud.tangram.svgplot.styles.BarAccumulationStyle;
@@ -76,10 +79,12 @@ public class SvgBarPainter extends SvgPainter {
 		
 		BarPlot barPlot = new BarPlot(doc, device);
 		
+		// After drawing a bar stores its upper border's y value
 		List<Double> upperPositions = new ArrayList<>(Collections.nCopies(barPointListList.getCategoryCount(), 0.));
 		
 		double availableSpace = cs.convertXDistance(cs.xAxis.getTicInterval());
 		
+		// stacked bars take the whole width, whereas grouped bars only take a fraction each
 		double convertedWidth;
 		if(barAccumulationStyle == BarAccumulationStyle.GROUPED)
 			convertedWidth = (availableSpace - 2 * Constants.HALF_BAR_DISTANCE) / barPointListList.size();
@@ -121,7 +126,7 @@ public class SvgBarPainter extends SvgPainter {
 					log.warn("Der Balken {} ist zu niedrig und wird daher ohne Textur dargestellt.", cs.formatForSpeech(point));
 				}
 				
-				Element bar = barPlot.getSingleBar(group, convertedPosition, convertedWidth, convertedHeight, dataSetNumber);
+				Element bar = barPlot.getSingleBar(convertedPosition, convertedWidth, convertedHeight, dataSetNumber);
 				Element title = doc.createElement("title");
 				title.setTextContent(pointList.getName() + ": " + cs.formatForSpeech(point));
 				bar.appendChild(title);
@@ -137,4 +142,19 @@ public class SvgBarPainter extends SvgPainter {
 		}
 	}
 
+	@Override
+	public void prepareLegendRenderer(LegendRenderer renderer, OutputDevice device) {
+		super.prepareLegendRenderer(renderer, device);
+		
+		int j = 0;
+
+		for (PointList pointList : barPointListList) {
+			if (pointList.size() <= 1) {
+				j++;
+				continue;
+			}
+
+			renderer.add(new LegendBarAreaItem(device, j++, pointList.getName()));
+		}
+	}
 }

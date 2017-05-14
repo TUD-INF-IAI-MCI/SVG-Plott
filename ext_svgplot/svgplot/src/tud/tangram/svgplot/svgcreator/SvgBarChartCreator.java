@@ -49,6 +49,7 @@ public class SvgBarChartCreator extends SvgGridCreator {
 		SvgBarPainter svgBarPainter = new SvgBarPainter(cs, options.barAccumulationStyle, options.points,
 				options.colors);
 		svgBarPainter.paintToSvgDocument(doc, viewbox, options.outputDevice);
+		svgBarPainter.prepareLegendRenderer(legendRenderer, options.outputDevice);
 
 		createDesc();
 	}
