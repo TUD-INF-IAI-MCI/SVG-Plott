@@ -3,6 +3,7 @@ package tud.tangram.svgplot.options;
 import tud.tangram.svgplot.data.CategorialPointListList;
 import tud.tangram.svgplot.data.sorting.SortingType;
 import tud.tangram.svgplot.styles.BarAccumulationStyle;
+import tud.tangram.svgplot.styles.GridStyle;
 
 public class SvgBarChartOptions extends SvgGridOptions {
 
@@ -17,6 +18,9 @@ public class SvgBarChartOptions extends SvgGridOptions {
 		this.barAccumulationStyle = options.getBarAccumulationStyle();
 		this.sortingType = options.getSortingType();
 		this.descending = options.isSortDescending();
+		
+		if(gridStyle == null)
+			gridStyle = GridStyle.HORIZONTAL;
 	}
 
 }
