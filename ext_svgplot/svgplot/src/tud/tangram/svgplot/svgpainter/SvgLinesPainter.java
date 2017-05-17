@@ -95,6 +95,11 @@ public class SvgLinesPainter extends SvgPainter {
 
 		Element linechartGroup = doc.getOrCreateChildGroupById(viewbox, "linecharts");
 
+		// Used to insert the third line before the second one, as
+		// the third is stronger - the second one therefore needs to lie above
+		// it.
+		Element lastBg = null;
+
 		for (PointList pointList : points) {
 			if (pointList.size() <= 1) {
 				j++;
@@ -117,12 +122,21 @@ public class SvgLinesPainter extends SvgPainter {
 			String polyLinePointsString = polyLinePointsBuilder.toString();
 
 			polyLinePoints.put(pointList, polyLinePointsString);
-
+			
 			polyLine.setAttribute("points", polyLinePointsString);
 			polyLineBg.setAttribute("points", polyLinePointsString);
-
-			linechartGroup.appendChild(polyLineBg);
-			linechartGroup.appendChild(polyLine);
+		
+			// Insert the third line before the second
+			if(j == 3 && lastBg != null){
+				linechartGroup.insertBefore(polyLine, lastBg);
+				linechartGroup.insertBefore(polyLineBg, polyLine);
+			}
+			else {
+				linechartGroup.appendChild(polyLineBg);
+				linechartGroup.appendChild(polyLine);
+			}
+			
+			lastBg = polyLineBg;
 		}
 	}
 
