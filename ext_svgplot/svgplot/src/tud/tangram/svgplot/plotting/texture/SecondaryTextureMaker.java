@@ -1,4 +1,4 @@
-package tud.tangram.svgplot.plotting.texture;
+ package tud.tangram.svgplot.plotting.texture;
 
 import org.w3c.dom.Element;
 
@@ -8,23 +8,23 @@ public class SecondaryTextureMaker extends TextureMaker {
 
 	@Override
 	protected String addTigerEmbosserTexture(SvgDocument doc) {
-		String id = "diagonal_line1_SP_T";
+		String id = "dotted_pattern";
 		
 		Element g = doc.getOrCreateChildGroupById(doc.defs, "patterns");
-
-		Element pattern = createPattern(doc, id, 10.16, 10.16);
-
+		
+		Element pattern = createPattern(doc, id, 10., 10.);
+		pattern.setAttribute("fill", "black");
+		
 		Element rect = createRect(doc, 0., 0., "100%", "100%", "white", "none");
-
-		Element line1 = createLine(doc, 5.85, -1.27, 18.55, 11.43, "black", 0.8);
-		Element line2 = createLine(doc, -1.77, 1.27, 8.39, 11.43, "black", 0.8);
-
+		Element circle1 = createCircle(doc, 1.25, 1.25, 0.6);
+		Element circle2 = createCircle(doc, 6.25, 6.25, 0.6);
+		
 		pattern.appendChild(rect);
-		pattern.appendChild(line1);
-		pattern.appendChild(line2);
+		pattern.appendChild(circle1);
+		pattern.appendChild(circle2);
 		
 		g.appendChild(pattern);
-	
+		
 		return id;
 	}
 
@@ -35,24 +35,7 @@ public class SecondaryTextureMaker extends TextureMaker {
 
 	@Override
 	protected String addPinDeviceTexture(SvgDocument doc) {
-		String id = "diagonal_line1_PD";
-		
-		Element g = doc.getOrCreateChildGroupById(doc.defs, "patterns");
-
-		Element pattern = createPattern(doc, id, 10., 10.);
-
-		Element rect = createRect(doc, 0., 0., "100%", "100%", "white", "none");
-
-		Element line1 = createLine(doc, 2.5, -2.5, 17.5, 12.5, "black", 1.3);
-		Element line2 = createLine(doc, -2.5, 2.5, 7.5, 12.5, "black", 1.3);
-
-		pattern.appendChild(rect);
-		pattern.appendChild(line1);
-		pattern.appendChild(line2);
-		
-		g.appendChild(pattern);
-	
-		return id;
+		return addTigerEmbosserTexture(doc);
 	}
 
 }
