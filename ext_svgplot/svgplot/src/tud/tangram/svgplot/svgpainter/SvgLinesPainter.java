@@ -107,7 +107,7 @@ public class SvgLinesPainter extends SvgPainter {
 			polyLineBg.setAttribute("class", "linechart_bg");
 
 			for (Point point : pointList) {
-				Point convertedPoint = cs.convert(point);
+				Point convertedPoint = cs.convertWithOffset(point);
 				polyLinePointsBuilder.append(convertedPoint.x());
 				polyLinePointsBuilder.append(",");
 				polyLinePointsBuilder.append(convertedPoint.y());

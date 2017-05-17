@@ -111,7 +111,7 @@ public class SvgPlotPainter extends SvgPainter {
 			for (List<Point> list : plot) {
 				String op = "M";
 				for (Point point : list) {
-					points += op + cs.convert(point) + " ";
+					points += op + cs.convertWithOffset(point) + " ";
 					op = "L";
 				}
 			}

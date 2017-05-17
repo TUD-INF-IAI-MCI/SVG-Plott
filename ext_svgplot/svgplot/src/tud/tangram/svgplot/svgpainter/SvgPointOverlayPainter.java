@@ -23,17 +23,17 @@ public class SvgPointOverlayPainter extends SvgPainter {
 		this.overlays = overlays;
 		this.cs = cs;
 	}
-	
+
 	@Override
 	protected HashMap<OutputDevice, String> getDeviceCss() {
 		HashMap<OutputDevice, String> deviceCss = new HashMap<>();
-		
+
 		StringBuilder defaultOptions = new StringBuilder();
 		defaultOptions.append("#overlayPoints { stroke: none; stroke-dasharray: none; fill: transparent; }")
 				.append(System.lineSeparator());
-	
+
 		deviceCss.put(OutputDevice.Default, defaultOptions.toString());
-		
+
 		return deviceCss;
 	}
 
@@ -69,8 +69,15 @@ public class SvgPointOverlayPainter extends SvgPainter {
 	 * @return a DOM Element representing the already inserted overlay node.
 	 */
 	protected Element createOverlay(SvgDocument doc, Overlay overlay) {
-		Element circle = doc.createCircle(cs.convert(overlay), Overlay.RADIUS);
-		circle.appendChild(doc.createTitle(cs.formatForSpeech(overlay)));
+		Element circle;
+		if (overlay.isAxisOverlay()) {
+			circle = doc.createCircle(cs.convert(overlay), Overlay.RADIUS);
+			circle.appendChild(doc.createTitle(cs.formatForAxisSpeech(overlay)));
+		}
+		else {
+			circle = doc.createCircle(cs.convertWithOffset(overlay), Overlay.RADIUS);
+			circle.appendChild(doc.createTitle(cs.formatForSpeech(overlay)));
+		}
 		if (overlay.getDescription() != null) {
 			circle.appendChild(doc.createDesc(overlay.getDescription()));
 		}

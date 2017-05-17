@@ -93,6 +93,19 @@ public class CoordinateSystem {
 				- ((y - yAxis.range.getFrom()) * size.getY() / (yAxis.range.getTo() - yAxis.range.getFrom()));
 		return new Point(newX, newY);
 	}
+	
+	/**
+	 * Converts a point from virtual to real coordinates using an offset from the axes.
+	 * 
+	 * @param x
+	 *            | virtual x coordinate
+	 * @param y
+	 *            | virtual y coordinate
+	 * @return real point
+	 */
+	public Point convertWithOffset(double x, double y) {
+		return convert(x + xAxis.getPointOffset(), y + yAxis.getPointOffset());
+	}
 
 	/**
 	 * Converts a point from virtual to real coordinates.
@@ -103,6 +116,17 @@ public class CoordinateSystem {
 	 */
 	public Point convert(Point point) {
 		return convert(point.getX(), point.getY());
+	}
+	
+	/**
+	 * Converts a point from virtual to real coordinates using an offset from the axes.
+	 * 
+	 * @param point
+	 *            | virtual coordinates
+	 * @return real point
+	 */
+	public Point convertWithOffset(Point point) {
+		return convertWithOffset(point.getX(), point.getY());
 	}
 
 	/**
@@ -244,5 +268,18 @@ public class CoordinateSystem {
 	public String formatForSpeech(Point point) {
 		return ((point.getName() != null && !point.getName().isEmpty()) ? point.getName() + " " : "")
 				+ formatXForSymbolSpeech(point.getX()) + " / " + formatY(point.getY());
+	}
+	
+	/**
+	 * Formats a Point that it is optimized for speech output for an axis audio label.
+	 * 
+	 * @param point
+	 *            The point that should be transformed into a textual
+	 *            representation
+	 * @return formated string for the point with '/' as delimiter
+	 */
+	public String formatForAxisSpeech(Point point) {
+		return ((point.getName() != null && !point.getName().isEmpty()) ? point.getName() + " " : "")
+				+ formatXForAxisSpeech(point.getX()) + " / " + formatY(point.getY());
 	}
 }

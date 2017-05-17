@@ -28,9 +28,9 @@ public abstract class AbstractAxis {
 	protected String unit;
 	protected String title;
 	
-	/** How much the point position shall be shifted - used for categorial axes.*/
+	/** How much the point position shall be shifted - used for nominal axes.*/
 	protected final double pointOffset;
-	
+
 	/**
 	 * Constructor setting the label and point offsets.
 	 * @param labelOffsetHorizontalX
@@ -145,5 +145,9 @@ public abstract class AbstractAxis {
 
 	public String getTitle() {
 		return title;
+	}
+	
+	public double getPointOffset() {
+		return pointOffset;
 	}
 }

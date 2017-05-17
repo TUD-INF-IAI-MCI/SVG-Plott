@@ -123,7 +123,7 @@ public class SvgPointsPainter extends SvgPainter {
 			for (Point p : pl) {
 				for (PointType pt : PointType.values()) {
 					Element paintedPoint = pointPlot.paintPoint(pt == PointType.BG ? backgroundSubGroup : pointSubGroup,
-							pt, cs.convert(p), j);
+							pt, cs.convertWithOffset(p), j);
 					if (paintedPoint != null) {
 						paintedPoint.appendChild(doc.createTitle(cs.formatForSpeech(p)));
 

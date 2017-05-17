@@ -145,7 +145,7 @@ public class IntegralPlot {
 
 							Collections.reverse(otherPath);
 							for (Point point2 : otherPath) {
-								backPoints += op + cs.convert(point2) + " ";
+								backPoints += op + cs.convertWithOffset(point2) + " ";
 								op = "L";
 							}
 							points += backPoints;
@@ -158,10 +158,10 @@ public class IntegralPlot {
 
 					// add the point to the path list
 					if (point.getX() <= to && point.getX() >= from)
-						points += op + cs.convert(point) + " ";
+						points += op + cs.convertWithOffset(point) + " ";
 					else {
 						if (point.getX() >= from) {
-							points += op + cs.convert(new Point(to, intersectionPlot != null ? point.getY() : 0)) + " ";
+							points += op + cs.convertWithOffset(new Point(to, intersectionPlot != null ? point.getY() : 0)) + " ";
 							break;
 						}
 					}
@@ -178,7 +178,7 @@ public class IntegralPlot {
 						path = (Element) graph.appendChild(doc.createElement("path"));
 
 						// clear points
-						points = "M" + cs.convert(point) + " ";
+						points = "M" + cs.convertWithOffset(point) + " ";
 					}
 					/******************* ROOT END ***********************/
 					op = "L";
