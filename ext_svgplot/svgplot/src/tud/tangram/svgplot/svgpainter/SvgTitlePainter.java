@@ -94,7 +94,7 @@ public class SvgTitlePainter extends SvgPainter {
 		doc.paintBackground();
 
 		diagramTitleLowerEnd = doc.createTitleText(title, Constants.titlePosition);
-		diagramTitleLowerEnd.translate(7, 18);
+		diagramTitleLowerEnd.translate(7, 13);
 
 		// Create the yAxislabel further moving the lower end
 		if (yAxislabel != null && yAxislabel.length() > 0)
@@ -103,7 +103,7 @@ public class SvgTitlePainter extends SvgPainter {
 		diagramTitleLowerEnd.translate(-7, -10);
 
 		// Create the xAxisLabel
-		int lowerEndShift = 0;
+		int lowerEndShift = 5;
 		if (xAxisLabel != null && xAxisLabel.length() > 0) {
 			Point xAxisTitlePosition = new Point(diagramTitleLowerEnd);
 			xAxisTitlePosition.translate(25, 0);
