@@ -100,7 +100,7 @@ public enum DiagramType {
 	public static DiagramType fromString(String name) {
 		if (name == null)
 			throw new NullPointerException("the name cannot be null");
-		DiagramType diagramType = SYNONYM_MAP.get(name);
+		DiagramType diagramType = SYNONYM_MAP.get(name.toLowerCase());
 		if (diagramType == null)
 			throw new IllegalArgumentException("Not a valid diagram type: " + name);
 		return diagramType;
