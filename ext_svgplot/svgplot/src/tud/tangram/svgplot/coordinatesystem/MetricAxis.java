@@ -12,7 +12,7 @@ import tud.tangram.svgplot.utils.Constants;
  *         Universität Dresden / MCI 2014
  *
  */
-public class MetricAxis extends AbstractAxis {
+public class MetricAxis extends Axis {
 	public final double atom;
 	public final int atomCount;
 	public final List<Double> intervalSteps;

@@ -5,7 +5,7 @@ import java.util.NoSuchElementException;
 
 import tud.tangram.svgplot.utils.Constants;
 
-public abstract class AbstractAxis {
+public abstract class Axis {
 
 	// The following offsets can and shall be overwritten by child classes
 	/** X offset of horizontal axis labels */
@@ -39,7 +39,7 @@ public abstract class AbstractAxis {
 	 * @param labelOffsetVerticalY
 	 * @param pointOffset
 	 */
-	public AbstractAxis(double labelOffsetHorizontalX, double labelOffsetHorizontalY, double labelOffsetVerticalX,
+	public Axis(double labelOffsetHorizontalX, double labelOffsetHorizontalY, double labelOffsetVerticalX,
 			double labelOffsetVerticalY, double pointOffset, String title, String unit) {
 		this.labelOffsetHorizontalX = labelOffsetHorizontalX;
 		this.labelOffsetHorizontalY = labelOffsetHorizontalY;

@@ -13,8 +13,8 @@ import tud.tangram.svgplot.data.Point;
  */
 public class CoordinateSystem {
 
-	public final AbstractAxis xAxis;
-	public final AbstractAxis yAxis;
+	public final Axis xAxis;
+	public final Axis yAxis;
 
 	public final boolean pi;
 

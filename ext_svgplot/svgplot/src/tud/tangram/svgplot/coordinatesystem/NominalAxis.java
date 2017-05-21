@@ -10,7 +10,7 @@ import tud.tangram.svgplot.utils.Constants;
 /**
  * Axis for displaying nominals.
  */
-public class NominalAxis extends AbstractAxis {
+public class NominalAxis extends Axis {
 
 	static final Logger log = LoggerFactory.getLogger(NominalAxis.class);
 
