@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height="297mm" version="1.1" width="210mm">
+    <defs>
+        <style type="text/css"><![CDATA[
+            /* Default CSS for Title Painter */
+            svg { fill: none; stroke: #000000; stroke-width: 0.5; }
+            text { font-family: serif; font-size: 36pt; fill: black; stroke: none; }
+            @media print{
+            	text { font-family: 'Braille DE Computer'; font-size: 36pt; fill: black; stroke: none; }
+            }
+            
+            
+        
+            /* Default CSS for Grid Painter */
+            #grid { stroke: #777777; }
+            #axes, #reference-lines, .box { stroke: #111111; fill: transparent; }
+            
+            
+        
+            /* Default CSS for Bar Painter */
+            .bar-filling { stroke: none }
+            .bar-border { fill: white }
+            
+        
+            /* Default CSS for Point Overlay Painter */
+            #overlayPoints { stroke: none; stroke-dasharray: none; fill: transparent; }
+            
+            
+        ]]></style>
+        <g id="patterns">
+            <pattern height="10.0" id="black" patternUnits="userSpaceOnUse" width="10.0">
+                <rect fill="black" height="100%" stroke="none" width="100%" x="0.0" y="0.0"/>
+            </pattern>
+            <pattern fill="black" height="10.0" id="dotted_pattern" patternUnits="userSpaceOnUse" width="10.0">
+                <rect fill="white" height="100%" stroke="none" width="100%" x="0.0" y="0.0"/>
+                <circle cx="1.25" cy="1.25" r="0.6"/>
+                <circle cx="6.25" cy="6.25" r="0.6"/>
+            </pattern>
+            <pattern height="10.16" id="diagonal_line1_SP_T" patternUnits="userSpaceOnUse" width="10.16">
+                <rect fill="white" height="100%" stroke="none" width="100%" x="0.0" y="0.0"/>
+                <line stroke="black" stroke-width="0.8" x1="5.85" x2="18.55" y1="-1.27" y2="11.43"/>
+                <line stroke="black" stroke-width="0.8" x1="-1.77" x2="8.39" y1="1.27" y2="11.43"/>
+            </pattern>
+        </g>
+    </defs>
+    <title>Example Grouped Bars 1</title>
+    <text id="title" x="10mm" y="25mm">Example Grouped Bars 1</text>
+    <rect height="100%" id="background" width="100%" x="0" y="0"/>
+    <svg viewBox="0 0 210 297">
+        <defs>
+            <clipPath id="plot-area">
+                <rect height="217" width="140" x="40" y="50"/>
+            </clipPath>
+        </defs>
+        <g id="grid">
+            <g id="y-grid" stroke-dasharray="0.5, 1.833">
+                <line x1="39.75" x2="180.25" y1="267" y2="267"/>
+                <line x1="39.75" x2="180.25" y1="239.875" y2="239.875"/>
+                <line x1="39.75" x2="180.25" y1="212.75" y2="212.75"/>
+                <line x1="39.75" x2="180.25" y1="185.625" y2="185.625"/>
+                <line x1="39.75" x2="180.25" y1="158.5" y2="158.5"/>
+                <line x1="39.75" x2="180.25" y1="131.375" y2="131.375"/>
+                <line x1="39.75" x2="180.25" y1="104.25" y2="104.25"/>
+                <line x1="39.75" x2="180.25" y1="77.125" y2="77.125"/>
+                <line x1="39.75" x2="180.25" y1="50" y2="50"/>
+            </g>
+        </g>
+        <g id="axes">
+            <g class="poi_symbol_bg" id="axes_spacer">
+                <line id="x-axis-smaller" x1="40" x2="180" y1="267" y2="267"/>
+                <g id="x-tics">
+                    <line x1="40" x2="40" y1="267" y2="273"/>
+                    <line x1="86.667" x2="86.667" y1="267" y2="273"/>
+                    <line x1="133.333" x2="133.333" y1="267" y2="273"/>
+                    <line x1="180" x2="180" y1="267" y2="273"/>
+                </g>
+                <line id="y-axis-smaller" x1="40" x2="40" y1="267" y2="50"/>
+                <line id="y-axis-bigger" x1="180" x2="180" y1="267" y2="50"/>
+                <g id="y-tics">
+                    <line x1="34" x2="40" y1="267" y2="267"/>
+                    <line x1="34" x2="40" y1="239.875" y2="239.875"/>
+                    <line x1="34" x2="40" y1="212.75" y2="212.75"/>
+                    <line x1="34" x2="40" y1="185.625" y2="185.625"/>
+                    <line x1="34" x2="40" y1="158.5" y2="158.5"/>
+                    <line x1="34" x2="40" y1="131.375" y2="131.375"/>
+                    <line x1="34" x2="40" y1="104.25" y2="104.25"/>
+                    <line x1="34" x2="40" y1="77.125" y2="77.125"/>
+                    <line x1="34" x2="40" y1="50" y2="50"/>
+                    <line x1="180" x2="186" y1="267" y2="267"/>
+                    <line x1="180" x2="186" y1="239.875" y2="239.875"/>
+                    <line x1="180" x2="186" y1="212.75" y2="212.75"/>
+                    <line x1="180" x2="186" y1="185.625" y2="185.625"/>
+                    <line x1="180" x2="186" y1="158.5" y2="158.5"/>
+                    <line x1="180" x2="186" y1="131.375" y2="131.375"/>
+                    <line x1="180" x2="186" y1="104.25" y2="104.25"/>
+                    <line x1="180" x2="186" y1="77.125" y2="77.125"/>
+                    <line x1="180" x2="186" y1="50" y2="50"/>
+                </g>
+            </g>
+            <line id="x-axis-smaller" x1="40" x2="180" y1="267" y2="267"/>
+            <g id="x-tics">
+                <line x1="40" x2="40" y1="267" y2="273"/>
+                <line x1="86.667" x2="86.667" y1="267" y2="273"/>
+                <line x1="133.333" x2="133.333" y1="267" y2="273"/>
+                <line x1="180" x2="180" y1="267" y2="273"/>
+            </g>
+            <line id="y-axis-smaller" x1="40" x2="40" y1="267" y2="50"/>
+            <line id="y-axis-bigger" x1="180" x2="180" y1="267" y2="50"/>
+            <g id="y-tics">
+                <line x1="34" x2="40" y1="267" y2="267"/>
+                <line x1="34" x2="40" y1="239.875" y2="239.875"/>
+                <line x1="34" x2="40" y1="212.75" y2="212.75"/>
+                <line x1="34" x2="40" y1="185.625" y2="185.625"/>
+                <line x1="34" x2="40" y1="158.5" y2="158.5"/>
+                <line x1="34" x2="40" y1="131.375" y2="131.375"/>
+                <line x1="34" x2="40" y1="104.25" y2="104.25"/>
+                <line x1="34" x2="40" y1="77.125" y2="77.125"/>
+                <line x1="34" x2="40" y1="50" y2="50"/>
+                <line x1="180" x2="186" y1="267" y2="267"/>
+                <line x1="180" x2="186" y1="239.875" y2="239.875"/>
+                <line x1="180" x2="186" y1="212.75" y2="212.75"/>
+                <line x1="180" x2="186" y1="185.625" y2="185.625"/>
+                <line x1="180" x2="186" y1="158.5" y2="158.5"/>
+                <line x1="180" x2="186" y1="131.375" y2="131.375"/>
+                <line x1="180" x2="186" y1="104.25" y2="104.25"/>
+                <line x1="180" x2="186" y1="77.125" y2="77.125"/>
+                <line x1="180" x2="186" y1="50" y2="50"/>
+            </g>
+        </g>
+        <g id="barchart-0">
+            <g class="bar-0 bar">
+                <rect class="bar-0-border  bar-border" height="162.75" width="13.556" x="43" y="104.25"/>
+                <rect class="bar-0-filling bar-filling" fill="url(#black)" height="158.75" width="9.556" x="45" y="106.25"/>
+                <title> Reihe a : Kat.1  / 3</title>
+                <desc> Reihe a , blau</desc>
+            </g>
+            <g class="bar-0 bar">
+                <rect class="bar-0-border  bar-border" height="217" width="13.556" x="89.667" y="50"/>
+                <rect class="bar-0-filling bar-filling" fill="url(#black)" height="213" width="9.556" x="91.667" y="52"/>
+                <title> Reihe a : Kat.2  / 4</title>
+                <desc> Reihe a , blau</desc>
+            </g>
+            <g class="bar-0 bar">
+                <rect class="bar-0-border  bar-border" height="217" width="13.556" x="136.333" y="50"/>
+                <rect class="bar-0-filling bar-filling" fill="url(#black)" height="213" width="9.556" x="138.333" y="52"/>
+                <title> Reihe a : Kat.3  / 4</title>
+                <desc> Reihe a , blau</desc>
+            </g>
+        </g>
+        <g id="barchart-1">
+            <g class="bar-1 bar">
+                <rect class="bar-1-border  bar-border" height="108.5" width="13.556" x="56.556" y="158.5"/>
+                <rect class="bar-1-filling bar-filling" fill="url(#dotted_pattern)" height="104.5" width="9.556" x="58.556" y="160.5"/>
+                <title> Reihe b : Kat.1  / 2</title>
+                <desc> Reihe b , orange</desc>
+            </g>
+            <g class="bar-1 bar">
+                <rect class="bar-1-border  bar-border" height="162.75" width="13.556" x="103.222" y="104.25"/>
+                <rect class="bar-1-filling bar-filling" fill="url(#dotted_pattern)" height="158.75" width="9.556" x="105.222" y="106.25"/>
+                <title> Reihe b : Kat.2  / 3</title>
+                <desc> Reihe b , orange</desc>
+            </g>
+            <g class="bar-1 bar">
+                <rect class="bar-1-border  bar-border" height="162.75" width="13.556" x="149.889" y="104.25"/>
+                <rect class="bar-1-filling bar-filling" fill="url(#dotted_pattern)" height="158.75" width="9.556" x="151.889" y="106.25"/>
+                <title> Reihe b : Kat.3  / 3</title>
+                <desc> Reihe b , orange</desc>
+            </g>
+        </g>
+        <g id="barchart-2">
+            <g class="bar-2 bar">
+                <rect class="bar-2-border  bar-border" height="54.25" width="13.556" x="70.111" y="212.75"/>
+                <rect class="bar-2-filling bar-filling" fill="url(#diagonal_line1_SP_T)" height="50.25" width="9.556" x="72.111" y="214.75"/>
+                <title> Reihe c: Kat.1  / 1</title>
+                <desc> Reihe c, grün</desc>
+            </g>
+            <g class="bar-2 bar">
+                <rect class="bar-2-border  bar-border" height="108.5" width="13.556" x="116.778" y="158.5"/>
+                <rect class="bar-2-filling bar-filling" fill="url(#diagonal_line1_SP_T)" height="104.5" width="9.556" x="118.778" y="160.5"/>
+                <title> Reihe c: Kat.2  / 2</title>
+                <desc> Reihe c, grün</desc>
+            </g>
+            <g class="bar-2 bar">
+                <rect class="bar-2-border  bar-border" height="54.25" width="13.556" x="163.444" y="212.75"/>
+                <rect class="bar-2-filling bar-filling" fill="url(#diagonal_line1_SP_T)" height="50.25" width="9.556" x="165.444" y="214.75"/>
+                <title> Reihe c: Kat.3  / 1</title>
+                <desc> Reihe c, grün</desc>
+            </g>
+        </g>
+        <g id="overlays">
+            <g id="overlayPoints">
+                <circle cx="63.333" cy="267" r="2.9">
+                    <title>Kat.1  / 0</title>
+                </circle>
+                <circle cx="40" cy="50" r="2.9">
+                    <title>|Kat.1  / 4</title>
+                </circle>
+                <circle cx="40" cy="239.875" r="2.9">
+                    <title>|Kat.1  / 0,5</title>
+                </circle>
+                <circle cx="40" cy="212.75" r="2.9">
+                    <title>|Kat.1  / 1</title>
+                </circle>
+                <circle cx="40" cy="185.625" r="2.9">
+                    <title>|Kat.1  / 1,5</title>
+                </circle>
+                <circle cx="40" cy="158.5" r="2.9">
+                    <title>|Kat.1  / 2</title>
+                </circle>
+                <circle cx="40" cy="131.375" r="2.9">
+                    <title>|Kat.1  / 2,5</title>
+                </circle>
+                <circle cx="40" cy="104.25" r="2.9">
+                    <title>|Kat.1  / 3</title>
+                </circle>
+                <circle cx="40" cy="77.125" r="2.9">
+                    <title>|Kat.1  / 3,5</title>
+                </circle>
+                <circle cx="86.667" cy="267" r="2.9">
+                    <title>Kat.1 |Kat.2  / 0</title>
+                </circle>
+                <circle cx="86.667" cy="50" r="2.9">
+                    <title>Kat.1 |Kat.2  / 4</title>
+                </circle>
+                <circle cx="133.333" cy="267" r="2.9">
+                    <title>Kat.2 |Kat.3  / 0</title>
+                </circle>
+                <circle cx="133.333" cy="50" r="2.9">
+                    <title>Kat.2 |Kat.3  / 4</title>
+                </circle>
+                <circle cx="180" cy="267" r="2.9">
+                    <title>Kat.3 | / 0</title>
+                </circle>
+                <circle cx="180" cy="50" r="2.9">
+                    <title>Kat.3 | / 4</title>
+                </circle>
+                <circle cx="180" cy="239.875" r="2.9">
+                    <title>Kat.3 | / 0,5</title>
+                </circle>
+                <circle cx="180" cy="212.75" r="2.9">
+                    <title>Kat.3 | / 1</title>
+                </circle>
+                <circle cx="180" cy="185.625" r="2.9">
+                    <title>Kat.3 | / 1,5</title>
+                </circle>
+                <circle cx="180" cy="158.5" r="2.9">
+                    <title>Kat.3 | / 2</title>
+                </circle>
+                <circle cx="180" cy="131.375" r="2.9">
+                    <title>Kat.3 | / 2,5</title>
+                </circle>
+                <circle cx="180" cy="104.25" r="2.9">
+                    <title>Kat.3 | / 3</title>
+                </circle>
+                <circle cx="180" cy="77.125" r="2.9">
+                    <title>Kat.3 | / 3,5</title>
+                </circle>
+            </g>
+        </g>
+    </svg>
+    <text x="46.5mm" y="282mm">Kat.1 </text>
+    <text x="93.167mm" y="282mm">Kat.2 </text>
+    <text x="139.833mm" y="282mm">Kat.3 </text>
+    <text text-anchor="end" x="30mm" y="272mm">0</text>
+    <text text-anchor="end" x="30mm" y="217.75mm">1</text>
+    <text text-anchor="end" x="30mm" y="163.5mm">2</text>
+    <text text-anchor="end" x="30mm" y="109.25mm">3</text>
+    <text text-anchor="end" x="30mm" y="55mm">4</text>
+</svg>

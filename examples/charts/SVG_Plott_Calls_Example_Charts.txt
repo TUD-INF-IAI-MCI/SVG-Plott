@@ -1,0 +1,57 @@
+
+#### EXAMENPLARY CALLS SVG PLOTT CHART GENERATION #####
+
+### CALL FOR SCATTERPLOT example_1_scatterplot
+
+$ java - jar ../ svg - plott . jar -- d i a g r a m t y p e S c a t t e r P l o t
+-- ti tle P u n k t d i a g r a m m -- c s v t y p e dots -- c s v o r i e n t a t i o n
+h o r i z o n t a l
+-- c s v p a t h ./ p o i n t s _ h . csv -- o u t p u t P u n k t d i a g r a m m . svg
+-- size "210 ,148" -- a u t o s c a l e
+
+### CALL FOR SCATTERPLOT WITH TRENDLINES 
+
+## example_2_scatterplot 
+
+# linear trendline 
+
+java - jar ../ svg - plott . jar -- d i a g r a m t y p e S c a t t e r P l o t
+-- ti tle T r e n d l i n i e n -- c s v t y p e x _ a l i g n e d -- c s v o r i e n t a t i o n v e r t i c a l -- c s v p a t h ./ tr end . csv
+-- o u t p u t T r e n d l i n i e n _ L R . svg -- size "210 ,148" -- a u t o s c a l e
+-- t r e n d l i n e L i n e a r R e g r e s s i o n
+
+# exponential smoothing trendline
+
+java - jar ../ svg - pl ott . jar -- d i a g r a m t y p e S c a t t e r P l o t
+-- d e v i c e S c r e e n C o l o r -- co lor rot blau -- ti tle T r e n d l i n i e n
+-- c s v t y p e x _ a l i g n e d -- c s v o r i e n t a t i o n v e r t i c a l
+-- c s v p a t h ./ tr end . csv -- o u t p u t T r e n d l i n i e n _ E S . svg
+-- size "210 ,148" -- a u t o s c a l e -- t r e n d l i n e E x p o n e n t i a l S m o o t h i n g
+0.5
+
+### CALL FOR LINE CHART example_3_linechart
+
+java - jar ../ svg - plott . jar -- d i a g r a m t y p e L i n e c h a r t
+-- ti tle L i n i e n d i a g r a m m -- c s v t y p e x _ a l i g n e d
+-- c s v o r i e n t a t i o n v e r t i c a l -- c s v p a t h ./ l i n e s _ v . csv
+-- o u t p u t L i n i e n d i a g r a m m . svg -- size "210 ,148" -- a u t o s c a l e
+-- hg rid on -- x r a n g e " Da uer : : 0 : 1 " -- xunit "s"
+
+### CALL FOR BAR CHART  example_4_barchart
+ 
+java - jar ../ svg - pl ott . jar -- d i a g r a m t y p e B a r C h a r t
+-- ti tle " G r u p p i e r t e s B a l k e n d i a g r a m m "
+-- c s v t y p e x _ a l i g n e d _ c a t e g o r i e s -- c s v o r i e n t a t i o n v e r t i c a l
+-- c s v p a t h ./ b a r s _ g _ v . csv -- o u t p u t B a l k e n d i a g r a m m _ g r u p p i e r t .
+svg
+-- size "210 ,148" -- a u t o s c a l e -- hgrid on
+
+### CALL FOR STACKED BARS example_5_stacked_bars
+
+java - jar ../ svg - plott.jar -- d i a g r a m t y p e B a r C h a r t
+-- ti tle " G e s t a p e l t e s B a l k e n d i a g r a m m " -- b a r a c c u m u l a t i o n
+s t a c k e d
+-- d e v i c e S c r e e n C o l o r -- c s v t y p e x _ a l i g n e d _ c a t e g o r i e s
+-- c s v o r i e n t a t i o n v e r t i c a l -- c s v p a t h ./ b a r s _ s _ v . csv
+-- o u t p u t B a l k e n d i a g r a m m _ g e s t a p e l t . svg -- size "210 ,148"
+-- a u t o s c a l e -- hgrid on

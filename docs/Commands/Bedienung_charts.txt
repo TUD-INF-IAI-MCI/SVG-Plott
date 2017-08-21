@@ -1,0 +1,105 @@
+Usage: java -jar svgplot.jar [options] functions
+  Options:
+    --as, --autoscale
+      Wenn angegeben, wird das Diagramm automatisch auf den Datenbereich 
+      skaliert, wobei eine angegebene --xrange bzw. --yrange den minimal 
+      Rahmen darstellen. Wenn "--diagramtype FunctionPlot" gesetzt ist, wird 
+      der Parameter ignoriert. [--autoscale]
+      Default: false
+
+    --css, -c
+      Direkte Angabe von zusätzlichen CSS-Anweisungen oder Pfad zu einer 
+      CSS-Datei [--css "#grid { stroke: #444444 }"] oder [--css 
+      stylesheet.css] 
+
+    --csvorientation, --csvo
+      Orientierung der CSV-Datei [--csvorientation horizontal] oder [--csvo v]
+      Default: horizontal
+      Possible Values: [horizontal, vertical]
+
+    --csvpath, --csv
+      Pfad zur CSV-Datei, aus der die Punkt-, Linien- oder Balkendaten gelesen 
+      werden (überschreibt --points) [--csvpath data.csv]
+
+    --device, -d
+      Ausgabegerät
+      Default: Default
+      Possible Values: [Default, TigerEmbosser, ScreenColor, ScreenHighContrast, PinDevice, MicroCapsulePaper]
+  * --diagramtype, --dt
+
+      Der Typ des Diagramms. Beeinflusst, welche weiteren Parameter 
+      ausgewertet werden.
+      Possible Values: [FunctionPlot, ScatterPlot, LineChart]
+
+    --gnuplot, -g
+      Pfad zum Gnuplot-Programm [--gnuplot "C:gnuplot.exe"]
+
+    --help, -h, -?
+      Hilfe
+
+    --hgrid, --horizontalgrid
+      Horizontale Gitterlinien zeigen [--hgrid on] oder [--hgrid off]. Wird 
+      weder vgrid noch hgrid angegeben, wird je nach Diagrammtyp eine 
+      Standarddarstellung gewählt.
+
+    --integral, -i
+      Zeichnet eine Integralfläche zwischen zwei Funktionen oder der X-Achse. 
+      Nur wenn "--diagramtype FunctionPlot" gesetzt ist. [--integral 
+      "Wahrscheinlichkeit::1,2[-2:2]" ]
+    --output, -o
+      Pfad zur Ausgabedatei [--output "output/sinus.svg"]
+    --pi, -p
+      Einteilung der x-Achse in Vielfache von pi
+      Default: false
+
+    --points, --pts
+      Liste von Punkten die markiert werden sollen. Es können mehrere Listen 
+      angegeben werden, welche duch {} zu grupieren sind. Punkte werden durch 
+      Leerzeichen getrennt. X- und Y-Werte jeweils durch ein Komma getrennt. 
+      Jeder Liste kann ein Titel gegeben werden ["Liste 1"::{1.2,3 
+      4.5,6}{-1,-2.3}]. Wird ignoriert wenn --csvdata angegeben und ein 
+      valider Pfad ist.
+
+    --size, -s
+      Größe der Grafik in Millimeter [--size 300,500]
+      Default: 210,297
+
+    --title, -t
+      Titel der Grafik [--title "Sinus- und Cosinusfunktion"]
+      Default: <empty string>
+
+    --trendline
+      Eine Funktion zur Berechnung der Trendline. "--diagramtype ScatterPlot" 
+      muss gesetzt sein. Parameter werden hinter dem Funktionsnamen angegeben. 
+      Mögliche Linientypen (Parameter in Klammern) sind mit Standardwerten: 
+      "MovingAverage::1" (n: ganzzahlig und größer als 0, Filtergröße ist 
+      2*n+1), "ExponentialSmoothing::0.3" (alpha: zwischen 0 und 1), 
+      "BrownLES::0.2,5" (alpha: zwischen 0 und 1; forecast: größer als 0, 
+      wieviele Werte extrapoliert werden), "LinearRegression" (keine 
+      Parameter) 
+      Default: []
+
+    --vgrid, --verticalgrid
+      Horizontale Gitterlinien zeigen [--vgrid on] oder [--vgrid off]. Wird 
+      weder vgrid noch hgrid angegeben, wird je nach Diagrammtyp eine 
+      Standarddarstellung gewählt.
+
+    --xlines
+      Hilfslinien auf der x-Achse, durch Leerzeichen getrennt [--xlines "1 
+      3.5"] 
+
+    --xrange, -x
+      Darstellungsbereich der x-Achse und abweichender Titel. Wird automatisch 
+      auf den Datenbereich erweitert, wenn "--autoscale" angegeben ist. Ist 
+      "--diagramtype FunctionPlot" gesetzt, wird der Bereich erweitert, so 
+      dass er 0 enthält. [--xrange "Jahre::-3:5"]
+
+    --ylines
+      Hilfslinien auf der y-Achse, durch Leerzeichen getrennt [--ylines "1 
+      3.5"] 
+
+    --yrange, -y
+      Darstellungsbereich der y-Achse und abweichender Titel. Wird automatisch 
+      auf den Datenbereich erweitert, wenn "--autoscale" angegeben ist. Ist 
+      "--diagramtype FunctionPlot" gesetzt, wird der Bereich erweitert, so 
+      dass er 0 enthält. [--yrange -3:5]

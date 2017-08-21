@@ -1,0 +1,399 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height="297mm" version="1.1" width="210mm">
+    <defs>
+        <style type="text/css"><![CDATA[
+            /* Default CSS for Title Painter */
+            svg { fill: none; stroke: #000000; stroke-width: 0.5; }
+            text { font-family: serif; font-size: 36pt; fill: black; stroke: none; }
+            @media print{
+            	text { font-family: 'Braille DE Computer'; font-size: 36pt; fill: black; stroke: none; }
+            }
+            
+            
+        
+            /* Default CSS for Grid Painter */
+            #grid { stroke: #777777; }
+            #axes, #reference-lines, .box { stroke: #111111; fill: transparent; }
+            
+            
+        
+            /* Default CSS for Line Painter */
+            #linecharts { stroke-width: 1.0; stroke-dasharray: 5.0, 5.0; }
+            #linechart-1 { stroke-dasharray: none; }
+            #linechart-2 { stroke-dasharray: 1.0, 3.0; }
+            .linechart_bg { stroke: white; stroke-dasharray: none; stroke-width:3.0;  fill: transparent; stroke-linecap: round; }
+            
+            
+        
+            /* Default CSS for Line Overlay Painter */
+            #overlayLines { stroke: transparent; stroke-dasharray: none; fill: none; stroke-width: 6.0; stroke-linecap: round; }
+            
+            
+        
+            /* Default CSS for Point Overlay Painter */
+            #overlayPoints { stroke: none; stroke-dasharray: none; fill: transparent; }
+            
+            
+        ]]></style>
+    </defs>
+    <title>Example 2 LineChart</title>
+    <text id="title" x="10mm" y="25mm">Example 2 LineChart</text>
+    <rect height="100%" id="background" width="100%" x="0" y="0"/>
+    <svg viewBox="0 0 210 297">
+        <defs>
+            <clipPath id="plot-area">
+                <rect height="217" width="140" x="40" y="50"/>
+            </clipPath>
+        </defs>
+        <g id="grid">
+            <g id="x-grid" stroke-dasharray="0.5, 1.911">
+                <line x1="40" x2="40" y1="49.75" y2="267.25"/>
+                <line x1="68" x2="68" y1="49.75" y2="267.25"/>
+                <line x1="96" x2="96" y1="49.75" y2="267.25"/>
+                <line x1="124" x2="124" y1="49.75" y2="267.25"/>
+                <line x1="152" x2="152" y1="49.75" y2="267.25"/>
+                <line x1="180" x2="180" y1="49.75" y2="267.25"/>
+            </g>
+            <g id="y-grid" stroke-dasharray="0.5, 1.833">
+                <line x1="39.75" x2="180.25" y1="267" y2="267"/>
+                <line x1="39.75" x2="180.25" y1="254.944" y2="254.944"/>
+                <line x1="39.75" x2="180.25" y1="242.889" y2="242.889"/>
+                <line x1="39.75" x2="180.25" y1="230.833" y2="230.833"/>
+                <line x1="39.75" x2="180.25" y1="218.778" y2="218.778"/>
+                <line x1="39.75" x2="180.25" y1="206.722" y2="206.722"/>
+                <line x1="39.75" x2="180.25" y1="194.667" y2="194.667"/>
+                <line x1="39.75" x2="180.25" y1="182.611" y2="182.611"/>
+                <line x1="39.75" x2="180.25" y1="170.556" y2="170.556"/>
+                <line x1="39.75" x2="180.25" y1="158.5" y2="158.5"/>
+                <line x1="39.75" x2="180.25" y1="146.444" y2="146.444"/>
+                <line x1="39.75" x2="180.25" y1="134.389" y2="134.389"/>
+                <line x1="39.75" x2="180.25" y1="122.333" y2="122.333"/>
+                <line x1="39.75" x2="180.25" y1="110.278" y2="110.278"/>
+                <line x1="39.75" x2="180.25" y1="98.222" y2="98.222"/>
+                <line x1="39.75" x2="180.25" y1="86.167" y2="86.167"/>
+                <line x1="39.75" x2="180.25" y1="74.111" y2="74.111"/>
+                <line x1="39.75" x2="180.25" y1="62.056" y2="62.056"/>
+                <line x1="39.75" x2="180.25" y1="50" y2="50"/>
+            </g>
+        </g>
+        <g id="axes">
+            <g class="poi_symbol_bg" id="axes_spacer">
+                <line id="x-axis-smaller" x1="40" x2="180" y1="267" y2="267"/>
+                <line id="x-axis-bigger" x1="40" x2="180" y1="50" y2="50"/>
+                <g id="x-tics">
+                    <line x1="40" x2="40" y1="267" y2="273"/>
+                    <line x1="68" x2="68" y1="267" y2="273"/>
+                    <line x1="96" x2="96" y1="267" y2="273"/>
+                    <line x1="124" x2="124" y1="267" y2="273"/>
+                    <line x1="152" x2="152" y1="267" y2="273"/>
+                    <line x1="180" x2="180" y1="267" y2="273"/>
+                    <line x1="40" x2="40" y1="44" y2="50"/>
+                    <line x1="68" x2="68" y1="44" y2="50"/>
+                    <line x1="96" x2="96" y1="44" y2="50"/>
+                    <line x1="124" x2="124" y1="44" y2="50"/>
+                    <line x1="152" x2="152" y1="44" y2="50"/>
+                    <line x1="180" x2="180" y1="44" y2="50"/>
+                </g>
+                <line id="y-axis-smaller" x1="40" x2="40" y1="267" y2="50"/>
+                <line id="y-axis-bigger" x1="180" x2="180" y1="267" y2="50"/>
+                <g id="y-tics">
+                    <line x1="34" x2="40" y1="267" y2="267"/>
+                    <line x1="34" x2="40" y1="254.944" y2="254.944"/>
+                    <line x1="34" x2="40" y1="242.889" y2="242.889"/>
+                    <line x1="34" x2="40" y1="230.833" y2="230.833"/>
+                    <line x1="34" x2="40" y1="218.778" y2="218.778"/>
+                    <line x1="34" x2="40" y1="206.722" y2="206.722"/>
+                    <line x1="34" x2="40" y1="194.667" y2="194.667"/>
+                    <line x1="34" x2="40" y1="182.611" y2="182.611"/>
+                    <line x1="34" x2="40" y1="170.556" y2="170.556"/>
+                    <line x1="34" x2="40" y1="158.5" y2="158.5"/>
+                    <line x1="34" x2="40" y1="146.444" y2="146.444"/>
+                    <line x1="34" x2="40" y1="134.389" y2="134.389"/>
+                    <line x1="34" x2="40" y1="122.333" y2="122.333"/>
+                    <line x1="34" x2="40" y1="110.278" y2="110.278"/>
+                    <line x1="34" x2="40" y1="98.222" y2="98.222"/>
+                    <line x1="34" x2="40" y1="86.167" y2="86.167"/>
+                    <line x1="34" x2="40" y1="74.111" y2="74.111"/>
+                    <line x1="34" x2="40" y1="62.056" y2="62.056"/>
+                    <line x1="34" x2="40" y1="50" y2="50"/>
+                    <line x1="180" x2="186" y1="267" y2="267"/>
+                    <line x1="180" x2="186" y1="254.944" y2="254.944"/>
+                    <line x1="180" x2="186" y1="242.889" y2="242.889"/>
+                    <line x1="180" x2="186" y1="230.833" y2="230.833"/>
+                    <line x1="180" x2="186" y1="218.778" y2="218.778"/>
+                    <line x1="180" x2="186" y1="206.722" y2="206.722"/>
+                    <line x1="180" x2="186" y1="194.667" y2="194.667"/>
+                    <line x1="180" x2="186" y1="182.611" y2="182.611"/>
+                    <line x1="180" x2="186" y1="170.556" y2="170.556"/>
+                    <line x1="180" x2="186" y1="158.5" y2="158.5"/>
+                    <line x1="180" x2="186" y1="146.444" y2="146.444"/>
+                    <line x1="180" x2="186" y1="134.389" y2="134.389"/>
+                    <line x1="180" x2="186" y1="122.333" y2="122.333"/>
+                    <line x1="180" x2="186" y1="110.278" y2="110.278"/>
+                    <line x1="180" x2="186" y1="98.222" y2="98.222"/>
+                    <line x1="180" x2="186" y1="86.167" y2="86.167"/>
+                    <line x1="180" x2="186" y1="74.111" y2="74.111"/>
+                    <line x1="180" x2="186" y1="62.056" y2="62.056"/>
+                    <line x1="180" x2="186" y1="50" y2="50"/>
+                </g>
+            </g>
+            <line id="x-axis-smaller" x1="40" x2="180" y1="267" y2="267"/>
+            <line id="x-axis-bigger" x1="40" x2="180" y1="50" y2="50"/>
+            <g id="x-tics">
+                <line x1="40" x2="40" y1="267" y2="273"/>
+                <line x1="68" x2="68" y1="267" y2="273"/>
+                <line x1="96" x2="96" y1="267" y2="273"/>
+                <line x1="124" x2="124" y1="267" y2="273"/>
+                <line x1="152" x2="152" y1="267" y2="273"/>
+                <line x1="180" x2="180" y1="267" y2="273"/>
+                <line x1="40" x2="40" y1="44" y2="50"/>
+                <line x1="68" x2="68" y1="44" y2="50"/>
+                <line x1="96" x2="96" y1="44" y2="50"/>
+                <line x1="124" x2="124" y1="44" y2="50"/>
+                <line x1="152" x2="152" y1="44" y2="50"/>
+                <line x1="180" x2="180" y1="44" y2="50"/>
+            </g>
+            <line id="y-axis-smaller" x1="40" x2="40" y1="267" y2="50"/>
+            <line id="y-axis-bigger" x1="180" x2="180" y1="267" y2="50"/>
+            <g id="y-tics">
+                <line x1="34" x2="40" y1="267" y2="267"/>
+                <line x1="34" x2="40" y1="254.944" y2="254.944"/>
+                <line x1="34" x2="40" y1="242.889" y2="242.889"/>
+                <line x1="34" x2="40" y1="230.833" y2="230.833"/>
+                <line x1="34" x2="40" y1="218.778" y2="218.778"/>
+                <line x1="34" x2="40" y1="206.722" y2="206.722"/>
+                <line x1="34" x2="40" y1="194.667" y2="194.667"/>
+                <line x1="34" x2="40" y1="182.611" y2="182.611"/>
+                <line x1="34" x2="40" y1="170.556" y2="170.556"/>
+                <line x1="34" x2="40" y1="158.5" y2="158.5"/>
+                <line x1="34" x2="40" y1="146.444" y2="146.444"/>
+                <line x1="34" x2="40" y1="134.389" y2="134.389"/>
+                <line x1="34" x2="40" y1="122.333" y2="122.333"/>
+                <line x1="34" x2="40" y1="110.278" y2="110.278"/>
+                <line x1="34" x2="40" y1="98.222" y2="98.222"/>
+                <line x1="34" x2="40" y1="86.167" y2="86.167"/>
+                <line x1="34" x2="40" y1="74.111" y2="74.111"/>
+                <line x1="34" x2="40" y1="62.056" y2="62.056"/>
+                <line x1="34" x2="40" y1="50" y2="50"/>
+                <line x1="180" x2="186" y1="267" y2="267"/>
+                <line x1="180" x2="186" y1="254.944" y2="254.944"/>
+                <line x1="180" x2="186" y1="242.889" y2="242.889"/>
+                <line x1="180" x2="186" y1="230.833" y2="230.833"/>
+                <line x1="180" x2="186" y1="218.778" y2="218.778"/>
+                <line x1="180" x2="186" y1="206.722" y2="206.722"/>
+                <line x1="180" x2="186" y1="194.667" y2="194.667"/>
+                <line x1="180" x2="186" y1="182.611" y2="182.611"/>
+                <line x1="180" x2="186" y1="170.556" y2="170.556"/>
+                <line x1="180" x2="186" y1="158.5" y2="158.5"/>
+                <line x1="180" x2="186" y1="146.444" y2="146.444"/>
+                <line x1="180" x2="186" y1="134.389" y2="134.389"/>
+                <line x1="180" x2="186" y1="122.333" y2="122.333"/>
+                <line x1="180" x2="186" y1="110.278" y2="110.278"/>
+                <line x1="180" x2="186" y1="98.222" y2="98.222"/>
+                <line x1="180" x2="186" y1="86.167" y2="86.167"/>
+                <line x1="180" x2="186" y1="74.111" y2="74.111"/>
+                <line x1="180" x2="186" y1="62.056" y2="62.056"/>
+                <line x1="180" x2="186" y1="50" y2="50"/>
+            </g>
+        </g>
+        <g id="linecharts">
+            <polyline class="linechart_bg" points="54,267 68,194.667 138,242.889 166,170.556 180,50 "/>
+            <polyline id="linechart-1" points="54,267 68,194.667 138,242.889 166,170.556 180,50 "/>
+            <polyline class="linechart_bg" points="40,218.778 54,170.556 68,74.111 96,122.333 138,194.667 166,242.889 "/>
+            <polyline id="linechart-2" points="40,218.778 54,170.556 68,74.111 96,122.333 138,194.667 166,242.889 "/>
+        </g>
+        <g id="overlays">
+            <g id="overlayLines">
+                <polyline points="54,267 68,194.667 138,242.889 166,170.556 180,50 ">
+                    <title>Linie1</title>
+                    <desc>blau</desc>
+                </polyline>
+                <polyline points="40,218.778 54,170.556 68,74.111 96,122.333 138,194.667 166,242.889 ">
+                    <title>Linie2</title>
+                    <desc>orange</desc>
+                </polyline>
+            </g>
+            <g id="overlayPoints">
+                <circle cx="40" cy="267" r="2.9">
+                    <title>0 / 1</title>
+                </circle>
+                <circle cx="40" cy="50" r="2.9">
+                    <title>0 / 10</title>
+                </circle>
+                <circle cx="40" cy="254.944" r="2.9">
+                    <title>0 / 1,5</title>
+                </circle>
+                <circle cx="40" cy="242.889" r="2.9">
+                    <title>0 / 2</title>
+                </circle>
+                <circle cx="40" cy="230.833" r="2.9">
+                    <title>0 / 2,5</title>
+                </circle>
+                <circle cx="40" cy="206.722" r="2.9">
+                    <title>0 / 3,5</title>
+                </circle>
+                <circle cx="40" cy="194.667" r="2.9">
+                    <title>0 / 4</title>
+                </circle>
+                <circle cx="40" cy="182.611" r="2.9">
+                    <title>0 / 4,5</title>
+                </circle>
+                <circle cx="40" cy="170.556" r="2.9">
+                    <title>0 / 5</title>
+                </circle>
+                <circle cx="40" cy="158.5" r="2.9">
+                    <title>0 / 5,5</title>
+                </circle>
+                <circle cx="40" cy="146.444" r="2.9">
+                    <title>0 / 6</title>
+                </circle>
+                <circle cx="40" cy="134.389" r="2.9">
+                    <title>0 / 6,5</title>
+                </circle>
+                <circle cx="40" cy="122.333" r="2.9">
+                    <title>0 / 7</title>
+                </circle>
+                <circle cx="40" cy="110.278" r="2.9">
+                    <title>0 / 7,5</title>
+                </circle>
+                <circle cx="40" cy="98.222" r="2.9">
+                    <title>0 / 8</title>
+                </circle>
+                <circle cx="40" cy="86.167" r="2.9">
+                    <title>0 / 8,5</title>
+                </circle>
+                <circle cx="40" cy="74.111" r="2.9">
+                    <title>0 / 9</title>
+                </circle>
+                <circle cx="40" cy="62.056" r="2.9">
+                    <title>0 / 9,5</title>
+                </circle>
+                <circle cx="40" cy="218.778" r="2.9">
+                    <title>0 / 3</title>
+                </circle>
+                <circle cx="54" cy="267" r="2.9">
+                    <title>1 / 1</title>
+                </circle>
+                <circle cx="54" cy="170.556" r="2.9">
+                    <title>1 / 5</title>
+                </circle>
+                <circle cx="68" cy="267" r="2.9">
+                    <title>2 / 1</title>
+                </circle>
+                <circle cx="68" cy="50" r="2.9">
+                    <title>2 / 10</title>
+                </circle>
+                <circle cx="68" cy="194.667" r="2.9">
+                    <title>2 / 4</title>
+                </circle>
+                <circle cx="68" cy="74.111" r="2.9">
+                    <title>2 / 9</title>
+                </circle>
+                <circle cx="96" cy="267" r="2.9">
+                    <title>4 / 1</title>
+                </circle>
+                <circle cx="96" cy="50" r="2.9">
+                    <title>4 / 10</title>
+                </circle>
+                <circle cx="96" cy="122.333" r="2.9">
+                    <title>4 / 7</title>
+                </circle>
+                <circle cx="124" cy="267" r="2.9">
+                    <title>6 / 1</title>
+                </circle>
+                <circle cx="124" cy="50" r="2.9">
+                    <title>6 / 10</title>
+                </circle>
+                <circle cx="138" cy="242.889" r="2.9">
+                    <title>7 / 2</title>
+                </circle>
+                <circle cx="138" cy="194.667" r="2.9">
+                    <title>7 / 4</title>
+                </circle>
+                <circle cx="152" cy="267" r="2.9">
+                    <title>8 / 1</title>
+                </circle>
+                <circle cx="152" cy="50" r="2.9">
+                    <title>8 / 10</title>
+                </circle>
+                <circle cx="166" cy="170.556" r="2.9">
+                    <title>9 / 5</title>
+                </circle>
+                <circle cx="166" cy="242.889" r="2.9">
+                    <title>9 / 2</title>
+                </circle>
+                <circle cx="180" cy="267" r="2.9">
+                    <title>10 / 1</title>
+                </circle>
+                <circle cx="180" cy="254.944" r="2.9">
+                    <title>10 / 1,5</title>
+                </circle>
+                <circle cx="180" cy="242.889" r="2.9">
+                    <title>10 / 2</title>
+                </circle>
+                <circle cx="180" cy="230.833" r="2.9">
+                    <title>10 / 2,5</title>
+                </circle>
+                <circle cx="180" cy="218.778" r="2.9">
+                    <title>10 / 3</title>
+                </circle>
+                <circle cx="180" cy="206.722" r="2.9">
+                    <title>10 / 3,5</title>
+                </circle>
+                <circle cx="180" cy="194.667" r="2.9">
+                    <title>10 / 4</title>
+                </circle>
+                <circle cx="180" cy="182.611" r="2.9">
+                    <title>10 / 4,5</title>
+                </circle>
+                <circle cx="180" cy="170.556" r="2.9">
+                    <title>10 / 5</title>
+                </circle>
+                <circle cx="180" cy="158.5" r="2.9">
+                    <title>10 / 5,5</title>
+                </circle>
+                <circle cx="180" cy="146.444" r="2.9">
+                    <title>10 / 6</title>
+                </circle>
+                <circle cx="180" cy="134.389" r="2.9">
+                    <title>10 / 6,5</title>
+                </circle>
+                <circle cx="180" cy="122.333" r="2.9">
+                    <title>10 / 7</title>
+                </circle>
+                <circle cx="180" cy="110.278" r="2.9">
+                    <title>10 / 7,5</title>
+                </circle>
+                <circle cx="180" cy="98.222" r="2.9">
+                    <title>10 / 8</title>
+                </circle>
+                <circle cx="180" cy="86.167" r="2.9">
+                    <title>10 / 8,5</title>
+                </circle>
+                <circle cx="180" cy="74.111" r="2.9">
+                    <title>10 / 9</title>
+                </circle>
+                <circle cx="180" cy="62.056" r="2.9">
+                    <title>10 / 9,5</title>
+                </circle>
+                <circle cx="180" cy="50" r="2.9">
+                    <title>10 / 10</title>
+                </circle>
+            </g>
+        </g>
+    </svg>
+    <text x="35mm" y="287mm">0</text>
+    <text x="91mm" y="287mm">4</text>
+    <text x="147mm" y="287mm">8</text>
+    <text text-anchor="end" x="30mm" y="272mm">1</text>
+    <text text-anchor="end" x="30mm" y="247.889mm">2</text>
+    <text text-anchor="end" x="30mm" y="223.778mm">3</text>
+    <text text-anchor="end" x="30mm" y="199.667mm">4</text>
+    <text text-anchor="end" x="30mm" y="175.556mm">5</text>
+    <text text-anchor="end" x="30mm" y="151.444mm">6</text>
+    <text text-anchor="end" x="30mm" y="127.333mm">7</text>
+    <text text-anchor="end" x="30mm" y="103.222mm">8</text>
+    <text text-anchor="end" x="30mm" y="79.111mm">9</text>
+    <text text-anchor="end" x="30mm" y="55mm">10</text>
+</svg>
