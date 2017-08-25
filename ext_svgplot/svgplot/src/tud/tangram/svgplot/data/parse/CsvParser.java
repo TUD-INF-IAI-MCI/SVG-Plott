@@ -45,7 +45,7 @@ public class CsvParser {
 		while ((nextLine = csvReader.readNext()) != null) {
 			csvData.add(new ArrayList<String>(Arrays.asList(nextLine)));
 		}
-
+		System.out.println(csvData);
 		csvReader.close();
 	}
 	

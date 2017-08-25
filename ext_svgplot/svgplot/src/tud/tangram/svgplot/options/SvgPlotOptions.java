@@ -34,6 +34,7 @@ import tud.tangram.svgplot.plotting.Function;
 import tud.tangram.svgplot.plotting.IntegralPlotSettings;
 import tud.tangram.svgplot.styles.BarAccumulationStyle;
 import tud.tangram.svgplot.styles.Color;
+import tud.tangram.svgplot.data.parse.MarkupParser;
 
 @Parameters(separators = "=", resourceBundle = "Bundle")
 public class SvgPlotOptions {
@@ -481,6 +482,9 @@ public class SvgPlotOptions {
 		}
 		if (csvPath != null) {
 			try {
+				MarkupParser jsonDataParser = new MarkupParser(csvPath);
+				
+				
 				CsvParser parser = new CsvParser(new FileReader(csvPath), ',', '"');
 				points = parser.parse(csvType, csvOrientation);
 

@@ -1,1 +1,1 @@
-SVG-Plott>java -jar svg-plott.jar --diagramtype BarChart --title "Example Grouped Bars 1" --csvtype x_aligned_categories --csvo v --csvpath  ./examples/charts/example_1_barchart/example_1_barchart.csv  --output example_4_barchart.svg --autoscale
+java -jar svg-plott.jar --diagramtype BarChart --title "Example Grouped Bars 1" --csvtype x_aligned_categories --csvo v --csvpath  ./examples/charts/example_1_barchart/example_1_barchart.csv  --output example_4_barchart.svg --autoscale

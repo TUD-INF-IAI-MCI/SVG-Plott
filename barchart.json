@@ -1,0 +1,135 @@
+{
+  "MetaData": {
+    "Author": "Christin Engel",
+    "CreationDate": "25.08.2017 08:59:46",
+    "ExtractionProgram": "Microsoft Excel",
+    "ExtractionProgramVersion": "2013",
+    "AlternativeText": ""
+  },
+  "Chart": {
+    "ChartType": "Column",
+    "ChartHeadline": "Datengrundlage",
+    "ChartTypeCharacteristica": "Clustered",
+    "ChartStyle": {
+      "Width": 477.6912,
+      "Height": 204.25,
+      "Top": 3551.25,
+      "Left": 1244.25
+    },
+    "ChartDataGroups": [
+      {
+        "Name": "Datenreihen1",
+        "Style": {
+          "Color": "rgb(196,114,68)",
+          "BorderColor": "rgb(255,255,255)"
+        },
+        "DataPoints": [
+          {
+            "Style": {
+              "Color": "rgb(196,114,68)",
+              "BorderColor": "rgb(255,255,255)"
+            },
+            "Coordinates": [
+              {
+                "Axis": "axis_0",
+                "Value": "Datentabellen "
+              },
+              {
+                "Axis": "axis_1",
+                "Value": "0,592592592592593"
+              }
+            ]
+          },
+          {
+            "Style": {
+              "Color": "rgb(196,114,68)",
+              "BorderColor": "rgb(255,255,255)"
+            },
+            "Coordinates": [
+              {
+                "Axis": "axis_0",
+                "Value": "grafisches Diagramm "
+              },
+              {
+                "Axis": "axis_1",
+                "Value": "0,888888888888889"
+              }
+            ]
+          },
+          {
+            "Style": {
+              "Color": "rgb(196,114,68)",
+              "BorderColor": "rgb(255,255,255)"
+            },
+            "Coordinates": [
+              {
+                "Axis": "axis_0",
+                "Value": "textuelle Beschreibung "
+              },
+              {
+                "Axis": "axis_1",
+                "Value": "0,333333333333333"
+              }
+            ]
+          },
+          {
+            "Style": {
+              "Color": "rgb(196,114,68)",
+              "BorderColor": "rgb(255,255,255)"
+            },
+            "Coordinates": [
+              {
+                "Axis": "axis_0",
+                "Value": "Sonstiges"
+              },
+              {
+                "Axis": "axis_1",
+                "Value": "0,037037037037037"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "Axis": [
+      {
+        "Id": "axis_0",
+        "ScaleType": "linear",
+        "Type": "numeric",
+        "CrossesAt": "0",
+        "Interval": {
+          "Min": 0.0,
+          "Max": 1.0,
+          "MajorUnit": 0.1,
+          "MinorUnit": 0.02
+        },
+        "Style": {
+          "TickOrientation": "auto",
+          "FontType": "Calibri",
+          "MajorLineStyle": "solid",
+          "MajorLineWidth": 0.75
+        },
+        "ReversePlotOrder": false
+      },
+      {
+        "Id": "axis_1",
+        "Type": "categoric",
+        "Categories": [
+          "Datentabellen ",
+          "grafisches Diagramm ",
+          "textuelle Beschreibung ",
+          "Sonstiges"
+        ],
+        "Interval": {
+          "MajorUnit": 1.0
+        },
+        "Style": {
+          "Color": "rgb(255,255,255)",
+          "TickOrientation": "auto",
+          "FontType": "Calibri"
+        },
+        "ReversePlotOrder": false
+      }
+    ]
+  }
+}

@@ -1,0 +1,318 @@
+{
+  "MetaData": {
+    "Author": "Christin Engel",
+    "CreationDate": "25.08.2017 10:15:12",
+    "ExtractionProgram": "Microsoft Excel",
+    "ExtractionProgramVersion": "2013",
+    "AlternativeText": ""
+  },
+  "Chart": {
+    "ChartType": "Bar",
+    "ChartHeadline": "Why blind/visually impaired participants have no experiences in creating visual or tactile charts?",
+    "ChartTypeCharacteristica": [
+      "Clustered"
+    ],
+    "ChartStyle": {
+      "Width": 882.691162,
+      "Height": 362.985352,
+      "Top": 1436.25012,
+      "Left": 1041.75
+    },
+    "ChartDataGroups": [
+      {
+        "Name": "Problems with the creation of visual charts",
+        "Style": {
+          "Color": "rgb(196,114,68)",
+          "BorderColor": "rgb(255,255,255)"
+        },
+        "DataPoints": [
+          {
+            "Style": {
+              "Color": "rgb(196,114,68)",
+              "BorderColor": "rgb(255,255,255)"
+            },
+            "Coordinates": [
+              {
+                "Axis": "axis_0",
+                "Value": "Software includes barriers"
+              },
+              {
+                "Axis": "axis_1",
+                "Value": "0,115384615384615"
+              }
+            ]
+          },
+          {
+            "Style": {
+              "Color": "rgb(196,114,68)",
+              "BorderColor": "rgb(255,255,255)"
+            },
+            "Coordinates": [
+              {
+                "Axis": "axis_0",
+                "Value": "Problems in software handling"
+              },
+              {
+                "Axis": "axis_1",
+                "Value": "0,5"
+              }
+            ]
+          },
+          {
+            "Style": {
+              "Color": "rgb(196,114,68)",
+              "BorderColor": "rgb(255,255,255)"
+            },
+            "Coordinates": [
+              {
+                "Axis": "axis_0",
+                "Value": "No access to visual charts/no tactile printing possible "
+              },
+              {
+                "Axis": "axis_1",
+                "Value": "0,538461538461538"
+              }
+            ]
+          },
+          {
+            "Style": {
+              "Color": "rgb(196,114,68)",
+              "BorderColor": "rgb(255,255,255)"
+            },
+            "Coordinates": [
+              {
+                "Axis": "axis_0",
+                "Value": "No need"
+              },
+              {
+                "Axis": "axis_1",
+                "Value": "0,269230769230769"
+              }
+            ]
+          },
+          {
+            "Style": {
+              "Color": "rgb(196,114,68)",
+              "BorderColor": "rgb(255,255,255)"
+            },
+            "Coordinates": [
+              {
+                "Axis": "axis_0",
+                "Value": "Lack of self-convidence"
+              },
+              {
+                "Axis": "axis_1",
+                "Value": "0,230769230769231"
+              }
+            ]
+          },
+          {
+            "Style": {
+              "Color": "rgb(196,114,68)",
+              "BorderColor": "rgb(255,255,255)"
+            },
+            "Coordinates": [
+              {
+                "Axis": "axis_0",
+                "Value": "No time"
+              },
+              {
+                "Axis": "axis_1",
+                "Value": "0"
+              }
+            ]
+          },
+          {
+            "Style": {
+              "Color": "rgb(196,114,68)",
+              "BorderColor": "rgb(255,255,255)"
+            },
+            "Coordinates": [
+              {
+                "Axis": "axis_0",
+                "Value": "No interest"
+              },
+              {
+                "Axis": "axis_1",
+                "Value": "0,153846153846154"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "Name": "Problems with the creation of tactile charts",
+        "Style": {
+          "Color": "rgb(49,125,237)",
+          "BorderColor": "rgb(255,255,255)"
+        },
+        "DataPoints": [
+          {
+            "Style": {
+              "Color": "rgb(49,125,237)",
+              "BorderColor": "rgb(255,255,255)"
+            },
+            "Coordinates": [
+              {
+                "Axis": "axis_0",
+                "Value": "Software includes barriers"
+              },
+              {
+                "Axis": "axis_1",
+                "Value": "0,0952380952380952"
+              }
+            ]
+          },
+          {
+            "Style": {
+              "Color": "rgb(49,125,237)",
+              "BorderColor": "rgb(255,255,255)"
+            },
+            "Coordinates": [
+              {
+                "Axis": "axis_0",
+                "Value": "Problems in software handling"
+              },
+              {
+                "Axis": "axis_1",
+                "Value": "0,619047619047619"
+              }
+            ]
+          },
+          {
+            "Style": {
+              "Color": "rgb(49,125,237)",
+              "BorderColor": "rgb(255,255,255)"
+            },
+            "Coordinates": [
+              {
+                "Axis": "axis_0",
+                "Value": "No access to visual charts/no tactile printing possible "
+              },
+              {
+                "Axis": "axis_1",
+                "Value": "0,571428571428571"
+              }
+            ]
+          },
+          {
+            "Style": {
+              "Color": "rgb(49,125,237)",
+              "BorderColor": "rgb(255,255,255)"
+            },
+            "Coordinates": [
+              {
+                "Axis": "axis_0",
+                "Value": "No need"
+              },
+              {
+                "Axis": "axis_1",
+                "Value": "0,142857142857143"
+              }
+            ]
+          },
+          {
+            "Style": {
+              "Color": "rgb(49,125,237)",
+              "BorderColor": "rgb(255,255,255)"
+            },
+            "Coordinates": [
+              {
+                "Axis": "axis_0",
+                "Value": "Lack of self-convidence"
+              },
+              {
+                "Axis": "axis_1",
+                "Value": "0,19047619047619"
+              }
+            ]
+          },
+          {
+            "Style": {
+              "Color": "rgb(49,125,237)",
+              "BorderColor": "rgb(255,255,255)"
+            },
+            "Coordinates": [
+              {
+                "Axis": "axis_0",
+                "Value": "No time"
+              },
+              {
+                "Axis": "axis_1",
+                "Value": "0,142857142857143"
+              }
+            ]
+          },
+          {
+            "Style": {
+              "Color": "rgb(49,125,237)",
+              "BorderColor": "rgb(255,255,255)"
+            },
+            "Coordinates": [
+              {
+                "Axis": "axis_0",
+                "Value": "No interest"
+              },
+              {
+                "Axis": "axis_1",
+                "Value": "0"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "Axis": [
+      {
+        "Id": "axis_0",
+        "ScaleType": "linear",
+        "Type": "numeric",
+        "CrossesAt": "0",
+        "Interval": {
+          "Min": 0.0,
+          "Max": 0.7,
+          "MajorUnit": 0.1,
+          "MinorUnit": 0.02
+        },
+        "Style": {
+          "TickOrientation": "auto",
+          "FontType": "Calibri",
+          "MajorLineStyle": "solid",
+          "MajorLineWidth": 0.75
+        },
+        "ReversePlotOrder": false
+      },
+      {
+        "Id": "axis_1",
+        "Type": "categoric",
+        "Categories": [
+          "Software includes barriers",
+          "Problems in software handling",
+          "No access to visual charts/no tactile printing possible ",
+          "No need",
+          "Lack of self-convidence",
+          "No time",
+          "No interest"
+        ],
+        "Interval": {
+          "MajorUnit": 1.0
+        },
+        "Style": {
+          "Color": "rgb(255,255,255)",
+          "TickOrientation": "auto",
+          "FontType": "Calibri"
+        },
+        "ReversePlotOrder": false
+      }
+    ],
+    "Legend": {
+      "Top": 341.11023622047242,
+      "Left": 239.27464566929135,
+      "Width": 401.14188976377955,
+      "Position": "bottom",
+      "Style": {
+        "Font": "Calibri"
+      }
+    }
+  }
+}
