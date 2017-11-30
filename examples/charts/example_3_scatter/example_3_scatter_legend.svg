@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height="297mm" id="legend" version="1.1" width="210mm">
+    <defs>
+        <style type="text/css"><![CDATA[
+            
+            /* Default CSS for Title Painter */
+            svg { fill: none; stroke: #000000; stroke-width: 0.5; }
+            text { font-family: serif; font-size: 36pt; fill: black; stroke: none; }
+            @media print{
+            	text { font-family: 'Braille DE Computer'; font-size: 36pt; fill: black; stroke: none; }
+            }
+            
+            
+            /* Default CSS for Grid Painter */
+            #grid { stroke: #777777; }
+            #axes, #reference-lines, .box { stroke: #111111; fill: transparent; }
+            
+            
+            /* Default CSS for Points Painter */
+            .poi_symbol { stroke: black; stroke-dasharray: none; stroke-width:0.75;  fill: black; }
+            .poi_symbol_bg { stroke: white; stroke-dasharray: none; stroke-width:3.0;  fill: transparent; stroke-linecap: round; }
+            
+            
+        ]]></style>
+        <symbol id="poi_square" overflow="visible" preserveAspectRatio="xMidYMid slice" style="stroke-linecap:round;">
+            <g class="poi_symbol" style="stroke-opacity:0">
+                <rect height="4" width="4" x="-2" y="-2"/>
+            </g>
+        </symbol>
+        <symbol id="poi_cross" overflow="visible" preserveAspectRatio="xMidYMid slice" style="stroke-linecap:round; ">
+            <g class="poi_symbol">
+                <line x1="-2" x2="2" y1="-2" y2="2"/>
+                <line x1="-2" x2="2" y1="2" y2="-2"/>
+            </g>
+        </symbol>
+        <symbol id="poi_rhombus" overflow="visible" preserveAspectRatio="xMidYMid slice" style="stroke-linecap:round;">
+            <g class="poi_symbol" style="stroke-opacity:0">
+                <polygon points="0,-2.5 2.5,0 0,2.5 -2.5,0"/>
+            </g>
+        </symbol>
+    </defs>
+    <title>Legende: Example 3 Scatter Plot</title>
+    <text id="title">
+        <tspan x="10mm" y="25mm">Legende: Example 3 Scatter </tspan>
+        <tspan x="10mm" y="38mm">Plot</tspan>
+    </text>
+    <svg viewBox="0 0 210 297">
+        <g id="points">
+            <g id="points_0">
+                <use x="15" xlink:href="#poi_square" y="59"/>
+            </g>
+            <g id="points_1">
+                <use x="15" xlink:href="#poi_cross" y="79"/>
+            </g>
+            <g id="points_2">
+                <use x="15" xlink:href="#poi_rhombus" y="99"/>
+            </g>
+        </g>
+    </svg>
+    <rect height="100%" id="background" width="100%" x="0" y="0"/>
+    <text x="30mm" y="63mm">Erste Gruppe</text>
+    <text x="30mm" y="83mm">Zweite Gruppe</text>
+    <text x="30mm" y="103mm">Dritte Gruppe</text>
+    <text>
+        <tspan x="10mm" y="123mm">X-Bereich: -0,5 bis 6</tspan>
+        <tspan x="10mm" y="136mm">Skaleneinteilung: 0,5</tspan>
+    </text>
+    <text>
+        <tspan x="10mm" y="156mm">Y-Bereich: -0,5 bis 7</tspan>
+        <tspan x="10mm" y="169mm">Skaleneinteilung: 0,5</tspan>
+    </text>
+</svg>

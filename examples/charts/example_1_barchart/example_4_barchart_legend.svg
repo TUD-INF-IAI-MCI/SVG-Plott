@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height="297mm" id="legend" version="1.1" width="210mm">
+    <defs>
+        <style type="text/css"><![CDATA[
+            
+            /* Default CSS for Title Painter */
+            svg { fill: none; stroke: #000000; stroke-width: 0.5; }
+            text { font-family: serif; font-size: 36pt; fill: black; stroke: none; }
+            @media print{
+            	text { font-family: 'Braille DE Computer'; font-size: 36pt; fill: black; stroke: none; }
+            }
+            
+            
+            /* Default CSS for Grid Painter */
+            #grid { stroke: #777777; }
+            #axes, #reference-lines, .box { stroke: #111111; fill: transparent; }
+            
+            
+            /* Default CSS for Bar Painter */
+            .bar-filling { stroke: none }
+            .bar-border { fill: white }
+            
+        ]]></style>
+        <g id="patterns">
+            <pattern height="10.0" id="black" patternUnits="userSpaceOnUse" width="10.0">
+                <rect fill="black" height="100%" stroke="none" width="100%" x="0.0" y="0.0"/>
+            </pattern>
+            <pattern fill="black" height="10.0" id="dotted_pattern" patternUnits="userSpaceOnUse" width="10.0">
+                <rect fill="white" height="100%" stroke="none" width="100%" x="0.0" y="0.0"/>
+                <circle cx="1.25" cy="1.25" r="0.6"/>
+                <circle cx="6.25" cy="6.25" r="0.6"/>
+            </pattern>
+            <pattern height="10.16" id="diagonal_line1_SP_T" patternUnits="userSpaceOnUse" width="10.16">
+                <rect fill="white" height="100%" stroke="none" width="100%" x="0.0" y="0.0"/>
+                <line stroke="black" stroke-width="0.8" x1="5.85" x2="18.55" y1="-1.27" y2="11.43"/>
+                <line stroke="black" stroke-width="0.8" x1="-1.77" x2="8.39" y1="1.27" y2="11.43"/>
+            </pattern>
+        </g>
+    </defs>
+    <title>Legende: Example Grouped Bars 1</title>
+    <text id="title">
+        <tspan x="10mm" y="25mm">Legende: Example Grouped </tspan>
+        <tspan x="10mm" y="38mm">Bars 1</tspan>
+    </text>
+    <svg viewBox="0 0 210 297">
+        <g id="barchart">
+            <g id="barchart_0">
+                <g class="bar-0 bar">
+                    <rect class="bar-0-border  bar-border" height="19" width="30" x="10" y="58"/>
+                    <rect class="bar-0-filling bar-filling" fill="url(#black)" height="15" width="26" x="12" y="60"/>
+                </g>
+            </g>
+            <g id="barchart_1">
+                <g class="bar-1 bar">
+                    <rect class="bar-1-border  bar-border" height="19" width="30" x="10" y="90"/>
+                    <rect class="bar-1-filling bar-filling" fill="url(#dotted_pattern)" height="15" width="26" x="12" y="92"/>
+                </g>
+            </g>
+            <g id="barchart_2">
+                <g class="bar-2 bar">
+                    <rect class="bar-2-border  bar-border" height="19" width="30" x="10" y="122"/>
+                    <rect class="bar-2-filling bar-filling" fill="url(#diagonal_line1_SP_T)" height="15" width="26" x="12" y="124"/>
+                </g>
+            </g>
+        </g>
+    </svg>
+    <rect height="100%" id="background" width="100%" x="0" y="0"/>
+    <text x="45mm" y="70mm"> Reihe a </text>
+    <text x="45mm" y="102mm"> Reihe b </text>
+    <text x="45mm" y="134mm"> Reihe c</text>
+    <text>
+        <tspan x="10mm" y="159mm">Y-Bereich: 0 bis 4</tspan>
+        <tspan x="10mm" y="172mm">Skaleneinteilung: 0,5</tspan>
+    </text>
+</svg>

@@ -1,0 +1,770 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height="297mm" version="1.1" width="210mm">
+    <defs>
+        <style type="text/css"><![CDATA[
+            /* Default CSS for Title Painter */
+            svg { fill: none; stroke: #000000; stroke-width: 0.5; }
+            text { font-family: serif; font-size: 36pt; fill: black; stroke: none; }
+            @media print{
+            	text { font-family: 'Braille DE Computer'; font-size: 36pt; fill: black; stroke: none; }
+            }
+            
+            
+        
+            /* Default CSS for Grid Painter */
+            #grid { stroke: #777777; }
+            #axes, #reference-lines, .box { stroke: #111111; fill: transparent; }
+            
+            
+        
+            /* Default CSS for Points Painter */
+            .poi_symbol { stroke: black; stroke-dasharray: none; stroke-width:0.75;  fill: black; }
+            .poi_symbol_bg { stroke: white; stroke-dasharray: none; stroke-width:3.0;  fill: transparent; stroke-linecap: round; }
+            
+            
+        
+            /* Default CSS for Point Overlay Painter */
+            #overlayPoints { stroke: none; stroke-dasharray: none; fill: transparent; }
+            
+            
+        ]]></style>
+        <symbol id="poi_square_bg" overflow="visible" preserveAspectRatio="xMidYMid slice" style="stroke-linecap:round;">
+            <g class="poi_symbol_bg">
+                <rect height="4" width="4" x="-2" y="-2"/>
+            </g>
+        </symbol>
+        <symbol id="poi_square" overflow="visible" preserveAspectRatio="xMidYMid slice" style="stroke-linecap:round;">
+            <g class="poi_symbol" style="stroke-opacity:0">
+                <rect height="4" width="4" x="-2" y="-2"/>
+            </g>
+        </symbol>
+        <symbol id="poi_cross_bg" overflow="visible" preserveAspectRatio="xMidYMid slice" style="stroke-linecap:round; ">
+            <g class="poi_symbol_bg">
+                <line x1="-2" x2="2" y1="-2" y2="2"/>
+                <line x1="-2" x2="2" y1="2" y2="-2"/>
+            </g>
+        </symbol>
+        <symbol id="poi_cross" overflow="visible" preserveAspectRatio="xMidYMid slice" style="stroke-linecap:round; ">
+            <g class="poi_symbol">
+                <line x1="-2" x2="2" y1="-2" y2="2"/>
+                <line x1="-2" x2="2" y1="2" y2="-2"/>
+            </g>
+        </symbol>
+        <symbol id="poi_rhombus_bg" overflow="visible" preserveAspectRatio="xMidYMid slice" style="stroke-linecap:round;">
+            <g class="poi_symbol_bg">
+                <polygon points="0,-2.5 2.5,0 0,2.5 -2.5,0"/>
+            </g>
+        </symbol>
+        <symbol id="poi_rhombus" overflow="visible" preserveAspectRatio="xMidYMid slice" style="stroke-linecap:round;">
+            <g class="poi_symbol" style="stroke-opacity:0">
+                <polygon points="0,-2.5 2.5,0 0,2.5 -2.5,0"/>
+            </g>
+        </symbol>
+    </defs>
+    <title>Example 3 Scatter Plot</title>
+    <text id="title" x="10mm" y="25mm">Example 3 Scatter Plot</text>
+    <rect height="100%" id="background" width="100%" x="0" y="0"/>
+    <svg viewBox="0 0 210 297">
+        <defs>
+            <clipPath id="plot-area">
+                <rect height="217" width="140" x="40" y="50"/>
+            </clipPath>
+        </defs>
+        <g id="grid"/>
+        <g id="axes">
+            <g class="poi_symbol_bg" id="axes_spacer">
+                <line id="x-axis-smaller" x1="40" x2="180" y1="267" y2="267"/>
+                <line id="x-axis-bigger" x1="40" x2="180" y1="50" y2="50"/>
+                <g id="x-tics">
+                    <line x1="40" x2="40" y1="267" y2="273"/>
+                    <line x1="50.769" x2="50.769" y1="267" y2="273"/>
+                    <line x1="61.538" x2="61.538" y1="267" y2="273"/>
+                    <line x1="72.308" x2="72.308" y1="267" y2="273"/>
+                    <line x1="83.077" x2="83.077" y1="267" y2="273"/>
+                    <line x1="93.846" x2="93.846" y1="267" y2="273"/>
+                    <line x1="104.615" x2="104.615" y1="267" y2="273"/>
+                    <line x1="115.385" x2="115.385" y1="267" y2="273"/>
+                    <line x1="126.154" x2="126.154" y1="267" y2="273"/>
+                    <line x1="136.923" x2="136.923" y1="267" y2="273"/>
+                    <line x1="147.692" x2="147.692" y1="267" y2="273"/>
+                    <line x1="158.462" x2="158.462" y1="267" y2="273"/>
+                    <line x1="169.231" x2="169.231" y1="267" y2="273"/>
+                    <line x1="180" x2="180" y1="267" y2="273"/>
+                    <line x1="40" x2="40" y1="44" y2="50"/>
+                    <line x1="50.769" x2="50.769" y1="44" y2="50"/>
+                    <line x1="61.538" x2="61.538" y1="44" y2="50"/>
+                    <line x1="72.308" x2="72.308" y1="44" y2="50"/>
+                    <line x1="83.077" x2="83.077" y1="44" y2="50"/>
+                    <line x1="93.846" x2="93.846" y1="44" y2="50"/>
+                    <line x1="104.615" x2="104.615" y1="44" y2="50"/>
+                    <line x1="115.385" x2="115.385" y1="44" y2="50"/>
+                    <line x1="126.154" x2="126.154" y1="44" y2="50"/>
+                    <line x1="136.923" x2="136.923" y1="44" y2="50"/>
+                    <line x1="147.692" x2="147.692" y1="44" y2="50"/>
+                    <line x1="158.462" x2="158.462" y1="44" y2="50"/>
+                    <line x1="169.231" x2="169.231" y1="44" y2="50"/>
+                    <line x1="180" x2="180" y1="44" y2="50"/>
+                </g>
+                <line id="y-axis-smaller" x1="40" x2="40" y1="267" y2="50"/>
+                <line id="y-axis-bigger" x1="180" x2="180" y1="267" y2="50"/>
+                <g id="y-tics">
+                    <line x1="34" x2="40" y1="267" y2="267"/>
+                    <line x1="34" x2="40" y1="252.533" y2="252.533"/>
+                    <line x1="34" x2="40" y1="238.067" y2="238.067"/>
+                    <line x1="34" x2="40" y1="223.6" y2="223.6"/>
+                    <line x1="34" x2="40" y1="209.133" y2="209.133"/>
+                    <line x1="34" x2="40" y1="194.667" y2="194.667"/>
+                    <line x1="34" x2="40" y1="180.2" y2="180.2"/>
+                    <line x1="34" x2="40" y1="165.733" y2="165.733"/>
+                    <line x1="34" x2="40" y1="151.267" y2="151.267"/>
+                    <line x1="34" x2="40" y1="136.8" y2="136.8"/>
+                    <line x1="34" x2="40" y1="122.333" y2="122.333"/>
+                    <line x1="34" x2="40" y1="107.867" y2="107.867"/>
+                    <line x1="34" x2="40" y1="93.4" y2="93.4"/>
+                    <line x1="34" x2="40" y1="78.933" y2="78.933"/>
+                    <line x1="34" x2="40" y1="64.467" y2="64.467"/>
+                    <line x1="34" x2="40" y1="50" y2="50"/>
+                    <line x1="180" x2="186" y1="267" y2="267"/>
+                    <line x1="180" x2="186" y1="252.533" y2="252.533"/>
+                    <line x1="180" x2="186" y1="238.067" y2="238.067"/>
+                    <line x1="180" x2="186" y1="223.6" y2="223.6"/>
+                    <line x1="180" x2="186" y1="209.133" y2="209.133"/>
+                    <line x1="180" x2="186" y1="194.667" y2="194.667"/>
+                    <line x1="180" x2="186" y1="180.2" y2="180.2"/>
+                    <line x1="180" x2="186" y1="165.733" y2="165.733"/>
+                    <line x1="180" x2="186" y1="151.267" y2="151.267"/>
+                    <line x1="180" x2="186" y1="136.8" y2="136.8"/>
+                    <line x1="180" x2="186" y1="122.333" y2="122.333"/>
+                    <line x1="180" x2="186" y1="107.867" y2="107.867"/>
+                    <line x1="180" x2="186" y1="93.4" y2="93.4"/>
+                    <line x1="180" x2="186" y1="78.933" y2="78.933"/>
+                    <line x1="180" x2="186" y1="64.467" y2="64.467"/>
+                    <line x1="180" x2="186" y1="50" y2="50"/>
+                </g>
+            </g>
+            <line id="x-axis-smaller" x1="40" x2="180" y1="267" y2="267"/>
+            <line id="x-axis-bigger" x1="40" x2="180" y1="50" y2="50"/>
+            <g id="x-tics">
+                <line x1="40" x2="40" y1="267" y2="273"/>
+                <line x1="50.769" x2="50.769" y1="267" y2="273"/>
+                <line x1="61.538" x2="61.538" y1="267" y2="273"/>
+                <line x1="72.308" x2="72.308" y1="267" y2="273"/>
+                <line x1="83.077" x2="83.077" y1="267" y2="273"/>
+                <line x1="93.846" x2="93.846" y1="267" y2="273"/>
+                <line x1="104.615" x2="104.615" y1="267" y2="273"/>
+                <line x1="115.385" x2="115.385" y1="267" y2="273"/>
+                <line x1="126.154" x2="126.154" y1="267" y2="273"/>
+                <line x1="136.923" x2="136.923" y1="267" y2="273"/>
+                <line x1="147.692" x2="147.692" y1="267" y2="273"/>
+                <line x1="158.462" x2="158.462" y1="267" y2="273"/>
+                <line x1="169.231" x2="169.231" y1="267" y2="273"/>
+                <line x1="180" x2="180" y1="267" y2="273"/>
+                <line x1="40" x2="40" y1="44" y2="50"/>
+                <line x1="50.769" x2="50.769" y1="44" y2="50"/>
+                <line x1="61.538" x2="61.538" y1="44" y2="50"/>
+                <line x1="72.308" x2="72.308" y1="44" y2="50"/>
+                <line x1="83.077" x2="83.077" y1="44" y2="50"/>
+                <line x1="93.846" x2="93.846" y1="44" y2="50"/>
+                <line x1="104.615" x2="104.615" y1="44" y2="50"/>
+                <line x1="115.385" x2="115.385" y1="44" y2="50"/>
+                <line x1="126.154" x2="126.154" y1="44" y2="50"/>
+                <line x1="136.923" x2="136.923" y1="44" y2="50"/>
+                <line x1="147.692" x2="147.692" y1="44" y2="50"/>
+                <line x1="158.462" x2="158.462" y1="44" y2="50"/>
+                <line x1="169.231" x2="169.231" y1="44" y2="50"/>
+                <line x1="180" x2="180" y1="44" y2="50"/>
+            </g>
+            <line id="y-axis-smaller" x1="40" x2="40" y1="267" y2="50"/>
+            <line id="y-axis-bigger" x1="180" x2="180" y1="267" y2="50"/>
+            <g id="y-tics">
+                <line x1="34" x2="40" y1="267" y2="267"/>
+                <line x1="34" x2="40" y1="252.533" y2="252.533"/>
+                <line x1="34" x2="40" y1="238.067" y2="238.067"/>
+                <line x1="34" x2="40" y1="223.6" y2="223.6"/>
+                <line x1="34" x2="40" y1="209.133" y2="209.133"/>
+                <line x1="34" x2="40" y1="194.667" y2="194.667"/>
+                <line x1="34" x2="40" y1="180.2" y2="180.2"/>
+                <line x1="34" x2="40" y1="165.733" y2="165.733"/>
+                <line x1="34" x2="40" y1="151.267" y2="151.267"/>
+                <line x1="34" x2="40" y1="136.8" y2="136.8"/>
+                <line x1="34" x2="40" y1="122.333" y2="122.333"/>
+                <line x1="34" x2="40" y1="107.867" y2="107.867"/>
+                <line x1="34" x2="40" y1="93.4" y2="93.4"/>
+                <line x1="34" x2="40" y1="78.933" y2="78.933"/>
+                <line x1="34" x2="40" y1="64.467" y2="64.467"/>
+                <line x1="34" x2="40" y1="50" y2="50"/>
+                <line x1="180" x2="186" y1="267" y2="267"/>
+                <line x1="180" x2="186" y1="252.533" y2="252.533"/>
+                <line x1="180" x2="186" y1="238.067" y2="238.067"/>
+                <line x1="180" x2="186" y1="223.6" y2="223.6"/>
+                <line x1="180" x2="186" y1="209.133" y2="209.133"/>
+                <line x1="180" x2="186" y1="194.667" y2="194.667"/>
+                <line x1="180" x2="186" y1="180.2" y2="180.2"/>
+                <line x1="180" x2="186" y1="165.733" y2="165.733"/>
+                <line x1="180" x2="186" y1="151.267" y2="151.267"/>
+                <line x1="180" x2="186" y1="136.8" y2="136.8"/>
+                <line x1="180" x2="186" y1="122.333" y2="122.333"/>
+                <line x1="180" x2="186" y1="107.867" y2="107.867"/>
+                <line x1="180" x2="186" y1="93.4" y2="93.4"/>
+                <line x1="180" x2="186" y1="78.933" y2="78.933"/>
+                <line x1="180" x2="186" y1="64.467" y2="64.467"/>
+                <line x1="180" x2="186" y1="50" y2="50"/>
+            </g>
+        </g>
+        <g id="points">
+            <g id="points_bg">
+                <g id="points_bg_0">
+                    <use x="96.986" xlink:href="#poi_square_bg" y="198.663">
+                        <title>2,146 / 1,862</title>
+                        <desc>Erste Gruppe</desc>
+                    </use>
+                    <use x="109.867" xlink:href="#poi_square_bg" y="205.519">
+                        <title>2,744 / 1,625</title>
+                        <desc>Erste Gruppe</desc>
+                    </use>
+                    <use x="116.641" xlink:href="#poi_square_bg" y="221.297">
+                        <title>3,058 / 1,08</title>
+                        <desc>Erste Gruppe</desc>
+                    </use>
+                    <use x="117.686" xlink:href="#poi_square_bg" y="243.474">
+                        <title>3,107 / 0,313</title>
+                        <desc>Erste Gruppe</desc>
+                    </use>
+                    <use x="126.444" xlink:href="#poi_square_bg" y="216.245">
+                        <title>3,513 / 1,254</title>
+                        <desc>Erste Gruppe</desc>
+                    </use>
+                    <use x="133.468" xlink:href="#poi_square_bg" y="228.066">
+                        <title>3,84 / 0,846</title>
+                        <desc>Erste Gruppe</desc>
+                    </use>
+                    <use x="146.409" xlink:href="#poi_square_bg" y="231.792">
+                        <title>4,44 / 0,717</title>
+                        <desc>Erste Gruppe</desc>
+                    </use>
+                    <use x="147.854" xlink:href="#poi_square_bg" y="227.413">
+                        <title>4,508 / 0,868</title>
+                        <desc>Erste Gruppe</desc>
+                    </use>
+                </g>
+                <g id="points_bg_1">
+                    <use x="48.228" xlink:href="#poi_cross_bg" y="246.143">
+                        <title>-0,118 / 0,221</title>
+                        <desc>Zweite Gruppe</desc>
+                    </use>
+                    <use x="55.134" xlink:href="#poi_cross_bg" y="229.805">
+                        <title>0,203 / 0,786</title>
+                        <desc>Zweite Gruppe</desc>
+                    </use>
+                    <use x="60.94" xlink:href="#poi_cross_bg" y="165.378">
+                        <title>0,472 / 3,012</title>
+                        <desc>Zweite Gruppe</desc>
+                    </use>
+                    <use x="72.708" xlink:href="#poi_cross_bg" y="261.999">
+                        <title>1,019 / -0,327</title>
+                        <desc>Zweite Gruppe</desc>
+                    </use>
+                    <use x="74.247" xlink:href="#poi_cross_bg" y="184.585">
+                        <title>1,09 / 2,348</title>
+                        <desc>Zweite Gruppe</desc>
+                    </use>
+                    <use x="84.135" xlink:href="#poi_cross_bg" y="258.621">
+                        <title>1,549 / -0,21</title>
+                        <desc>Zweite Gruppe</desc>
+                    </use>
+                    <use x="91.95" xlink:href="#poi_cross_bg" y="201.287">
+                        <title>1,912 / 1,771</title>
+                        <desc>Zweite Gruppe</desc>
+                    </use>
+                    <use x="96.794" xlink:href="#poi_cross_bg" y="224.068">
+                        <title>2,137 / 0,984</title>
+                        <desc>Zweite Gruppe</desc>
+                    </use>
+                </g>
+                <g id="points_bg_2">
+                    <use x="137.06" xlink:href="#poi_rhombus_bg" y="89.06">
+                        <title>4,006 / 5,65</title>
+                        <desc>Dritte Gruppe</desc>
+                    </use>
+                    <use x="139.351" xlink:href="#poi_rhombus_bg" y="105.187">
+                        <title>4,113 / 5,093</title>
+                        <desc>Dritte Gruppe</desc>
+                    </use>
+                    <use x="144.313" xlink:href="#poi_rhombus_bg" y="80.994">
+                        <title>4,343 / 5,929</title>
+                        <desc>Dritte Gruppe</desc>
+                    </use>
+                    <use x="157.549" xlink:href="#poi_rhombus_bg" y="152.683">
+                        <title>4,958 / 3,451</title>
+                        <desc>Dritte Gruppe</desc>
+                    </use>
+                    <use x="158.299" xlink:href="#poi_rhombus_bg" y="109.939">
+                        <title>4,992 / 4,928</title>
+                        <desc>Dritte Gruppe</desc>
+                    </use>
+                    <use x="166.361" xlink:href="#poi_rhombus_bg" y="59.417">
+                        <title>5,367 / 6,675</title>
+                        <desc>Dritte Gruppe</desc>
+                    </use>
+                    <use x="169.188" xlink:href="#poi_rhombus_bg" y="111.074">
+                        <title>5,498 / 4,889</title>
+                        <desc>Dritte Gruppe</desc>
+                    </use>
+                    <use x="179.637" xlink:href="#poi_rhombus_bg" y="123.045">
+                        <title>5,983 / 4,475</title>
+                        <desc>Dritte Gruppe</desc>
+                    </use>
+                </g>
+            </g>
+            <g id="points_fg">
+                <g id="points_fg_0">
+                    <use x="96.986" xlink:href="#poi_square" y="198.663">
+                        <title>2,146 / 1,862</title>
+                        <desc>Erste Gruppe</desc>
+                    </use>
+                    <use x="109.867" xlink:href="#poi_square" y="205.519">
+                        <title>2,744 / 1,625</title>
+                        <desc>Erste Gruppe</desc>
+                    </use>
+                    <use x="116.641" xlink:href="#poi_square" y="221.297">
+                        <title>3,058 / 1,08</title>
+                        <desc>Erste Gruppe</desc>
+                    </use>
+                    <use x="117.686" xlink:href="#poi_square" y="243.474">
+                        <title>3,107 / 0,313</title>
+                        <desc>Erste Gruppe</desc>
+                    </use>
+                    <use x="126.444" xlink:href="#poi_square" y="216.245">
+                        <title>3,513 / 1,254</title>
+                        <desc>Erste Gruppe</desc>
+                    </use>
+                    <use x="133.468" xlink:href="#poi_square" y="228.066">
+                        <title>3,84 / 0,846</title>
+                        <desc>Erste Gruppe</desc>
+                    </use>
+                    <use x="146.409" xlink:href="#poi_square" y="231.792">
+                        <title>4,44 / 0,717</title>
+                        <desc>Erste Gruppe</desc>
+                    </use>
+                    <use x="147.854" xlink:href="#poi_square" y="227.413">
+                        <title>4,508 / 0,868</title>
+                        <desc>Erste Gruppe</desc>
+                    </use>
+                </g>
+                <g id="points_fg_1">
+                    <use x="48.228" xlink:href="#poi_cross" y="246.143">
+                        <title>-0,118 / 0,221</title>
+                        <desc>Zweite Gruppe</desc>
+                    </use>
+                    <use x="55.134" xlink:href="#poi_cross" y="229.805">
+                        <title>0,203 / 0,786</title>
+                        <desc>Zweite Gruppe</desc>
+                    </use>
+                    <use x="60.94" xlink:href="#poi_cross" y="165.378">
+                        <title>0,472 / 3,012</title>
+                        <desc>Zweite Gruppe</desc>
+                    </use>
+                    <use x="72.708" xlink:href="#poi_cross" y="261.999">
+                        <title>1,019 / -0,327</title>
+                        <desc>Zweite Gruppe</desc>
+                    </use>
+                    <use x="74.247" xlink:href="#poi_cross" y="184.585">
+                        <title>1,09 / 2,348</title>
+                        <desc>Zweite Gruppe</desc>
+                    </use>
+                    <use x="84.135" xlink:href="#poi_cross" y="258.621">
+                        <title>1,549 / -0,21</title>
+                        <desc>Zweite Gruppe</desc>
+                    </use>
+                    <use x="91.95" xlink:href="#poi_cross" y="201.287">
+                        <title>1,912 / 1,771</title>
+                        <desc>Zweite Gruppe</desc>
+                    </use>
+                    <use x="96.794" xlink:href="#poi_cross" y="224.068">
+                        <title>2,137 / 0,984</title>
+                        <desc>Zweite Gruppe</desc>
+                    </use>
+                </g>
+                <g id="points_fg_2">
+                    <use x="137.06" xlink:href="#poi_rhombus" y="89.06">
+                        <title>4,006 / 5,65</title>
+                        <desc>Dritte Gruppe</desc>
+                    </use>
+                    <use x="139.351" xlink:href="#poi_rhombus" y="105.187">
+                        <title>4,113 / 5,093</title>
+                        <desc>Dritte Gruppe</desc>
+                    </use>
+                    <use x="144.313" xlink:href="#poi_rhombus" y="80.994">
+                        <title>4,343 / 5,929</title>
+                        <desc>Dritte Gruppe</desc>
+                    </use>
+                    <use x="157.549" xlink:href="#poi_rhombus" y="152.683">
+                        <title>4,958 / 3,451</title>
+                        <desc>Dritte Gruppe</desc>
+                    </use>
+                    <use x="158.299" xlink:href="#poi_rhombus" y="109.939">
+                        <title>4,992 / 4,928</title>
+                        <desc>Dritte Gruppe</desc>
+                    </use>
+                    <use x="166.361" xlink:href="#poi_rhombus" y="59.417">
+                        <title>5,367 / 6,675</title>
+                        <desc>Dritte Gruppe</desc>
+                    </use>
+                    <use x="169.188" xlink:href="#poi_rhombus" y="111.074">
+                        <title>5,498 / 4,889</title>
+                        <desc>Dritte Gruppe</desc>
+                    </use>
+                    <use x="179.637" xlink:href="#poi_rhombus" y="123.045">
+                        <title>5,983 / 4,475</title>
+                        <desc>Dritte Gruppe</desc>
+                    </use>
+                </g>
+            </g>
+        </g>
+        <g id="overlays">
+            <g id="overlayPoints">
+                <circle cx="40" cy="267" r="2.9">
+                    <title>-0,5 / -0,5</title>
+                </circle>
+                <circle cx="40" cy="50" r="2.9">
+                    <title>-0,5 / 7</title>
+                </circle>
+                <circle cx="40" cy="252.533" r="2.9">
+                    <title>-0,5 / 0</title>
+                </circle>
+                <circle cx="40" cy="238.067" r="2.9">
+                    <title>-0,5 / 0,5</title>
+                </circle>
+                <circle cx="40" cy="223.6" r="2.9">
+                    <title>-0,5 / 1</title>
+                </circle>
+                <circle cx="40" cy="209.133" r="2.9">
+                    <title>-0,5 / 1,5</title>
+                </circle>
+                <circle cx="40" cy="194.667" r="2.9">
+                    <title>-0,5 / 2</title>
+                </circle>
+                <circle cx="40" cy="180.2" r="2.9">
+                    <title>-0,5 / 2,5</title>
+                </circle>
+                <circle cx="40" cy="165.733" r="2.9">
+                    <title>-0,5 / 3</title>
+                </circle>
+                <circle cx="40" cy="151.267" r="2.9">
+                    <title>-0,5 / 3,5</title>
+                </circle>
+                <circle cx="40" cy="136.8" r="2.9">
+                    <title>-0,5 / 4</title>
+                </circle>
+                <circle cx="40" cy="122.333" r="2.9">
+                    <title>-0,5 / 4,5</title>
+                </circle>
+                <circle cx="40" cy="107.867" r="2.9">
+                    <title>-0,5 / 5</title>
+                </circle>
+                <circle cx="40" cy="93.4" r="2.9">
+                    <title>-0,5 / 5,5</title>
+                </circle>
+                <circle cx="40" cy="78.933" r="2.9">
+                    <title>-0,5 / 6</title>
+                </circle>
+                <circle cx="40" cy="64.467" r="2.9">
+                    <title>-0,5 / 6,5</title>
+                </circle>
+                <circle cx="48.228" cy="246.143" r="2.9">
+                    <title>-0,118 / 0,221</title>
+                    <desc>Zweite Gruppe, orange</desc>
+                </circle>
+                <circle cx="50.769" cy="252.533" r="2.9">
+                    <title>0 / 0</title>
+                </circle>
+                <circle cx="50.769" cy="267" r="2.9">
+                    <title>0 / -0,5</title>
+                </circle>
+                <circle cx="50.769" cy="50" r="2.9">
+                    <title>0 / 7</title>
+                </circle>
+                <circle cx="50.769" cy="238.067" r="2.9">
+                    <title>0 / 0,5</title>
+                </circle>
+                <circle cx="50.769" cy="223.6" r="2.9">
+                    <title>0 / 1</title>
+                </circle>
+                <circle cx="50.769" cy="209.133" r="2.9">
+                    <title>0 / 1,5</title>
+                </circle>
+                <circle cx="50.769" cy="194.667" r="2.9">
+                    <title>0 / 2</title>
+                </circle>
+                <circle cx="50.769" cy="180.2" r="2.9">
+                    <title>0 / 2,5</title>
+                </circle>
+                <circle cx="50.769" cy="165.733" r="2.9">
+                    <title>0 / 3</title>
+                </circle>
+                <circle cx="50.769" cy="151.267" r="2.9">
+                    <title>0 / 3,5</title>
+                </circle>
+                <circle cx="50.769" cy="136.8" r="2.9">
+                    <title>0 / 4</title>
+                </circle>
+                <circle cx="50.769" cy="122.333" r="2.9">
+                    <title>0 / 4,5</title>
+                </circle>
+                <circle cx="50.769" cy="107.867" r="2.9">
+                    <title>0 / 5</title>
+                </circle>
+                <circle cx="50.769" cy="93.4" r="2.9">
+                    <title>0 / 5,5</title>
+                </circle>
+                <circle cx="50.769" cy="78.933" r="2.9">
+                    <title>0 / 6</title>
+                </circle>
+                <circle cx="50.769" cy="64.467" r="2.9">
+                    <title>0 / 6,5</title>
+                </circle>
+                <circle cx="55.134" cy="229.805" r="2.9">
+                    <title>0,203 / 0,786</title>
+                    <desc>Zweite Gruppe, orange</desc>
+                </circle>
+                <circle cx="60.94" cy="165.378" r="2.9">
+                    <title>0,472 / 3,012</title>
+                    <desc>Zweite Gruppe, orange</desc>
+                </circle>
+                <circle cx="61.538" cy="252.533" r="2.9">
+                    <title>0,5 / 0</title>
+                </circle>
+                <circle cx="61.538" cy="267" r="2.9">
+                    <title>0,5 / -0,5</title>
+                </circle>
+                <circle cx="61.538" cy="50" r="2.9">
+                    <title>0,5 / 7</title>
+                </circle>
+                <circle cx="72.308" cy="252.533" r="2.9">
+                    <title>1 / 0</title>
+                </circle>
+                <circle cx="72.308" cy="50" r="2.9">
+                    <title>1 / 7</title>
+                </circle>
+                <circle cx="72.708" cy="261.999" r="2.9">
+                    <title>1,019 / -0,327</title>
+                    <desc>Zweite Gruppe, orange</desc>
+                </circle>
+                <circle cx="74.247" cy="184.585" r="2.9">
+                    <title>1,09 / 2,348</title>
+                    <desc>Zweite Gruppe, orange</desc>
+                </circle>
+                <circle cx="83.077" cy="252.533" r="2.9">
+                    <title>1,5 / 0</title>
+                </circle>
+                <circle cx="83.077" cy="267" r="2.9">
+                    <title>1,5 / -0,5</title>
+                </circle>
+                <circle cx="83.077" cy="50" r="2.9">
+                    <title>1,5 / 7</title>
+                </circle>
+                <circle cx="84.135" cy="258.621" r="2.9">
+                    <title>1,549 / -0,21</title>
+                    <desc>Zweite Gruppe, orange</desc>
+                </circle>
+                <circle cx="91.95" cy="201.287" r="2.9">
+                    <title>1,912 / 1,771</title>
+                    <desc>Zweite Gruppe, orange</desc>
+                </circle>
+                <circle cx="93.846" cy="252.533" r="2.9">
+                    <title>2 / 0</title>
+                </circle>
+                <circle cx="93.846" cy="267" r="2.9">
+                    <title>2 / -0,5</title>
+                </circle>
+                <circle cx="93.846" cy="50" r="2.9">
+                    <title>2 / 7</title>
+                </circle>
+                <circle cx="96.794" cy="224.068" r="2.9">
+                    <title>2,137 / 0,984</title>
+                    <desc>Zweite Gruppe, orange</desc>
+                </circle>
+                <circle cx="104.615" cy="252.533" r="2.9">
+                    <title>2,5 / 0</title>
+                </circle>
+                <circle cx="104.615" cy="267" r="2.9">
+                    <title>2,5 / -0,5</title>
+                </circle>
+                <circle cx="104.615" cy="50" r="2.9">
+                    <title>2,5 / 7</title>
+                </circle>
+                <circle cx="109.867" cy="205.519" r="2.9">
+                    <title>2,744 / 1,625</title>
+                    <desc>Erste Gruppe, blau</desc>
+                </circle>
+                <circle cx="115.385" cy="252.533" r="2.9">
+                    <title>3 / 0</title>
+                </circle>
+                <circle cx="115.385" cy="267" r="2.9">
+                    <title>3 / -0,5</title>
+                </circle>
+                <circle cx="115.385" cy="50" r="2.9">
+                    <title>3 / 7</title>
+                </circle>
+                <circle cx="116.641" cy="221.297" r="2.9">
+                    <title>3,058 / 1,08</title>
+                    <desc>Erste Gruppe, blau</desc>
+                </circle>
+                <circle cx="117.686" cy="243.474" r="2.9">
+                    <title>3,107 / 0,313</title>
+                    <desc>Erste Gruppe, blau</desc>
+                </circle>
+                <circle cx="126.154" cy="252.533" r="2.9">
+                    <title>3,5 / 0</title>
+                </circle>
+                <circle cx="126.154" cy="267" r="2.9">
+                    <title>3,5 / -0,5</title>
+                </circle>
+                <circle cx="126.154" cy="50" r="2.9">
+                    <title>3,5 / 7</title>
+                </circle>
+                <circle cx="126.444" cy="216.245" r="2.9">
+                    <title>3,513 / 1,254</title>
+                    <desc>Erste Gruppe, blau</desc>
+                </circle>
+                <circle cx="133.468" cy="228.066" r="2.9">
+                    <title>3,84 / 0,846</title>
+                    <desc>Erste Gruppe, blau</desc>
+                </circle>
+                <circle cx="136.923" cy="252.533" r="2.9">
+                    <title>4 / 0</title>
+                </circle>
+                <circle cx="136.923" cy="267" r="2.9">
+                    <title>4 / -0,5</title>
+                </circle>
+                <circle cx="136.923" cy="50" r="2.9">
+                    <title>4 / 7</title>
+                </circle>
+                <circle cx="137.06" cy="89.06" r="2.9">
+                    <title>4,006 / 5,65</title>
+                    <desc>Dritte Gruppe, grün</desc>
+                </circle>
+                <circle cx="139.351" cy="105.187" r="2.9">
+                    <title>4,113 / 5,093</title>
+                    <desc>Dritte Gruppe, grün</desc>
+                </circle>
+                <circle cx="144.313" cy="80.994" r="2.9">
+                    <title>4,343 / 5,929</title>
+                    <desc>Dritte Gruppe, grün</desc>
+                </circle>
+                <circle cx="147.692" cy="252.533" r="2.9">
+                    <title>4,5 / 0</title>
+                </circle>
+                <circle cx="147.692" cy="267" r="2.9">
+                    <title>4,5 / -0,5</title>
+                </circle>
+                <circle cx="147.692" cy="50" r="2.9">
+                    <title>4,5 / 7</title>
+                </circle>
+                <circle cx="147.854" cy="227.413" r="2.9">
+                    <title>4,508 / 0,868</title>
+                    <desc>Erste Gruppe, blau</desc>
+                </circle>
+                <circle cx="157.549" cy="152.683" r="2.9">
+                    <title>4,958 / 3,451</title>
+                    <desc>Dritte Gruppe, grün</desc>
+                </circle>
+                <circle cx="158.299" cy="109.939" r="2.9">
+                    <title>4,992 / 4,928</title>
+                    <desc>Dritte Gruppe, grün</desc>
+                </circle>
+                <circle cx="158.462" cy="252.533" r="2.9">
+                    <title>5 / 0</title>
+                </circle>
+                <circle cx="158.462" cy="267" r="2.9">
+                    <title>5 / -0,5</title>
+                </circle>
+                <circle cx="158.462" cy="50" r="2.9">
+                    <title>5 / 7</title>
+                </circle>
+                <circle cx="166.361" cy="59.417" r="2.9">
+                    <title>5,367 / 6,675</title>
+                    <desc>Dritte Gruppe, grün</desc>
+                </circle>
+                <circle cx="169.188" cy="111.074" r="2.9">
+                    <title>5,498 / 4,889</title>
+                    <desc>Dritte Gruppe, grün</desc>
+                </circle>
+                <circle cx="169.231" cy="252.533" r="2.9">
+                    <title>5,5 / 0</title>
+                </circle>
+                <circle cx="169.231" cy="267" r="2.9">
+                    <title>5,5 / -0,5</title>
+                </circle>
+                <circle cx="169.231" cy="50" r="2.9">
+                    <title>5,5 / 7</title>
+                </circle>
+                <circle cx="179.637" cy="123.045" r="2.9">
+                    <title>5,983 / 4,475</title>
+                    <desc>Dritte Gruppe, grün</desc>
+                </circle>
+                <circle cx="180" cy="267" r="2.9">
+                    <title>6 / -0,5</title>
+                </circle>
+                <circle cx="180" cy="50" r="2.9">
+                    <title>6 / 7</title>
+                </circle>
+                <circle cx="180" cy="252.533" r="2.9">
+                    <title>6 / 0</title>
+                </circle>
+                <circle cx="180" cy="238.067" r="2.9">
+                    <title>6 / 0,5</title>
+                </circle>
+                <circle cx="180" cy="223.6" r="2.9">
+                    <title>6 / 1</title>
+                </circle>
+                <circle cx="180" cy="209.133" r="2.9">
+                    <title>6 / 1,5</title>
+                </circle>
+                <circle cx="180" cy="194.667" r="2.9">
+                    <title>6 / 2</title>
+                </circle>
+                <circle cx="180" cy="180.2" r="2.9">
+                    <title>6 / 2,5</title>
+                </circle>
+                <circle cx="180" cy="165.733" r="2.9">
+                    <title>6 / 3</title>
+                </circle>
+                <circle cx="180" cy="151.267" r="2.9">
+                    <title>6 / 3,5</title>
+                </circle>
+                <circle cx="180" cy="136.8" r="2.9">
+                    <title>6 / 4</title>
+                </circle>
+                <circle cx="180" cy="107.867" r="2.9">
+                    <title>6 / 5</title>
+                </circle>
+                <circle cx="180" cy="93.4" r="2.9">
+                    <title>6 / 5,5</title>
+                </circle>
+                <circle cx="180" cy="78.933" r="2.9">
+                    <title>6 / 6</title>
+                </circle>
+                <circle cx="180" cy="64.467" r="2.9">
+                    <title>6 / 6,5</title>
+                </circle>
+            </g>
+        </g>
+    </svg>
+    <text x="35mm" y="287mm">-0,5</text>
+    <text x="56.538mm" y="287mm">0,5</text>
+    <text x="78.077mm" y="287mm">1,5</text>
+    <text x="99.615mm" y="287mm">2,5</text>
+    <text x="121.154mm" y="287mm">3,5</text>
+    <text x="142.692mm" y="287mm">4,5</text>
+    <text x="164.231mm" y="287mm">5,5</text>
+    <text text-anchor="end" x="30mm" y="272mm">-0,5</text>
+    <text text-anchor="end" x="30mm" y="243.067mm">0,5</text>
+    <text text-anchor="end" x="30mm" y="214.133mm">1,5</text>
+    <text text-anchor="end" x="30mm" y="185.2mm">2,5</text>
+    <text text-anchor="end" x="30mm" y="156.267mm">3,5</text>
+    <text text-anchor="end" x="30mm" y="127.333mm">4,5</text>
+    <text text-anchor="end" x="30mm" y="98.4mm">5,5</text>
+    <text text-anchor="end" x="30mm" y="69.467mm">6,5</text>
+</svg>

@@ -1,135 +1,106 @@
 package tud.tangram.svgplot.coordinatesystem;
 
 import java.text.DecimalFormat;
-import java.util.Locale;
-/**
- * 
- * @author Gregor Harlan, Jens Bornschein
- * Idea and supervising by Jens Bornschein jens.bornschein@tu-dresden.de
- * Copyright by Technische Universität Dresden / MCI 2014
- *
- */
-public class Axis {
-	final private static int minGridDistance = 10;
+import java.util.NoSuchElementException;
 
-	final public double ticInterval;
-	final public Range ticRange;
-	final public double gridInterval;
-	final public Range range;
-	final public double atom;
-	final public int atomCount;
-	final public double[] intervalSteps;
+import tud.tangram.svgplot.utils.Constants;
 
-	final private DecimalFormat decimalFormat = (DecimalFormat) DecimalFormat.getInstance(Locale.getDefault());
-	// FIXME: use this for publications
-	//final private DecimalFormat decimalFormat = (DecimalFormat) DecimalFormat.getInstance(Locale.US);
-		
-	public Axis(Range axisRange, double size) {
-		boolean finished = false;
-		double interval = 0;
-		range = new Range(0, 0);
-		int dimensionExp;
-		double dimension;
-		double factor;
-		do {
-			int maxTics = (int) (size / minGridDistance);
-			interval = axisRange.distance() / maxTics;
-			dimensionExp = 0;
-			int direction = interval < 1 ? -1 : 1;
-			while (direction * 0.5 * Math.pow(10, dimensionExp) < direction * interval) {
-				dimensionExp += direction;
-			}
-			if (direction == 1) {
-				dimensionExp--;
-			}
-			dimension = Math.pow(10, dimensionExp);
-			if (interval > dimension) {
-				factor = 2.5;
-			} else if (interval > 0.5 * dimension) {
-				factor = 1;
-			} else {
-				factor = 0.5;
-			}
-			finished = true;
-			interval = factor * dimension;
-			range.from = ((int) (axisRange.from / interval)) * interval;
-			range.to = ((int) (axisRange.to / interval)) * interval;
-			range.name = axisRange.name;
-			if (range.from > axisRange.from) {
-				axisRange.from = range.from - interval;
-				finished = false;
-			}
-			if (range.to < axisRange.to) {
-				axisRange.to = range.to + interval;
-				finished = false;
-			}
-		} while (!finished);
+public abstract class Axis {
 
-		gridInterval = interval;
+	// The following offsets can and shall be overwritten by child classes
+	/** X offset of horizontal axis labels */
+	public final double labelOffsetHorizontalX;
+	/** Y offset of horizontal axis labels */
+	public final double labelOffsetHorizontalY;
+	/** X offset of vertical axis labels */
+	public final double labelOffsetVerticalX;
+	/** Y offset of vertical axis labels */
+	public final double labelOffsetVerticalY;
 
-		ticInterval = 2 * interval;
-		ticRange = new Range(((int) (range.from / ticInterval)) * ticInterval, ((int) (range.to / ticInterval)) * ticInterval);
+	protected double ticInterval;
+	protected Range ticRange;
+	protected double gridInterval;
+	protected Range range;
+	protected double labelInterval;
+	protected Range labelRange;
+	protected final DecimalFormat decimalFormat = (DecimalFormat) DecimalFormat.getInstance(Constants.locale);
+	
+	protected String unit;
+	protected String title;
+	
+	/** How much the point position shall be shifted - used for nominal axes.*/
+	protected final double pointOffset;
 
-		decimalFormat.setMaximumFractionDigits(Math.max(0, -dimensionExp + 2));
-
-		atom = dimension / 100;
-		atomCount = (int) (range.distance() / atom + 1);
-
-		int i = 0;
-		if (factor == 2.5) {
-			intervalSteps = new double[6];
-			intervalSteps[i++] = 2.5 * dimension;
-			intervalSteps[i++] = dimension;
-		} else if (factor == 1) {
-			intervalSteps = new double[5];
-			intervalSteps[i++] = dimension;
-		} else {
-			intervalSteps = new double[4];
-		}
-		intervalSteps[i++] = 0.5 * dimension;
-		intervalSteps[i++] = 0.1 * dimension;
-		intervalSteps[i++] = 0.05 * dimension;
-		intervalSteps[i++] = 0.01 * dimension;
+	/**
+	 * Constructor setting the label and point offsets.
+	 * @param labelOffsetHorizontalX
+	 * @param labelOffsetHorizontalY
+	 * @param labelOffsetVerticalX
+	 * @param labelOffsetVerticalY
+	 * @param pointOffset
+	 */
+	public Axis(double labelOffsetHorizontalX, double labelOffsetHorizontalY, double labelOffsetVerticalX,
+			double labelOffsetVerticalY, double pointOffset, String title, String unit) {
+		this.labelOffsetHorizontalX = labelOffsetHorizontalX;
+		this.labelOffsetHorizontalY = labelOffsetHorizontalY;
+		this.labelOffsetVerticalX = labelOffsetVerticalX;
+		this.labelOffsetVerticalY = labelOffsetVerticalY;
+		this.pointOffset = pointOffset;
+		this.title = title;
+		this.unit = unit;
 	}
 
-	public Iterator ticLines() {
-		return new Iterator(ticRange, ticInterval);
+	public AxisIterator ticLines() {
+		return new AxisIterator(ticRange, ticInterval);
 	}
 
-	public Iterator gridLines() {
-		return new Iterator(range, gridInterval);
+	public AxisIterator gridLines() {
+		return new AxisIterator(range, gridInterval);
 	}
 
-	public String format(double value) {
-		String str = decimalFormat.format(value);
-		return "-0".equals(str) ? "0" : str;
+	public AxisIterator labelPositions() {
+		return new AxisIterator(labelRange, labelInterval);
 	}
 
-	protected static class Iterator implements java.util.Iterator<Double>, Iterable<Double> {
+	public abstract String formatForAxisLabel(double value);
+
+	public abstract String formatForAxisAudioLabel(double value);
+	
+	public abstract String formatForSymbolAudioLabel(double value);
+
+	protected static class AxisIterator implements java.util.Iterator<Double>, Iterable<Double> {
 
 		private Range range;
 		private double interval;
 		private double current;
 
-		protected Iterator(Range range, double interval) {
-			this.range = range;
-			this.interval = interval;
-			current = range.from;
+		protected AxisIterator(Range range, double interval) {
+			this(range, interval, 0);
 		}
 
+		protected AxisIterator(Range range, double interval, double offset) {
+			this.range = range;
+			this.interval = interval;
+			current = range.getFrom() + offset;
+		}
+
+		/**
+		 * Get the next axis value. There used to be a check for skipping the
+		 * zero value, but now it is not skipped anymore, because there are axis
+		 * configurations where the zero tics and gridlines are needed.
+		 */
 		@Override
 		public boolean hasNext() {
-			if (current == 0) {
-				current += interval;
-			}
-			return current <= range.to;
+			return current <= range.getTo();
 		}
 
 		@Override
 		public Double next() {
-			double current = this.current;
+			if (!hasNext())
+				throw new NoSuchElementException();
+			double nextCurrent = this.current;
 			this.current += interval;
-			return current;
+			return nextCurrent;
 		}
 
 		@Override
@@ -138,10 +109,45 @@ public class Axis {
 		}
 
 		@Override
-		public Iterator iterator() {
+		public AxisIterator iterator() {
 			return this;
 		}
 
 	}
 
+	public double getTicInterval() {
+		return ticInterval;
+	}
+
+	public Range getTicRange() {
+		return ticRange;
+	}
+
+	public double getGridInterval() {
+		return gridInterval;
+	}
+
+	public Range getRange() {
+		return range;
+	}
+
+	public double getLabelInterval() {
+		return labelInterval;
+	}
+	
+	public Range getLabelRange() {
+		return labelRange;
+	}
+
+	public String getUnit() {
+		return unit;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+	
+	public double getPointOffset() {
+		return pointOffset;
+	}
 }

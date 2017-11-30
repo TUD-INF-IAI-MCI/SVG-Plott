@@ -5,7 +5,7 @@ import com.beust.jcommander.IStringConverter;
  * 
  * @author Gregor Harlan
  * Idea and supervising by Jens Bornschein jens.bornschein@tu-dresden.de
- * Copyright by Technische Universit‰t Dresden / MCI 2014
+ * Copyright by Technische Universit√§t Dresden / MCI 2014
  *
  */
 public class Function {

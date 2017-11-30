@@ -15,7 +15,7 @@ public class HtmlDocument extends Document {
 	 * 
 	 * @author Gregor Harlan
 	 * Idea and supervising by Jens Bornschein jens.bornschein@tu-dresden.de
-	 * Copyright by Technische Universit‰t Dresden / MCI 2014
+	 * Copyright by Technische Universit√§t Dresden / MCI 2014
 	 *
 	 */
 	public HtmlDocument(String title) throws ParserConfigurationException {
@@ -33,7 +33,7 @@ public class HtmlDocument extends Document {
 		appendChild(body);
 	}
 
-	public Node appendBodyChild(Element child) {
+	public Node appendBodyChild(Node child) {
 		return body.appendChild(child);
 	}
 

@@ -1,0 +1,1 @@
+java -jar svg-plott.jar --diagramtype LineChart   --title "Example 2 LineChart" --csvpath  ./examples/charts/example_2_linechart/example_2_linechart.csv  --output example_2_linechart.svg --autoscale

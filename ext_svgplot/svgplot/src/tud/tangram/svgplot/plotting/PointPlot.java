@@ -5,94 +5,118 @@ import java.util.List;
 
 import org.w3c.dom.Element;
 
-import tud.tangram.svgplot.SvgPlot;
-import tud.tangram.svgplot.coordinatesystem.Point;
+import tud.tangram.svgplot.data.Point;
+import tud.tangram.svgplot.styles.PointPlotStyle;
+import tud.tangram.svgplot.utils.Constants;
 import tud.tangram.svgplot.xml.SvgDocument;
 
 /**
  * 
- * @author Gregor Harlan, Jens Bornschein
- * Idea and supervising by Jens Bornschein jens.bornschein@tu-dresden.de
- * Copyright by Technische Universit‰t Dresden / MCI 2014
+ * @author Gregor Harlan, Jens Bornschein Idea and supervising by Jens
+ *         Bornschein jens.bornschein@tu-dresden.de Copyright by Technische
+ *         Universit√§t Dresden / MCI 2014
  *
  */
 public class PointPlot {
 
+	public enum PointType {
+		BG, FG
+	}
+
 	/**
-	 * Place a symbol at a given point.
+	 * The css class for the visual part of a POI Symbol
+	 */
+	public static final String POI_SYMBOL_VISIBLE_CLASS = "poi_symbol";
+	/**
+	 * The css class for the underlying part of a POI Symbol, should result i a
+	 * kind of outline.
+	 */
+	public static final String POI_SYMBOL_SPACER_CLASS = Constants.SPACER_CSS_CLASS;
+
+	/**
+	 * The list of available POI point symbols
+	 */
+	private List<Element> poiSymbolElements;
+	private List<Element> poiSymbolBackgroundElements;
+	// private SvgDocument poiSymbolDoc; FIXME When is this used?
+	private PointPlotStyle style;
+	private SvgDocument doc;
+
+	public PointPlot(SvgDocument doc, PointPlotStyle style) {
+		this.style = style;
+		this.doc = doc;
+		
+		if (doc == null)
+			throw new IllegalArgumentException("You must supply an SvgDocument");
+		if (style == null)
+			throw new IllegalArgumentException("You must supply a PointPlotStyle");
+
+		initSymbolArray();
+	}
+
+	/**
+	 * Select a point symbol for the given id and places it at a given point.
+	 * May return null, if a borderless style is selected and an attempt to
+	 * create a border is made.
 	 * 
-	 * @param doc		|	the svg document
-	 * @param p			|	the point to place the symbol
-	 * @param symbol	|	the svg Symbol to use for the point
-	 * @param parent	|	the parent svg element where the used symbol should be added as a child. 
+	 * @param pointParent
+	 *            | the parent group of the point
+	 * @param pointType
+	 *            | specify whether a background or foreground is queried
+	 * @param position
+	 *            | the point to place the symbol
+	 * @param index
+	 *            | the index of the pointlist, influences which symbol is
+	 *            selected
 	 * @return the svg 'use' element that visually represents the point
 	 */
-	public static Element paintPoint(SvgDocument doc, Point p, Element symbol,
-			Element parent) {
+	public Element paintPoint(Element pointParent, PointType pointType, Point position, int index) {
+		Element pointElement = getPointSymbolForIndex(pointType, index);
 
-		if (doc == null) return null;
+		if (pointElement == null)
+			return null;
+
+		// Get or create a defs section
 		Element defs = (Element) doc.defs;
 		if (defs == null)
-			defs = addDevsToDoc(doc);
+			defs = addDefsToDoc();
 
-		String symbolId = "";
-
-		if (defs != null) {
-			if (symbol != null && symbol.hasAttribute("id")) {
-				if (doc.getElementById(symbol.getAttribute("id")) == null) {
-					defs.appendChild(symbol);
-				}
-				symbolId = symbol.getAttribute("id");
-			}
+		// Add the point symbol to the defs, if it is not already there. Also
+		// save its
+		// id.
+		if (doc.getElementById(pointElement.getAttribute("id")) == null) {
+			defs.appendChild(pointElement);
 		}
-		return paintPoint(doc, p, symbolId, parent);
+		String pointSymbolId = pointElement.getAttribute("id");
+
+		return paintPointUse(pointParent, position, pointSymbolId);
 	}
 
 	/**
 	 * Place a symbol at a given point.
 	 * 
-	 * @param doc		|	the svg document
-	 * @param p			|	the point to place the symbol
-	 * @param symbol	|	the svg Symbol to use for the point
-	 * @param parent	|	the parent svg element where the used symbol should be added as a child. 
+	 * @param parent
+	 *            | the parent group of the symbol
+	 * @param p
+	 *            | the point to place the symbol
+	 * @param symbolId
+	 *            | the svg Symbol id to use for the point
 	 * @return the svg 'use' element that visually represents the point
 	 */
-	public static Element paintPoint(SvgDocument doc, Point p, String symbolId,
-			Element parent) {
-
-		if(doc == null) return null;
+	private Element paintPointUse(Element parent, Point p, String symbolId) {
+		// Get the parent of the point
+		Element safeParent;
 		if (parent == null)
-			parent = doc.document();
-		if (symbolId == null || symbolId.isEmpty()
-				|| doc.getElementById(symbolId) == null) {
-			Element defs = (Element) doc.defs;
-			if (defs == null)
-				defs = addDevsToDoc(doc);
+			safeParent = doc.document();
+		else
+			safeParent = parent;
 
-			if (defs != null) { // TODO: set default
-				Element symbol = createCrossSymbol(doc);
-				// Element cross = createPlusSymbol(doc);
-				// Element cross = createCircleSymbol(doc);
-				// Element cross = createDotSymbol(doc);
-				// Element cross = createSquareSymbol(doc);
-				// Element cross = createRombusSymbol(doc);
-
-				if (symbol != null && symbol.hasAttribute("id")) {
-					if (doc.getChildElementById((Element) doc.defs,
-							symbol.getAttribute("id")) == null) {
-						defs.appendChild(symbol);
-					}
-					symbolId = symbol.getAttribute("id");
-				} else
-					return null;
-			}
-		}
 		// do a use
 		Element use = doc.createElement("use");
 		use.setAttribute("xlink:href", "#" + symbolId);
 		use.setAttribute("x", p.x());
 		use.setAttribute("y", p.y());
-		parent.appendChild(use);
+		safeParent.appendChild(use);
 
 		return use;
 	}
@@ -100,101 +124,90 @@ public class PointPlot {
 	/**
 	 * Adds a SVG defs Element to the svg document
 	 * 
-	 * @param doc	| The SVG document
+	 * @param doc
+	 *            | The SVG document
 	 * @return the defs section Element already inserted into the svg document
 	 */
-	private static Element addDevsToDoc(SvgDocument doc) {
-		Element devs = doc.createElement("devs");
-		doc.appendChild(devs);
-		return devs;
+	private Element addDefsToDoc() {
+		Element defs = doc.createElement("defs");
+		doc.appendChild(defs);
+		return defs;
 	}
 
-	// TODO: make this more generic for using more point symbols
 	/**
-	 * Returns a svg Symbol corresponding to the given index. 
-	 * The symbols are stored in a list sorted by here recognizability.
-	 * The first symbols are best to detect and to recognize. If the 
-	 * index is higher than the amount of available symbols the last 
-	 * symbol will be returned.
+	 * Returns a svg point/background Symbol corresponding to the given index.
+	 * The symbols are stored in a list sorted by their recognizability. The
+	 * first symbols are best to detect and to recognize. If the index is higher
+	 * than the amount of available symbols the last symbol will be returned.
 	 * 
-	 * @param index	|	the symbols list entry to return
-	 * @param doc	|	the SVG document
+	 * @param index
+	 *            | the symbols list entry to return
 	 * @return an svg Symbol Element
 	 */
-	public static Element getPointSymbolForIndex(int index, SvgDocument doc) {
-		if (doc != null) {
-			if (initSymbolArray(doc)) {
-				if (POI_SYMBOL_ELEMNTS.size() > index)
-					return POI_SYMBOL_ELEMNTS.get(index);
-				else if (POI_SYMBOL_ELEMNTS.size() > 0)
-					return POI_SYMBOL_ELEMNTS
-							.get(POI_SYMBOL_ELEMNTS.size() - 1);
+	private Element getPointSymbolForIndex(PointType pointType, int index) {
+		List<Element> elements = pointType == PointType.FG ? poiSymbolElements : poiSymbolBackgroundElements;
+		if (elements.size() > index)
+			return elements.get(index);
+		if (elements.isEmpty())
+			return null;
+		return elements.get(elements.size() - 1);
+	}
+
+	/**
+	 * Fills the poiSymbolElements list with the svg symbols. Has to add at
+	 * least one symbol in any case. For the borderless dot styles no border
+	 * elements are added.
+	 * 
+	 */
+	private void initSymbolArray() {
+		poiSymbolElements = new ArrayList<>();
+		poiSymbolBackgroundElements = new ArrayList<>();
+
+		if (doc == null)
+			return;
+
+		if (style == PointPlotStyle.DOTS || style == PointPlotStyle.DOTS_BORDERLESS) {
+			poiSymbolElements.add(createFilledCircleSymbol(PointType.FG));
+			if (style == PointPlotStyle.DOTS)
+				poiSymbolBackgroundElements.add(createFilledCircleSymbol(PointType.BG));
+		} else {
+			poiSymbolElements.add(createSquareSymbol(PointType.FG));
+			poiSymbolElements.add(createCrossSymbol(PointType.FG));
+			poiSymbolElements.add(createRhombusSymbol(PointType.FG));
+			poiSymbolElements.add(createPlusSymbol(PointType.FG));
+			poiSymbolElements.add(createFilledCircleSymbol(PointType.FG));
+			poiSymbolElements.add(createCircleSymbol(PointType.FG));
+			if (style == PointPlotStyle.MULTI_ROWS) {
+				poiSymbolBackgroundElements.add(createSquareSymbol(PointType.BG));
+				poiSymbolBackgroundElements.add(createCrossSymbol(PointType.BG));
+				poiSymbolBackgroundElements.add(createRhombusSymbol(PointType.BG));
+				poiSymbolBackgroundElements.add(createPlusSymbol(PointType.BG));
+				poiSymbolBackgroundElements.add(createFilledCircleSymbol(PointType.BG));
+				poiSymbolBackgroundElements.add(createCircleSymbol(PointType.BG));
 			}
 		}
-		return null;
 	}
-	/**
-	 * The list of available POI point symbols
-	 */
-	private static List<Element> POI_SYMBOL_ELEMNTS = new ArrayList<Element>();
-	private static SvgDocument POI_SYMBOL_DOC;
-	/**
-	 * fills the POI_SYMBOL_ELEMNTS list with the svg symbols.
-	 * 
-	 * @param doc	|	 the svg document
-	 * @return <code>true</code> if the list was , otherwise <code>false</code> 
-	 */
-	private static boolean initSymbolArray(SvgDocument doc) {
-		if (doc == null)
-			return false;
-		if (POI_SYMBOL_ELEMNTS == null || POI_SYMBOL_ELEMNTS.size() < 1 || POI_SYMBOL_DOC == null || !POI_SYMBOL_DOC.equals(doc)) {
-			POI_SYMBOL_DOC = doc;
-			POI_SYMBOL_ELEMNTS = new ArrayList<Element>();
-			POI_SYMBOL_ELEMNTS.add(createSquareSymbol(doc));
-			POI_SYMBOL_ELEMNTS.add(createCrossSymbol(doc));
-			POI_SYMBOL_ELEMNTS.add(createRhombusSymbol(doc));
-			POI_SYMBOL_ELEMNTS.add(createPlusSymbol(doc));
-			POI_SYMBOL_ELEMNTS.add(createDotSymbol(doc));
-			POI_SYMBOL_ELEMNTS.add(createCircleSymbol(doc));
-		}
-		return true;
-	}
-	/**
-	 * The css class for the visual part of a POI Symbol
-	 */
-	public static final String POI_SYMBOL_VISSIBLE_CLASS = "poi_symbol";
-	/**
-	 * The css class for the underlying part of a POI Symbol, should result i a kind of outline. 
-	 */
-	public final static String POI_SYMBOL_SPACER_CLASS = SvgPlot.spacerCssClass;
 
 	/**
 	 * Creates a cross Symbol with the id 'poi_cross'
 	 * 
-	 * @param doc	|	the svg document
-	 * @return an SVG symbol with the id 'poi_cross' representing a little cross 
+	 * @return an SVG symbol with the id 'poi_cross' representing a little cross
 	 */
-	private static Element createCrossSymbol(SvgDocument doc) {
+	private Element createCrossSymbol(PointType pointType) {
 
-		Element symbol = createSymbol(doc, "poi_cross");
+		Element symbol = createSymbol("poi_cross" + (pointType == PointType.BG ? "_bg" : ""));
 		symbol.setAttribute("style", "stroke-linecap:round; ");
 
-		Element vGroup = doc.createElement("g");
-		vGroup.setAttribute("class", POI_SYMBOL_VISSIBLE_CLASS);
-		Element bgGroup = doc.createElement("g");
-		bgGroup.setAttribute("class", POI_SYMBOL_SPACER_CLASS);
+		Element group = doc.createElement("g");
+		group.setAttribute("class", pointType == PointType.BG ? POI_SYMBOL_SPACER_CLASS : POI_SYMBOL_VISIBLE_CLASS);
 
-		symbol.appendChild(bgGroup);
-		symbol.appendChild(vGroup);
+		symbol.appendChild(group);
 
 		Element line1 = doc.createLine(new Point(-2, 2), new Point(2, -2));
 		Element line2 = doc.createLine(new Point(-2, -2), new Point(2, 2));
 
-		bgGroup.appendChild(line2);
-		bgGroup.appendChild(line1);
-
-		vGroup.appendChild(line2.cloneNode(true));
-		vGroup.appendChild(line1.cloneNode(true));
+		group.appendChild(line2);
+		group.appendChild(line1);
 
 		return symbol;
 	}
@@ -202,30 +215,23 @@ public class PointPlot {
 	/**
 	 * Creates a plus Symbol with the id 'poi_plus'
 	 * 
-	 * @param doc	|	the svg document
-	 * @return an SVG symbol with the id 'poi_plus' representing a little plus 
+	 * @return an SVG symbol with the id 'poi_plus' representing a little plus
 	 */
-	private static Element createPlusSymbol(SvgDocument doc) {
+	private Element createPlusSymbol(PointType pointType) {
 
-		Element symbol = createSymbol(doc, "poi_plus");
+		Element symbol = createSymbol("poi_plus" + (pointType == PointType.BG ? "_bg" : ""));
 		symbol.setAttribute("style", "stroke-linecap:round; ");
 
-		Element vGroup = doc.createElement("g");
-		vGroup.setAttribute("class", "poi_symbol");
-		Element bgGroup = doc.createElement("g");
-		bgGroup.setAttribute("class", "poi_symbol_bg");
+		Element group = doc.createElement("g");
+		group.setAttribute("class", pointType == PointType.BG ? POI_SYMBOL_SPACER_CLASS : POI_SYMBOL_VISIBLE_CLASS);
 
-		symbol.appendChild(bgGroup);
-		symbol.appendChild(vGroup);
+		symbol.appendChild(group);
 
 		Element hLine = doc.createLine(new Point(-2, 0), new Point(2, 0));
 		Element vLine = doc.createLine(new Point(0, -2), new Point(0, 2));
 
-		bgGroup.appendChild(hLine);
-		bgGroup.appendChild(vLine);
-
-		vGroup.appendChild(hLine.cloneNode(true));
-		vGroup.appendChild(vLine.cloneNode(true));
+		group.appendChild(hLine);
+		group.appendChild(vLine);
 
 		return symbol;
 	}
@@ -233,52 +239,46 @@ public class PointPlot {
 	/**
 	 * Creates a circle Symbol with the id 'poi_circles'
 	 * 
-	 * @param doc	|	the svg document
-	 * @return an SVG symbol with the id 'poi_circle' representing a little circle 
+	 * @return an SVG symbol with the id 'poi_circle' representing a little
+	 *         circle
 	 */
-	private static Element createCircleSymbol(SvgDocument doc) {
+	private Element createCircleSymbol(PointType pointType) {
 
-		Element symbol = createSymbol(doc, "poi_circle");
+		Element symbol = createSymbol("poi_circle" + (pointType == PointType.BG ? "_bg" : ""));
 		symbol.setAttribute("style", "stroke-linecap:round; fill-opacity:0");
 
-		Element vGroup = doc.createElement("g");
-		vGroup.setAttribute("class", POI_SYMBOL_VISSIBLE_CLASS);
-		Element bgGroup = doc.createElement("g");
-		bgGroup.setAttribute("class", POI_SYMBOL_SPACER_CLASS);
+		Element group = doc.createElement("g");
+		group.setAttribute("class", pointType == PointType.BG ? POI_SYMBOL_SPACER_CLASS : POI_SYMBOL_VISIBLE_CLASS);
 
-		symbol.appendChild(bgGroup);
-		symbol.appendChild(vGroup);
+		symbol.appendChild(group);
 
 		Element circle = doc.createCircle(new Point(0, 0), 1.7);
-		bgGroup.appendChild(circle);
-		vGroup.appendChild(circle.cloneNode(true));
+		group.appendChild(circle);
 
 		return symbol;
 	}
 
 	/**
-	 * Creates a dot Symbol with the id 'poi_dot'
+	 * Creates a filled circle Symbol with the id 'poi_dot'
 	 * 
-	 * @param doc	|	the svg document
-	 * @return an SVG symbol with the id 'poi_dot' representing a little filled dot 
+	 * @return an SVG symbol with the id 'poi_dot' representing a little filled
+	 *         dot
 	 */
-	private static Element createDotSymbol(SvgDocument doc) {
+	private Element createFilledCircleSymbol(PointType pointType) {
 
-		Element symbol = createSymbol(doc, "poi_dot");
+		Element symbol = createSymbol("poi_dot" + (pointType == PointType.BG ? "_bg" : ""));
 		symbol.setAttribute("style", "stroke-linecap:round;");
 
-		Element vGroup = doc.createElement("g");
-		vGroup.setAttribute("class", POI_SYMBOL_VISSIBLE_CLASS);
-		vGroup.setAttribute("style", "stroke-opacity:0");
-		Element bgGroup = doc.createElement("g");
-		bgGroup.setAttribute("class", POI_SYMBOL_SPACER_CLASS);
+		Element group = doc.createElement("g");
+		group.setAttribute("class", pointType == PointType.BG ? POI_SYMBOL_SPACER_CLASS : POI_SYMBOL_VISIBLE_CLASS);
 
-		symbol.appendChild(bgGroup);
-		symbol.appendChild(vGroup);
+		if (pointType == PointType.FG)
+			group.setAttribute("style", "stroke-opacity:0");
+
+		symbol.appendChild(group);
 
 		Element circle = doc.createCircle(new Point(0, 0), 2.2);
-		bgGroup.appendChild(circle);
-		vGroup.appendChild(circle.cloneNode(true));
+		group.appendChild(circle);
 
 		return symbol;
 	}
@@ -286,26 +286,24 @@ public class PointPlot {
 	/**
 	 * Creates a square Symbol with the id 'poi_square'
 	 * 
-	 * @param doc	|	the svg document
-	 * @return an SVG symbol with the id 'poi_square' representing a little filled square 
+	 * @return an SVG symbol with the id 'poi_square' representing a little
+	 *         filled square
 	 */
-	private static Element createSquareSymbol(SvgDocument doc) {
+	private Element createSquareSymbol(PointType pointType) {
 
-		Element symbol = createSymbol(doc, "poi_square");
+		Element symbol = createSymbol("poi_square" + (pointType == PointType.BG ? "_bg" : ""));
 		symbol.setAttribute("style", "stroke-linecap:round;");
 
-		Element vGroup = doc.createElement("g");
-		vGroup.setAttribute("class", POI_SYMBOL_VISSIBLE_CLASS);
-		vGroup.setAttribute("style", "stroke-opacity:0");
-		Element bgGroup = doc.createElement("g");
-		bgGroup.setAttribute("class", POI_SYMBOL_SPACER_CLASS);
+		Element group = doc.createElement("g");
+		group.setAttribute("class", pointType == PointType.BG ? POI_SYMBOL_SPACER_CLASS : POI_SYMBOL_VISIBLE_CLASS);
 
-		symbol.appendChild(bgGroup);
-		symbol.appendChild(vGroup);
+		if (pointType == PointType.FG)
+			group.setAttribute("style", "stroke-opacity:0");
+
+		symbol.appendChild(group);
 
 		Element square = doc.createRectangle(new Point(-2, -2), 4, 4);
-		bgGroup.appendChild(square);
-		vGroup.appendChild(square.cloneNode(true));
+		group.appendChild(square);
 
 		return symbol;
 	}
@@ -313,41 +311,38 @@ public class PointPlot {
 	/**
 	 * Creates a rhomb Symbol with the id 'poi_rhombus'
 	 * 
-	 * @param doc	|	the svg document
-	 * @return an SVG symbol with the id 'poi_rhombus' representing a little filled rhomb 
+	 * @return an SVG symbol with the id 'poi_rhombus' representing a little
+	 *         filled rhomb
 	 */
-	private static Element createRhombusSymbol(SvgDocument doc) {
+	private Element createRhombusSymbol(PointType pointType) {
 
-		Element symbol = createSymbol(doc, "poi_rhombus");
+		Element symbol = createSymbol("poi_rhombus" + (pointType == PointType.BG ? "_bg" : ""));
 		symbol.setAttribute("style", "stroke-linecap:round;");
 
-		Element vGroup = doc.createElement("g");
-		vGroup.setAttribute("class", POI_SYMBOL_VISSIBLE_CLASS);
-		vGroup.setAttribute("style", "stroke-opacity:0");
-		Element bgGroup = doc.createElement("g");
-		bgGroup.setAttribute("class", POI_SYMBOL_SPACER_CLASS);
+		Element group = doc.createElement("g");
+		group.setAttribute("class", pointType == PointType.BG ? POI_SYMBOL_SPACER_CLASS : POI_SYMBOL_VISIBLE_CLASS);
 
-		symbol.appendChild(bgGroup);
-		symbol.appendChild(vGroup);
+		if (pointType == PointType.FG)
+			group.setAttribute("style", "stroke-opacity:0");
+
+		symbol.appendChild(group);
 
 		Element rombus = doc.createElement("polygon");
 		rombus.setAttribute("points", "0,-2.5 2.5,0 0,2.5 -2.5,0");
-		bgGroup.appendChild(rombus);
-		vGroup.appendChild(rombus.cloneNode(true));
+		group.appendChild(rombus);
 
 		return symbol;
 	}
 
 	/**
-	 * Represent the basic structure of an svg Symbol.
-	 * Setting 'preserveAspectRatio' to 'xMidYMid slice' and
-	 * 'overflow' to 'visible';
+	 * Represent the basic structure of an svg Symbol. Setting
+	 * 'preserveAspectRatio' to 'xMidYMid slice' and 'overflow' to 'visible';
 	 * 
-	 * @param doc	|	the svg document
-	 * @param id	|	the id-attribute the symbol should get
+	 * @param id
+	 *            | the id-attribute the symbol should get
 	 * @return the symbol skeleton
 	 */
-	public static Element createSymbol(SvgDocument doc, String id) {
+	public Element createSymbol(String id) {
 		Element symbol = doc.createElement("symbol", id);
 		symbol.setAttribute("preserveAspectRatio", "xMidYMid slice");
 		symbol.setAttribute("overflow", "visible");

@@ -10,14 +10,14 @@ import java.util.Locale;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 
-import tud.tangram.svgplot.coordinatesystem.Point;
 import tud.tangram.svgplot.coordinatesystem.Range;
+import tud.tangram.svgplot.data.Point;
 
 /**
  * 
  * @author Gregor Harlan
  * Idea and supervising by Jens Bornschein jens.bornschein@tu-dresden.de
- * Copyright by Technische Universit‰t Dresden / MCI 2014
+ * Copyright by Technische Universit√§t Dresden / MCI 2014
  *
  */
 public class Gnuplot {
@@ -54,8 +54,8 @@ public class Gnuplot {
 		String command = "set table; \n";
 		command += "set sample " + sample + "; ";
 		String pi = this.pi ? "*pi" : "";
-		command += "set xrange [" + xrange.from + pi + ":" + xrange.to + pi + "]; ";
-		command += "set yrange [" + yrange.from + ":" + yrange.to + "]; ";
+		command += "set xrange [" + xrange.getFrom() + pi + ":" + xrange.getTo() + pi + "]; ";
+		command += "set yrange [" + yrange.getFrom() + ":" + yrange.getTo() + "]; ";
 		//call gnuplot with command
 		Process p = Runtime.getRuntime().exec(new String[] { executable, "-e", command, "-e", "plot " + function });
 		BufferedReader bri = new BufferedReader(new InputStreamReader(p.getInputStream()));
@@ -71,11 +71,11 @@ public class Gnuplot {
 		boolean nextNewList = true;
 		
 		/*
-		 * When table mode is enabled, ëplotë and ësplotë commands print out a multicolumn 
+		 * When table mode is enabled, "plot" and "splot" commands print out a multicolumn 
 		 * ASCII table of X Y {Z} R values rather than creating an actual plot on the current 
 		 * terminal. The character R takes on one of three values: "i" if the point is in the 
 		 * active range, "o" if it is out-of-range, or "u" if it is undefined. The data 
-		 * format is determined by the format of the axis labels (see ëset formatë), and the 
+		 * format is determined by the format of the axis labels (see "set format"), and the 
 		 * columns are separated by single spaces.
 		 */
 		
@@ -89,7 +89,7 @@ public class Gnuplot {
 			scanner.useLocale(Locale.ENGLISH);
 			point = new Point(scanner.nextDouble(), scanner.nextDouble());
 			if (this.pi) {
-				point.x /= Math.PI;
+				point.setX(point.getX() / Math.PI);
 			}
 			String type = scanner.next();
 			if (type.equals("u")) {

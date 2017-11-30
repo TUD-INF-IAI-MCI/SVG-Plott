@@ -8,9 +8,9 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
-import tud.tangram.svgplot.SvgPlot;
 import tud.tangram.svgplot.coordinatesystem.CoordinateSystem;
-import tud.tangram.svgplot.coordinatesystem.Point;
+import tud.tangram.svgplot.data.Point;
+import tud.tangram.svgplot.utils.SvgTools;
 import tud.tangram.svgplot.xml.SvgDocument;
 
 public class IntegralPlot {
@@ -21,13 +21,12 @@ public class IntegralPlot {
 		this.cs = cs;
 	}
 
-	public void handlePlotIntergral(Plot plot, SvgDocument doc, Element parent,
-			double from, double to) {
-		handlePlotIntergral(plot, doc, parent, from, to, null);
+	public void handlePlotIntergral(Plot plot, SvgDocument doc, Element parent, double from, double to) {
+		handlePlotIntegral(plot, doc, parent, from, to, null);
 	}
 
-	public void handlePlotIntergral(Plot plot, SvgDocument doc, Element parent,
-			double from, double to, Plot intersectionPlot) {
+	public void handlePlotIntegral(Plot plot, SvgDocument doc, Element parent, double from, double to,
+			Plot intersectionPlot) {
 
 		Element integralContainer = doc.createGroup("integrals");
 		parent.appendChild(integralContainer);
@@ -38,24 +37,21 @@ public class IntegralPlot {
 		int i = 0;
 
 		String title = "integral";
-//				+ plot.getFunction().getTitle()
-//				+ " mit "
-//				+ (intersectionPlot != null ? intersectionPlot.getFunction()
-//						.getTitle() : "");
-		
-		if(intersectionPlot != null){
-			title = SvgPlot.translate("legend.integral_1", from, to, plot.Name, intersectionPlot.Name);
-		}else{
-			title = SvgPlot.translate("legend.integral_0", from, to, plot.Name);
+		// + plot.getFunction().getTitle()
+		// + " mit "
+		// + (intersectionPlot != null ? intersectionPlot.getFunction()
+		// .getTitle() : "");
+
+		if (intersectionPlot != null) {
+			title = SvgTools.translate("legend.integral_1", from, to, plot.Name, intersectionPlot.Name);
+		} else {
+			title = SvgTools.translate("legend.integral_0", from, to, plot.Name);
 		}
-		
-		
-		
+
 		String css = "integral-";
 
 		// crate container for Element
-		Node graph = parent
-				.appendChild(doc.createGroup("plot_integral-" + ++i));
+		Node graph = parent.appendChild(doc.createGroup("plot_integral-" + ++i));
 		// create path element
 		Element path = (Element) graph.appendChild(doc.createElement("path"));
 
@@ -67,11 +63,10 @@ public class IntegralPlot {
 
 		if (intersectionPlot != null) {
 			if (!intersectionPlot.equals(plot)) {
-				ispts = plot.getIntersections(intersectionPlot);	
+				ispts = plot.getIntersections(intersectionPlot);
 				Collections.sort(ispts);
 			}
 		}
-		
 
 		String points = "";
 		String backPoints = "";
@@ -83,11 +78,9 @@ public class IntegralPlot {
 				String op = "M"; // "moveto" command - start path
 
 				// check if the path should start at the x axes
-				if (intersectionPlot == null
-						&& (zero == null || zero.size() < 2)
-						&& list.get(0) != null
-						&& (list.get(0).x > cs.xAxis.range.from || list.get(0).y != 0)) {
-					points += op + cs.convert(Math.max(cs.xAxis.range.from, from), 0) + " ";
+				if (intersectionPlot == null && (zero == null || zero.size() < 2) && list.get(0) != null
+						&& (list.get(0).getX() > cs.xAxis.getRange().getFrom() || list.get(0).getY() != 0)) {
+					points += op + cs.convert(Math.max(cs.xAxis.getRange().getFrom(), from), 0) + " ";
 					op = "L";
 
 				}
@@ -96,41 +89,43 @@ public class IntegralPlot {
 				boolean started = false;
 				/******* START PAINTING EACH POINTOF A PLOT *********/
 				for (Point point : list) {
-					
+
 					// start integrals after first visible intersection
-					if (!started) { 
+					if (!started) {
 						if (!ispts.contains(point) && intersectionPlot != null)
 							continue;
-						else{
+						else {
 							started = true;
 						}
 					}
 
-					/******************* INTERSECION START ***********************/
+					/*******************
+					 * INTERSECION START
+					 ***********************/
 					if (ispts.size() > 0 && (ispts.contains(point))) {
 
 						int j = 0;
 						// try to find the index of the intersection point
 						for (j = 0; j < ispts.size(); j++) {
-							if (ispts.get(j) != null
-									&& ispts.get(j).equals(point))
+							if (ispts.get(j) != null && ispts.get(j).equals(point))
 								break;
 						}
 
 						Point nextIspt = null;
 						List<Point> otherPath = new ArrayList<Point>();
 						if (j >= 0 && j < ispts.size()) {
-							
+
 							Point start = ispts.get(j);
-							if(start.x <= from) start = new Point(from, 0);
-							
+							if (start.getX() <= from)
+								start = new Point(from, 0);
+
 							// get next point
 							if (j + 1 < (ispts.size())) {
-								nextIspt = ispts.get(j + 1);	
+								nextIspt = ispts.get(j + 1);
 								// next intersection point is out of range
-								if(nextIspt == null || nextIspt.x > to) nextIspt = new Point(to, 0);
-								otherPath = getFunctionAreaPoints(start,
-										nextIspt, intersectionPlot);
+								if (nextIspt == null || nextIspt.getX() > to)
+									nextIspt = new Point(to, 0);
+								otherPath = getFunctionAreaPoints(start, nextIspt, intersectionPlot);
 							}
 						}
 
@@ -139,11 +134,9 @@ public class IntegralPlot {
 							if (op.equals("L")) {
 								// end the path
 								points += "Z";
-								path = finalizePath(path, points, css + i,
-										"", title, null);
+								path = finalizePath(path, points, css + i, "", title, null);
 								// create new path
-								path = (Element) graph.appendChild(doc
-										.createElement("path"));
+								path = (Element) graph.appendChild(doc.createElement("path"));
 
 								// clear points
 								points = "";
@@ -152,52 +145,49 @@ public class IntegralPlot {
 
 							Collections.reverse(otherPath);
 							for (Point point2 : otherPath) {
-								backPoints += op + cs.convert(point2) + " ";
+								backPoints += op + cs.convertWithOffset(point2) + " ";
 								op = "L";
 							}
 							points += backPoints;
 							backPoints = "";
 						}
 					}
-					/******************* INTERSECION END ***********************/
+					/*******************
+					 * INTERSECION END
+					 ***********************/
 
 					// add the point to the path list
-					if(point.x <= to && point.x >= from) points += op + cs.convert(point) + " ";
-					else{
-						if(point.x >= from){
-							points += op + cs.convert(new Point(to,intersectionPlot != null ? point.y : 0)) + " ";
+					if (point.getX() <= to && point.getX() >= from)
+						points += op + cs.convertWithOffset(point) + " ";
+					else {
+						if (point.getX() >= from) {
+							points += op + cs.convertWithOffset(new Point(to, intersectionPlot != null ? point.getY() : 0)) + " ";
 							break;
-						}						
+						}
 					}
 
 					// if point is the last intersection point exit the handling
-					if (ispts != null && ispts.size() > 0
-							&& point.equals(ispts.get(ispts.size() - 1)))
+					if (ispts != null && ispts.size() > 0 && point.equals(ispts.get(ispts.size() - 1)))
 						break;
 
 					/******************* ROOT START ***********************/
 					if (intersectionPlot == null && zero.contains(point)) {
 						points += "Z";
-						path = finalizePath(path, points, css + i + " root", "", title,
-								null);
+						path = finalizePath(path, points, css + i + " root", "", title, null);
 						// create new path
-						path = (Element) graph.appendChild(doc
-								.createElement("path"));
+						path = (Element) graph.appendChild(doc.createElement("path"));
 
 						// clear points
-						points = "M" + cs.convert(point) + " ";
+						points = "M" + cs.convertWithOffset(point) + " ";
 					}
 					/******************* ROOT END ***********************/
 					op = "L";
 				}
 
 				// check if the path should end at the x axes
-				if (intersectionPlot == null
-						&& (zero == null || zero.size() < 2)
-						&& list.get(list.size() - 1) != null
-						&& (list.get(list.size() - 1).x < cs.xAxis.range.to || list
-								.get(list.size() - 1).y != 0)) {
-					points += op + cs.convert(Math.min(cs.xAxis.range.to, to), 0) + " ";
+				if (intersectionPlot == null && (zero == null || zero.size() < 2) && list.get(list.size() - 1) != null
+						&& (list.get(list.size() - 1).getX() < cs.xAxis.getRange().getTo() || list.get(list.size() - 1).getY() != 0)) {
+					points += op + cs.convert(Math.min(cs.xAxis.getRange().getTo(), to), 0) + " ";
 				}
 				points += " Z";
 			}
@@ -205,8 +195,7 @@ public class IntegralPlot {
 		path = finalizePath(path, points, css + i, "", title, null);
 	}
 
-	private Element finalizePath(Element path, String d, String cssClass,
-			String id, String title, String desc) {
+	private Element finalizePath(Element path, String d, String cssClass, String id, String title, String desc) {
 
 		cssClass = "integral " + cssClass;
 
@@ -258,15 +247,13 @@ public class IntegralPlot {
 	 *            | the function to search
 	 * @return List of points
 	 */
-	private static List<Point> getFunctionAreaPoints(Point from, Point to,
-			Plot plot) {
+	private static List<Point> getFunctionAreaPoints(Point from, Point to, Plot plot) {
 		List<Point> pl = new ArrayList<Point>();
 		if (from != null && to != null && plot != null) {
 			for (List<Point> list : plot) {
 				if (list != null && list.size() > 0) {
 					for (Point point : list) {
-						if (point.compareToX(from) >= 0
-								&& point.compareTo(to) <= 0) {
+						if (point.compareToX(from) >= 0 && point.compareTo(to) <= 0) {
 							pl.add(point);
 						}
 					}
@@ -287,7 +274,6 @@ public class IntegralPlot {
 		return null;
 	}
 
-
 	@SuppressWarnings("unused")
 	private static Point getListPointAtX(double x, List<Point> list) {
 
@@ -295,11 +281,11 @@ public class IntegralPlot {
 		if (list != null && list.size() > 0) {
 
 			for (Point point : list) {
-				if (x == point.x)
+				if (x == point.getX())
 					return point;
-				else if (x > point.x)
+				else if (x > point.getX())
 					lp = point;
-				else if (x < point.x)
+				else if (x < point.getX())
 					return lp;
 			}
 		}
@@ -309,39 +295,38 @@ public class IntegralPlot {
 	public static Element getFillPattern(SvgDocument doc) {
 
 		/**
-		 * <pattern id="diagonal_line1_SP_T" width="7.18420489685mm"
-		 * height="0.5mm" patternUnits="userSpaceOnUse"
-		 * patternTransform="rotate(-45) translate(-2 -2)"> <rect x="0" y="0"
-		 * width="100%" height="100%" fill="white" stroke="none"/> <line
-		 * x1="1.8288mm" y1="0" x2="1.8288mm" y2="0.5mm" stroke="black"
+		 * <pattern id="diagonal_line1_SP_T" width="7.18420489685mm" height=
+		 * "0.5mm" patternUnits="userSpaceOnUse" patternTransform="rotate(-45)
+		 * translate(-2 -2)">
+		 * <rect x="0" y="0" width="100%" height="100%" fill="white" stroke=
+		 * "none"/>
+		 * <line x1="1.8288mm" y1="0" x2="1.8288mm" y2="0.5mm" stroke="black"
 		 * stroke-width="0.8mm"/> </pattern>
 		 * 
-		 * <pattern id="diagonal_line2_PD" width="3.535533905932738mm"
-		 * height="0.5mm" patternUnits="userSpaceOnUse"
-		 * patternTransform="rotate(45)"> <rect x="0" y="0" width="100%"
-		 * height="100%" fill="white" stroke="none"/> <line x1="1.8mm" y1="0"
-		 * x2="1.8mm" y2="0.5mm" stroke="black" stroke-width="1.3mm"/>
-		 * </pattern>
+		 * <pattern id="diagonal_line2_PD" width="3.535533905932738mm" height=
+		 * "0.5mm" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+		 * <rect x="0" y="0" width="100%" height="100%" fill="white" stroke=
+		 * "none"/> <line x1="1.8mm" y1="0" x2="1.8mm" y2="0.5mm" stroke="black"
+		 * stroke-width="1.3mm"/> </pattern>
 		 * 
-		 * <pattern id="diagonal_line2_SP_T" width="3.5921024484mm"
-		 * height="0.5mm" patternUnits="userSpaceOnUse"
-		 * patternTransform="rotate(45) translate(-2 )"> <rect x="0" y="0"
-		 * width="100%" height="100%" fill="white" stroke="none"/> <line
-		 * x1="1.016mm" y1="0" x2="1.016mm" y2="0.5mm" stroke="black"
+		 * <pattern id="diagonal_line2_SP_T" width="3.5921024484mm" height=
+		 * "0.5mm" patternUnits="userSpaceOnUse" patternTransform="rotate(45)
+		 * translate(-2 )">
+		 * <rect x="0" y="0" width="100%" height="100%" fill="white" stroke=
+		 * "none"/>
+		 * <line x1="1.016mm" y1="0" x2="1.016mm" y2="0.5mm" stroke="black"
 		 * stroke-width="0.8mm"/> </pattern>
 		 */
 
 		/**
-		 * <pattern id="diagonal_line1_PD" width="7.071067811865475mm"
-		 * height="0.5mm" patternUnits="userSpaceOnUse"
-		 * patternTransform="rotate(-45)"> <rect x="0" y="0" width="100%"
-		 * height="100%" fill="white" stroke="none"/> <line x1="1.8mm" y1="0"
-		 * x2="1.8mm" y2="0.5mm" stroke="black" stroke-width="1.3mm"/>
-		 * </pattern>
+		 * <pattern id="diagonal_line1_PD" width="7.071067811865475mm" height=
+		 * "0.5mm" patternUnits="userSpaceOnUse" patternTransform="rotate(-45)">
+		 * <rect x="0" y="0" width="100%" height="100%" fill="white" stroke=
+		 * "none"/> <line x1="1.8mm" y1="0" x2="1.8mm" y2="0.5mm" stroke="black"
+		 * stroke-width="1.3mm"/> </pattern>
 		 */
 		Element g = doc.createGroup();
-		
-		
+
 		Element pattern1 = doc.createElement("pattern");
 		pattern1.setAttribute("id", "diagonal_line1_PD");
 		pattern1.setAttribute("width", "7.071067811865475");
@@ -367,8 +352,7 @@ public class IntegralPlot {
 
 		pattern1.appendChild(rect);
 		pattern1.appendChild(line);
-				
-		
+
 		Element pattern2 = doc.createElement("pattern");
 		pattern2.setAttribute("id", "diagonal_line1_PD_");
 		pattern2.setAttribute("width", "7.071067811865475");
@@ -394,11 +378,10 @@ public class IntegralPlot {
 
 		pattern2.appendChild(rect2);
 		pattern2.appendChild(line2);
-		
+
 		g.appendChild(pattern1);
 		g.appendChild(pattern2);
-		
-		
+
 		return g;
 	}
 }

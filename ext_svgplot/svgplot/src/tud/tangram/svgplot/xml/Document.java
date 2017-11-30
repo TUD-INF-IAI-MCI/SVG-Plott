@@ -20,7 +20,7 @@ import org.w3c.dom.Text;
  * 
  * @author Gregor Harlan, Jens Bornschein Idea and supervising by Jens
  *         Bornschein jens.bornschein@tu-dresden.de Copyright by Technische
- *         Universit‰t Dresden / MCI 2014
+ *         Universit√§t Dresden / MCI 2014
  * 
  */
 public class Document {
@@ -91,6 +91,22 @@ public class Document {
 
 	public Node appendChild(Node child) {
 		return root.appendChild(child);
+	}
+	
+	/**
+	 * Inserts newChild after refChild, if refChild is a child of the document. Else there might be unexpected behaviour.
+	 * @param newChild
+	 * @param refChild
+	 * @return the child
+	 */
+	public Node insertAfter(Node newChild, Node refChild) {
+		Node nextSibling = refChild.getNextSibling();
+		if(nextSibling == null) {
+			return refChild.getParentNode().appendChild(newChild);
+		}
+		else {
+			return root.insertBefore(newChild, nextSibling);
+		}
 	}
 
 	public void writeTo(OutputStream outputStream) throws TransformerException {
