@@ -56,15 +56,24 @@ Here you can find some example program calls and the resulting images.
 
 
 ###Example 1
+
 	java -jar svg-plott.jar -o example_1.svg -t "example 1" "(x^3-3x^2-10x+12)/6" "-0.25x^2+1"
-![](https://github.com/TUD-INF-IAI-MCI/SVG-Plott/raw/master/docs/screenshot/example_1.JPG)
+	
+	
+	
+![two graphs (x^3-3x^2-10x+12)/6 and  -0.25x^2+1](./examples/graphs/generated_graph/example_1_graph/example_1.svg){:height="25%" width="25%"}
+
 ###Example 2
+
 	java -jar svg-plott.jar -o example2.svg -t "example 2" -x -4:8 -y -6:6 "(x^5-12x^4+35x^3+20x^2-156x+168)/56" "-x+3" "-(x-2)^2+3"
-![](https://github.com/TUD-INF-IAI-MCI/SVG-Plott/raw/master/docs/screenshot/example_2.JPG)
+ 
+ ![](./examples/graphs/generated_graph/example_2_graph/example_2.svg){:height="25%" width="25%"}
 
 ###Example 3
+
 	java -jar svg-plott.jar -o example_3.svg -t "example 3" -x -6:10 -y -6:10 "1/(x-2)+2" "-0.3(x-3)^2+6"
-![](https://github.com/TUD-INF-IAI-MCI/SVG-Plott/raw/master/docs/screenshot/example_3.JPG)
+ 
+ ![](./examples/graphs/generated_graph/example_3_graph/example_3.svg){:height="100px" width="50px"}
 
 
 
